@@ -461,6 +461,8 @@ function animate() {
     var coordCenterX = contener.offsetWidth-1 / 2;
     var coordCenterY = contener.offsetHeight-1 / 2;
 
+
+
     if(buttonAddAgentME) {
         contener.style.cursor = "crosshair";
     }
@@ -1041,7 +1043,7 @@ function sendListAgent() {
     		"angle"    : listAgentEditor[i].angle,
     		"teamName" : listAgentEditor[i].teamName,
     		"type"     : listAgentEditor[i].type,
-    		"life"     : getLifeMaxAgent(listAgentEditor[i])
+    		"life"     : getLifeMaxAgent(listAgentEditor[i]),
     	});
     }
 
@@ -1066,7 +1068,7 @@ function sendMessageForSaveTrainingConfiguration() {
 			"angle"    : listAgentEditor[i].angle,
 			"teamName" : listAgentEditor[i].teamName,
 			"type"     : listAgentEditor[i].type,
-			"life"     : getLifeMaxAgent(listAgentEditor[i])
+			"life"     : getLifeMaxAgent(listAgentEditor[i]),
 		});
 	}
 
@@ -1096,7 +1098,6 @@ function saveTrainingConfiguration() {
 			teamName : listAgentEditor[i].teamName,
 			type : listAgentEditor[i].type,
 			life : getLifeMaxAgent(listAgentEditor[i])
-
 		};
 
 		listAgentForSave.push(agent);
