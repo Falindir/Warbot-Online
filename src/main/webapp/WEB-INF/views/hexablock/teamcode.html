@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>HEXABLOCK</title>
+
+    <link href="../../../resources/css/bootstrap.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.js"></script>
+
+    <script src="../../../resources/js/zone/jquery.js" th:src="@{/resources/js/zone/jquery.js}"></script>
+    <script src="../../../resources/js/zone/jquery.layout.js" th:src="@{/resources/js/zone/jquery.layout.js}"></script>
+    <script src="../../../resources/js/zone/jquery.ui.all.js" th:src="@{/resources/js/zone/jquery.ui.all.js}"></script>
+    <script src="../../../resources/js/hexablock/hexaZone.js" th:src="@{/resources/js/hexablock/hexaZone.js}"></script>
+
+    <script src="../../../resources/js/streaming/pixi.js" th:src="@{/resources/js/streaming/pixi.js}"></script>
+    <script src="../../../resources/js/streaming/importTexture.js"
+            th:src="@{/resources/js/streaming/importTexture.js}"></script>
+    <script src="../../../resources/js/hexablock/importBlockTexture.js"
+            th:src="@{/resources/js/hexablock/importBlockTexture.js}"></script>
+
+
+
+</head>
+<body>
+    <div th:replace="fragments/header :: header">Header</div>
+
+    <div class="box">
+
+        <!--<input type="hidden" id="idParty" th:value="${party.id}"/>
+         normale car dans le controlleur je passe pas la party du joueur -->
+
+        <div id="blocks" class="outer-center">
+
+            // BLOCK
+
+        </div>
+
+        <div id="tools" class="outer-east">
+
+            <!-- TOOLS -->
+
+        </div>
+
+        <div class="outer-west">
+
+            <div id="stream" class="middle-center">
+
+                <!-- STREAM -->
+
+            </div>
+
+            <div id="console" class="ui-layout-south">
+                // CONSOLE
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../resources/js/sockjs.min.js" th:src="@{/resources/js/sockjs.min.js}"></script>
+    <script src="../../../resources/js/stomp.min.js" th:src="@{/resources/js/stomp.min.js}"></script>
+    <!-- application -->
+    <script src="../../../resources/js/webgame.js" th:src="@{/resources/js/webgame.js}"></script>
+    <script src="../../../resources/js/request-data-editor.js" th:src="@{/resources/js/request-data-editor.js}"></script>
+    <script src="../../../resources/js/streaming/drawStreaming.js"
+            th:src="@{/resources/js/streaming/drawStreaming.js}"></script>
+    <script src="../../../resources/js/hexablock/hexaEditor.js"
+            th:src="@{/resources/js/hexablock/hexaEditor.js}"></script>
+    <script src="../../../resources/js/hexablock/hexaToolsBlock.js"
+            th:src="@{/resources/js/hexablock/hexaToolsBlock.js}"></script>
+    <script th:inline="javascript">
+(function() {
+        var path =  /*[[@{/warbot}]]*/ /warbot;
+        var socket = new SockJS(path);
+        var stompClient = Stomp.over(socket);
+
+        var appModel = new WebGameModel(stompClient);
+        appM = appModel;
+        //idP = $("#idParty")[0].value;
+        idP = 1; //temp pour test
+        //ko.applyBindings(appModel);
+
+        chargeAppModel(appModel);
+
+        appModel.connect();
+
+         $(".btn.btn-sm.btn-primary.save").click(function(event)
+        {
+          var child = $(this);
+          var vidAgent = child[0].id;
+          var vidParty = $("#idParty")[0].value;
+          var vCode = editors[vidAgent+"-editor"].getSession().getValue();
+          appModel.save(vidParty,vidAgent, vCode);
+        });
+
+        $(".btn.btn-sm.btn-info.load").click(function(event)
+        {
+          var child = $(this);
+          var vidAgent = child[0].id;
+          var vidParty = $("#idParty")[0].value;
+          appModel.get(vidParty,vidAgent);
+        });
+
+      })();
+    </script>
+</body>
+</html>

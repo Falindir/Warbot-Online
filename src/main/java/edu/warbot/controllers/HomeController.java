@@ -83,4 +83,15 @@ public class HomeController {
         return "duel/duel";
     }
 
+    @RequestMapping(value = "/hexacode", method = RequestMethod.GET)
+    public String hexacode(Principal principal,
+                           Model model,
+                           @RequestParam Long idParty,
+                           @RequestParam(required = false) Long idParty2) {
+
+
+        return "hexablock/teamcode";
+    }
+
+
 }
