@@ -255,40 +255,38 @@ function resetResumeCounterAgent() {
     document.getElementById('numberOfWallBlue').innerHTML = counterAgent.blueWall;
 }
 
-function createAgentMapEditor(scene, teamName, type , posX, posY) {
+function createAgentMapEditor(scene, teamName, type , posX, posY, angle) {
 
     var agent = null;
 
-    if(nameTeamSelected == "red") {
+    if(teamName == "red") {
         agent = new PIXI.Sprite(getSpriteAgent(type, 1));
         agent.teamType = 1;
-        agent.teamName = "My Team";
+        agent.teamName = "red";
     }
-    else if (nameTeamSelected == "blue") {
+    else if (nameTeamSelected == "blue" || teamName == "blue") {
         agent = new PIXI.Sprite(getSpriteAgent(type, 2));
         agent.teamType = 2;
-        agent.teamName = "Other Team";
+        agent.teamName = "blue";
     }
-    else if (nameTeamSelected == "mother") {
+    else if (nameTeamSelected == "mother" || teamName == "mother") {
     	agent = new PIXI.Sprite(getSpriteAgent(type, 0));
         agent.teamType = 0;
-        agent.teamName = "Mother Team";
+        agent.teamName = "mother";
     }
     else {
-        console.log("Bug selected team");
+        agent = new PIXI.Sprite(getSpriteAgent(type, 1));
+        agent.teamType = 1;
+        agent.teamName = "red";
     }
 
     agent.type = type;
     agent.name = type + "-" + listAgentEditor.length;
 
-
-
-
-
     agent.anchor.x = 0.5;
     agent.anchor.y = 0.5;
 
-    agent.angle = 0;
+    agent.angle = angle;
     agent.rotation = Math.PI * (agent.angle / 180);
     agent.scale.x = 0.5 * cameraMapEditor.zoom;
     agent.scale.y = 0.5 * cameraMapEditor.zoom;
@@ -505,7 +503,7 @@ function cameraMove(stg, cam) {
 					if(nameAgentSelected == "WarFood") {
 						if(counterAgent.food < numberMaxFood) {
 							if((tx - vx) > (10 + mapVector) * cameraMapEditor.zoom && (tx - vx) < (mapWigth - (10 - mapVector))* cameraMapEditor.zoom && (ty - vy) > (10 + mapVector) * cameraMapEditor.zoom && (ty - vy) < (mapHeigth - (10 - mapVector)) * cameraMapEditor.zoom ) {
-								createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy);
+								createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy, 0);
 							}
 						}
 						else {
@@ -522,7 +520,7 @@ function cameraMove(stg, cam) {
 						if(nameTeamSelected == "red") {
 							if(counterAgentRed < numberMaxAgentByTeamUser) {
 								if((tx - vx) > (10 + mapVector) * cameraMapEditor.zoom && (tx - vx) < (mapWigth - (10 - mapVector))* cameraMapEditor.zoom && (ty - vy) > (10 + mapVector) * cameraMapEditor.zoom && (ty - vy) < (mapHeigth - (10 - mapVector)) * cameraMapEditor.zoom ) {
-									createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy);
+									createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy, 0);
 								}
 							}
 							else {
@@ -533,7 +531,7 @@ function cameraMove(stg, cam) {
 						else if (nameTeamSelected == "blue") {
 							if(counterAgentBlue < numberMaxAgentByTeamUser) {
 								if((tx - vx) > (10 + mapVector) * cameraMapEditor.zoom && (tx - vx) < (mapWigth - (10 - mapVector))* cameraMapEditor.zoom && (ty - vy) > (10 + mapVector) * cameraMapEditor.zoom && (ty - vy) < (mapHeigth - (10 - mapVector)) * cameraMapEditor.zoom ) {
-									createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy);
+									createAgentMapEditor(cameraMapEditor, nameTeamSelected, nameAgentSelected, tx - vx, ty-vy, 0);
 								}
 							}
 							else {
@@ -1038,8 +1036,8 @@ function sendListAgent() {
 	for (i = 0; i < listAgentEditor.length; i++) {
     	agents.push({
     		"name"     : listAgentEditor[i].name,
-    		"x"        : listAgentEditor[i].position.x,
-    		"y"        : listAgentEditor[i].position.y,
+    		"x"        : listAgentEditor[i].position.x / cameraMapEditor.zoom,
+    		"y"        : listAgentEditor[i].position.y / cameraMapEditor.zoom,
     		"angle"    : listAgentEditor[i].angle,
     		"teamName" : listAgentEditor[i].teamName,
     		"type"     : listAgentEditor[i].type,
@@ -1136,5 +1134,13 @@ function decrementAngleAgentFollow() {
 
 		changePositionPercept(cameraMapEditor.agentEntityFollow);
 		document.getElementById('angleOfAgentFollow').innerHTML = cameraMapEditor.agentEntityFollow.angle;
+	}
+}
+
+function replaceAgents(tabAgent) {
+	for (i = 0; i < tabAgent.length; i++) {
+		var currentAgent = tabAgent[i];
+		console.log(currentAgent.teamName);
+		createAgentMapEditor(cameraMapEditor, currentAgent.teamName, currentAgent.type , currentAgent.x, currentAgent.y, currentAgent.angle);
 	}
 }

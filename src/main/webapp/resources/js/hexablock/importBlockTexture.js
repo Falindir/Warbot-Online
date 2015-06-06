@@ -1,0 +1,1 @@
+var redHexagon = PIXI.Texture.fromImage("/resources/hexaBlocks/defaultHexagon/redHexagon.png");

@@ -50,6 +50,23 @@ public class WebGameController {
         webGameService.startExampleWebGame(account);
     }
 
+    @MessageMapping("/game/start.duel")
+    public void startWebGame(Principal principal, WebGameSettings settings) throws AlreadyRunningGameException {
+        Assert.notNull(principal);
+        logger.info(settings);
+        Account account = accountRepository.findByEmail(principal.getName());
+        Assert.notNull(account);
+        Party party = warbotOnlineService.findPartyById(settings.getIdTeam1());
+        Assert.notNull(party);
+
+        Party party2;
+        party2 = warbotOnlineService.findPartyById(settings.getIdTeam2());
+        Assert.notNull(party2);
+
+        if (party.getMembers().contains(account) || party.getCreator().equals(account))
+            webGameService.startWebGame(account, settings);
+    }
+
     @MessageMapping("/game/start.against.ia")
     public void startGameAgainstIA(Principal principal,
                                    WebGameSettings settings) throws Exception, AlreadyRunningGameException {
@@ -59,8 +76,8 @@ public class WebGameController {
         Assert.notNull(account);
         Party party = warbotOnlineService.findPartyById(settings.getIdTeam1());
         Assert.notNull(party);
-        //if(party.getMembers().contains(account) || party.getCreator().equals(account))
-        webGameService.startAgainstIA(account, party);
+        if (party.getMembers().contains(account) || party.getCreator().equals(account))
+            webGameService.startAgainstIA(account, party);
         //else
     }
 

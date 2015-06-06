@@ -9,10 +9,9 @@ var buttonTab = new Array();
 var TeamAll = new Array();
 var nameTeamRed;
 var nameTeamBlue;
-
+var playuttonUI;
 var partyInGame = false;
 var partyStart = false;
-
 var appM;
 var idP;
 
@@ -205,8 +204,6 @@ function createMapJson() {
 		else {
 			//console.log("Bug team");
 		}
-
-
 	}
 
 }
@@ -359,20 +356,36 @@ function createAgentJson(scene, tab, json, teams) {
 
 	agent.mousedown = function(data) {
 
-   		if (this.isdown) {
-   			this.isdown = false;
-   			scene.follow = false;
-   			scene.agentFollow = -1;
-   			scene.agentEntityFollow = null;
-   			document.getElementById('nameOfAgentFollow').innerHTML = "null";
-   			document.getElementById('teamOfAgentFollow').innerHTML = "null";
-   			document.getElementById('typeOfAgentFollow').innerHTML = "null";
-   			document.getElementById('lifeOfAgentFollow').innerHTML = "0 %";
-   			document.getElementById('debugMessageOfAgentFollow').innerHTML = "null";
-   			document.getElementById('angleOfAgentFollow').innerHTML = "0";
+//		alert(scene.follow + scene.agentFollow );
+
+   		if (scene.follow) {
+   			if(scene.agentFollow == this.name) {
+				scene.follow = false;
+				scene.agentFollow = -1;
+				scene.agentEntityFollow = null;
+				document.getElementById('nameOfAgentFollow').innerHTML = "aucun";
+				document.getElementById('teamOfAgentFollow').innerHTML = "aucun";
+				document.getElementById('typeOfAgentFollow').innerHTML = "aucun";
+				document.getElementById('lifeOfAgentFollow').innerHTML = "0 %";
+				document.getElementById('debugMessageOfAgentFollow').innerHTML = "aucun";
+				document.getElementById('angleOfAgentFollow').innerHTML = "0";
+				}
+
+				else {
+				   			scene.follow = true;
+                   			scene.agentFollow = agent.name;
+                   			scene.agentEntityFollow = this;
+                   			scene.position.x += (renderer.width / 2) - this.position.x;
+                   			scene.position.y += (renderer.height / 2) - this.position.y;
+                   			document.getElementById('nameOfAgentFollow').innerHTML = this.name;
+                   			document.getElementById('teamOfAgentFollow').innerHTML = this.teamName;
+                   			document.getElementById('typeOfAgentFollow').innerHTML = this.type;
+                   			document.getElementById('lifeOfAgentFollow').innerHTML = this.lifeP + " %";
+                   			document.getElementById('debugMessageOfAgentFollow').innerHTML = this.messageDebug;
+                   			document.getElementById('angleOfAgentFollow').innerHTML = this.angle;
+				}
    		}
    		else {
-   			this.isdown = true;
    			scene.follow = true;
    			scene.agentFollow = agent.name;
    			scene.agentEntityFollow = this;
@@ -585,20 +598,25 @@ function animate() {
 	hud.playBut.position.x = coordCenterX / 2;
     hud.playBut.position.y = coordCenterY / 2;
 
+    hud.playBut.scale.x = 0.8;
+    hud.playBut.scale.y = 0.8;
+
 	if(partyStart) {
 		hud.gChargement.rotation += 0.05;
 		hud.gChargement.alpha = 1;
 		hud.playBut.alpha = -1;
+		hud.playBut.interactive = false;
 	}
 	else {
 		hud.gChargement.alpha = -1;
 		if(!partyInGame) {
 			hud.playBut.alpha = 1;
+			hud.playBut.interactive = true;
 		}
 	}
 
-	for (i = 0; i < agentTab.length; i++) {
-		if(camera.follow) {
+	if(camera.follow) {
+		for (i = 0; i < agentTab.length; i++) {
 			if(camera.agentFollow == agentTab[i].name) {
    				camera.position.x = (renderer.width / 2) - agentTab[i].position.x;
    				camera.position.y = (renderer.height / 2) - agentTab[i].position.y;
@@ -641,7 +659,7 @@ function initStreaming() {
     hud.gChargement = gifChargement;
     hud.addChild(gifChargement);
 
-    var playuttonUI = new PIXI.Sprite(playButton);
+    playuttonUI = new PIXI.Sprite(playButton);
     playuttonUI.position.x = 0;
     playuttonUI.position.y = 0;
     playuttonUI.alpha = 1;
@@ -1112,6 +1130,50 @@ function changeDebugMessage(agent, json) {
 
 
 function messageServerEnd(message) {
+
+    counterAgent = {
+    	food : 0,
+    	redBase : 0,
+    	blueBase : 0,
+    	redExplorer : 0,
+    	blueExplorer : 0,
+    	redKamikaze : 0,
+    	blueKamikaze : 0,
+    	redRocketLauncher : 0,
+    	blueRocketLauncher : 0,
+    	redTurret : 0,
+    	blueTurret : 0,
+    	redEngineer : 0,
+    	blueEngineer : 0,
+    	redWall : 0,
+    	blueWall : 0
+    };
+
+    document.getElementById('numberOfExplorerRed').innerHTML = 0;
+    document.getElementById('numberOfExplorerBlue').innerHTML = 0;
+    document.getElementById('numberOfEngineerRed').innerHTML = 0;
+    document.getElementById('numberOfEngineerBlue').innerHTML = 0;
+    document.getElementById('numberOfRocketLauncherRed').innerHTML = 0;
+    document.getElementById('numberOfRocketLauncherBlue').innerHTML = 0;
+    document.getElementById('numberOfKamikazeRed').innerHTML = 0;
+    document.getElementById('numberOfKamikazeBlue').innerHTML = 0;
+    document.getElementById('numberOfTurretRed').innerHTML = 0;
+    document.getElementById('numberOfTurretBlue').innerHTML = 0;
+    document.getElementById('numberOfBaseRed').innerHTML = 0;
+    document.getElementById('numberOfBaseBlue').innerHTML = 0;
+    document.getElementById('numberOfWallRed').innerHTML = 0;
+    document.getElementById('numberOfWallBlue').innerHTML = 0;
+    document.getElementById('numberOfFoodConsoleMap').innerHTML = 0;
+
+    document.getElementById('nameRedTeamConsoleMap').innerHTML = "aucune";
+    document.getElementById('nameBlueTeamConsoleMap').innerHTML = "aucune";
+
+    document.getElementById('nameOfAgentFollow').innerHTML = "aucun";
+    document.getElementById('teamOfAgentFollow').innerHTML = "aucun";
+    document.getElementById('typeOfAgentFollow').innerHTML = "aucun";
+    document.getElementById('lifeOfAgentFollow').innerHTML = "0 %";
+    document.getElementById('debugMessageOfAgentFollow').innerHTML = "aucun";
+    document.getElementById('angleOfAgentFollow').innerHTML = "0";
 
 	stage.setBackgroundColor(colorStreamOff);
 
