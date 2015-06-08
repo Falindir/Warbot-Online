@@ -248,8 +248,8 @@ function createAgentJson(scene, tab, json, teams) {
 	agent.position.y = json.y * camera.zoom;
 	agent.angle = json.angle;
 	agent.rotation = Math.PI * (agent.angle / 180);
-	agent.scale.x = 0.5 * camera.zoom;
-	agent.scale.y = 0.5 * camera.zoom;
+	agent.scale.x = 0.05 * camera.zoom;
+	agent.scale.y = 0.05 * camera.zoom;
 
     if (typeof(json.lifeP) != "undefined") {
     	agent.lifeP = json.lifeP;

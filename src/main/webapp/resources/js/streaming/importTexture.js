@@ -1,4 +1,4 @@
-var explorerRed = PIXI.Texture.fromImage("/resources/assetWarbot/RedTeam/explorer.png");
+/*var explorerRed = PIXI.Texture.fromImage("/resources/assetWarbot/RedTeam/explorer.png");
 var explorerBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/explorer.png");
 var engineerRed = PIXI.Texture.fromImage("/resources/assetWarbot/RedTeam/engineer.png");
 var engineerBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/engineer.png");
@@ -11,8 +11,25 @@ var turretBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/turret.
 var baseRed = PIXI.Texture.fromImage("/resources/assetWarbot/RedTeam/base.png");
 var baseBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/base.png");
 var wallRed = PIXI.Texture.fromImage("/resources/assetWarbot/RedTeam/wall.png");
-var wallBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/wall.png");
-var rocket = PIXI.Texture.fromImage("/resources/assetWarbot/MotherTeam/rocket2.png");;
+var wallBlue = PIXI.Texture.fromImage("/resources/assetWarbot/BlueTeam/wall.png");*/
+
+
+var explorerRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/explorer.png");
+var explorerBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/explorer.png");
+var engineerRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/engineer.png");
+var engineerBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/engineer.png");
+var rocketLauncherRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/rocketLauncher.png");
+var rocketLauncherBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/rocketLauncher.png");
+var kamikazeRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/kamikaze.png");
+var kamikazeBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/kamikaze.png");
+var turretRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/turret.png");
+var turretBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/turret.png");
+var baseRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/base.png");
+var baseBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/base.png");
+var wallRed = PIXI.Texture.fromImage("/resources/hexaBlocks/RedTeam/wall.png");
+var wallBlue = PIXI.Texture.fromImage("/resources/hexaBlocks/BlueTeam/wall.png");
+
+var rocket = PIXI.Texture.fromImage("/resources/assetWarbot/MotherTeam/rocket2.png");
 var bomb;
 var food = PIXI.Texture.fromImage("/resources/assetWarbot/MotherTeam/food02.png");
 

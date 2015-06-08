@@ -89,6 +89,16 @@ public class HomeController {
                            @RequestParam Long idParty,
                            @RequestParam(required = false) Long idParty2) {
 
+        Assert.notNull(principal);
+        Account account = accountRepository.findByEmail(principal.getName());
+        Party party = warbotOnlineService.findPartyById(idParty);
+        Assert.notNull(party);
+        if (!party.getMembers().contains(account) && !party.getCreator().equals(account)) {
+            MessageHelper.addErrorAttribute(model, "party.not.members");
+            return "redirect:/partylist";
+        }
+        model.addAttribute("party", party);
+        model.addAttribute("agents", webAgentRepository.findAllStarter());
 
         return "hexablock/teamcode";
     }
