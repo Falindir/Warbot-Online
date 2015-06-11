@@ -250,3 +250,12 @@ margin-top:5%;
     font-size: 250%;
     margin-top:-25px;
 }
+
+#tools {
+    overflow: auto;
+}
+
+.imagesToolsTable {
+    width: 100%;
+}
+
