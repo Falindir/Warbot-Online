@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Warbot Online</title>
+    <object th:include="fragments/header :: head" th:remove="tag"/>
+
+    <script src="../../../resources/js/libs/jquery-ui.min.js"
+            th:src="@{/resources/js/libs/jquery-ui.min.js}"></script>
+    <script src="../../../resources/js/libs/jquery.layout_and_plugins.min.js"
+            th:src="@{/resources/js/libs/jquery.layout_and_plugins.min.js}"></script>
+    <script src="../../../resources/js/layout/partyHexagonLayout.js"
+            th:src="@{/resources/js/layout/partyHexagonLayout.js}"></script>
+
+    <script src="../../../resources/js/libs/pixi.min.js"
+            th:src="@{/resources/js/libs/pixi.min.js}"></script>
+
+    <script src="../../../resources/js/hexablock/classExtend.js"
+            th:src="@{/resources/js/hexablock/classExtend.js}"></script>
+
+    <script src="../../../resources/js/hexablock/stream.js"
+            th:src="@{/resources/js/hexablock/stream.js}"></script>
+
+    <!--<script src="../../../resources/js/hexablock/pixi.draggable.js"
+            th:src="@{/resources/js/hexablock/pixi.draggable.js}"></script>-->
+
+    <script src="../../../resources/js/streaming/importTexture.js"
+            th:src="@{/resources/js/streaming/importTexture.js}"></script>
+    <script src="../../../resources/js/hexablock/importBlockTexture.js"
+            th:src="@{/resources/js/hexablock/importBlockTexture.js}"></script>
+
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="box">
+    <input type="hidden" id="idParty" value="" th:value="${party.id}"/>
+
+    <div id="blocks" class="outer-center">
+
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Liste des agents <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+
+                    <li class="webcode-request" th:each="agent : ${agents}" th:data="${agent.id}">
+                        <input type="hidden" value="" th:value="${agent.id}"/>
+                        <a class="agentList" data-toggle="tab" th:href="'#'+${agent.id}" th:text="${agent.type}">
+                            Ag
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <a href="#" class="btn btn-sm btn-primary save"> Save</a>
+            <a href="#" class="btn btn-sm btn-info load"> Load</a>
+        </ul>
+
+
+        <!-- EDITOR -->
+
+    </div>
+
+    <div id="tools" class="outer-east">
+
+        <!-- TOOLS -->
+
+        <ul class="nav nav-tabs" role="tablist" id="toolsTab">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+            <li role="presentation"><a href="#agents" aria-controls="agents" role="tab" data-toggle="tab">Agents</a></li>
+            <li role="presentation"><a href="#views" aria-controls="views" role="tab" data-toggle="tab">Views</a></li>
+            <li role="presentation"><a href="#actions" aria-controls="actions" role="tab" data-toggle="tab">Actions</a></li>
+            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane active" id="home">
+                //home
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="agents">
+                <div>
+                    <table id="tableTools" class="table table-bordered">
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <div style="position: relative; left: 0; top: 0; margin : 10px 10px 10px 10px;">
+                                    <img id="agentBaseTeam1_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png" alt="Mountain View" style="width:96px;height:110px;position: absolute;top: -5px; left: -5px;visibility: hidden;"/>
+                                    <img id="agentBaseTeam1" class = "imageHexagon" src="/resources/hexaBlocks/blocks/agent/team1/base.png" alt="Mountain View" style="width:86px;height:100px;position: relative;top: 0; left: 0;"/>
+                                </div>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <div style="position: relative; left: 0; top: 0; margin : 10px 10px 10px 10px;">
+                                    <img id="agentEngineerTeam1_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png" alt="Mountain View" style="width:96px;height:110px;position: absolute;top: -5px; left: -5px;visibility: hidden;"/>
+                                    <img id="agentEngineerTeam1" class = "imageHexagon" src="/resources/hexaBlocks/blocks/agent/team1/engineer.png" alt="Mountain View" style="width:86px;height:100px;position: relative;top: 0; left: 0;"/>
+                                </div>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team1/explorer.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team1/kamikaze.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team1/rocketLauncher.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team1/turret.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team1/wall.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/base.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/engineer.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/explorer.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/kamikaze.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/rocketLauncher.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/turret.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/team2/wall.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                        <tr class="">
+                            <td class="imagesToolsTable">
+                                <img src="/resources/hexaBlocks/blocks/agent/mother/food.png" alt="Mountain View" style="width:86px;height:100px;"/>
+                            </td>
+                            <td class="documentationToolsTable">
+                                //TODO
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="views">
+                //views
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="actions">
+                //action
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="messages">
+                //messages
+            </div>
+
+        </div>
+    </div>
+
+    <div class="outer-west">
+
+        <div id="stream" class="middle-center">
+
+            <!-- STREAM -->
+
+        </div>
+
+        <div id="console" class="ui-layout-south">
+            // CONSOLE
+        </div>
+    </div>
+</div>
+
+<script src="../../../resources/js/libs/sockjs.min.js" th:src="@{/resources/js/libs/sockjs.min.js}"></script>
+<script src="../../../resources/js/libs/stomp.min.js" th:src="@{/resources/js/libs/stomp.min.js}"></script>
+<!-- application -->
+<script src="../../../resources/js/webgame.js" th:src="@{/resources/js/webgame.js}"></script>
+<script src="../../../resources/js/streaming/drawStreaming.js"
+        th:src="@{/resources/js/streaming/drawStreaming.js}"></script>
+<script src="../../../resources/js/hexablock/hexaEditor.js"
+        th:src="@{/resources/js/hexablock/hexaEditor.js}"></script>
+<script src="../../../resources/js/hexablock/hexaToolsBlock.js"
+        th:src="@{/resources/js/hexablock/hexaToolsBlock.js}"></script>
+<script th:inline="javascript">
+(function() {
+        var path =  /*[[@{/warbot}]]*/ /warbot;
+        var socket = new SockJS(path);
+        var stompClient = Stomp.over(socket);
+
+        var appModel = new WebGameModel(stompClient);
+        appM = appModel;
+        //idP = $("#idParty")[0].value;
+        idP = 1; //temp pour test
+        //ko.applyBindings(appModel);
+
+        chargeAppModel(appModel);
+
+        appModel.connect();
+
+         $(".btn.btn-sm.btn-primary.save").click(function(event)
+        {
+          var child = $(this);
+          var vidAgent = child[0].id;
+          var vidParty = $("#idParty")[0].value;
+          var vCode = editors[vidAgent+"-editor"].getSession().getValue();
+          appModel.save(vidParty,vidAgent, vCode);
+        });
+
+        $(".btn.btn-sm.btn-info.load").click(function(event)
+        {
+          var child = $(this);
+          var vidAgent = child[0].id;
+          var vidParty = $("#idParty")[0].value;
+          appModel.get(vidParty,vidAgent);
+        });
+
+        //EDITOR
+
+        $(".agentList").click(function(event)
+        {
+            hexaEditor.nameActiveMasterAgent = this.text;
+
+            // chargement du code
+
+            hexaEditor.loadMasterAgent();
+        });
+
+        // TOOLS
+        var nameHexagonTab = "nobody";
+
+        $(".imageHexagon").click(function(event)
+        {
+            var selectHexagon = document.getElementById($(this)[0].id+"_select");
+
+            if(selectHexagon.style.visibility == 'visible') {
+                selectHexagon.style.visibility = 'hidden';
+                nameHexagonTab = 'nobody';
+                hexaEditor.nextHexagonToCreate = null;
+            }
+            else {
+                selectHexagon.style.visibility = 'visible';
+
+                if(nameHexagonTab != 'nobody') {
+                        var selectHexagonOld = document.getElementById(nameHexagonTab);
+                        selectHexagonOld.style.visibility = 'hidden';
+
+                }
+
+                nameHexagonTab = $(this)[0].id+"_select";
+                hexaEditor.nextHexagonToCreate = agentBaseTeam1;
+
+            }
+
+        });
+
+      })();
+
+
+    </script>
+</body>
+</html>
