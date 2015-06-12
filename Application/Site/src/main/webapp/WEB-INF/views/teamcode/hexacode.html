@@ -13,8 +13,16 @@
 
     <script src="../../../resources/js/libs/pixi.min.js"
             th:src="@{/resources/js/libs/pixi.min.js}"></script>
-    <script src="../../../resources/js/hexablock/pixi.draggable.js"
-            th:src="@{/resources/js/hexablock/pixi.draggable.js}"></script>
+
+    <script src="../../../resources/js/hexablock/classExtend.js"
+            th:src="@{/resources/js/hexablock/classExtend.js}"></script>
+
+    <script src="../../../resources/js/hexablock/stream.js"
+            th:src="@{/resources/js/hexablock/stream.js}"></script>
+
+    <!--<script src="../../../resources/js/hexablock/pixi.draggable.js"
+            th:src="@{/resources/js/hexablock/pixi.draggable.js}"></script>-->
+
     <script src="../../../resources/js/streaming/importTexture.js"
             th:src="@{/resources/js/streaming/importTexture.js}"></script>
     <script src="../../../resources/js/hexablock/importBlockTexture.js"
@@ -25,9 +33,6 @@
 <div th:replace="fragments/header :: header">Header</div>
 
 <div class="box">
-
-    <!--<input type="hidden" id="idParty" th:value="${party.id}"/>
-     normale car dans le controlleur je passe pas la party du joueur -->
     <input type="hidden" id="idParty" value="" th:value="${party.id}"/>
 
     <div id="blocks" class="outer-center">
@@ -39,7 +44,7 @@
 
                     <li class="webcode-request" th:each="agent : ${agents}" th:data="${agent.id}">
                         <input type="hidden" value="" th:value="${agent.id}"/>
-                        <a data-toggle="tab" th:href="'#'+${agent.id}" th:text="${agent.type}">
+                        <a class="agentList" data-toggle="tab" th:href="'#'+${agent.id}" th:text="${agent.type}">
                             Ag
                         </a>
                     </li>
@@ -50,7 +55,7 @@
             <a href="#" class="btn btn-sm btn-info load"> Load</a>
         </ul>
 
-        
+
         <!-- EDITOR -->
 
     </div>
@@ -278,6 +283,17 @@
           appModel.get(vidParty,vidAgent);
         });
 
+        //EDITOR
+
+        $(".agentList").click(function(event)
+        {
+            hexaEditor.nameActiveMasterAgent = this.text;
+
+            // chargement du code
+
+            hexaEditor.loadMasterAgent();
+        });
+
         // TOOLS
         var nameHexagonTab = "nobody";
 
@@ -288,7 +304,7 @@
             if(selectHexagon.style.visibility == 'visible') {
                 selectHexagon.style.visibility = 'hidden';
                 nameHexagonTab = 'nobody';
-                nextHexagonToCreate = null;
+                hexaEditor.nextHexagonToCreate = null;
             }
             else {
                 selectHexagon.style.visibility = 'visible';
@@ -300,7 +316,7 @@
                 }
 
                 nameHexagonTab = $(this)[0].id+"_select";
-                nextHexagonToCreate = agentBaseTeam1;
+                hexaEditor.nextHexagonToCreate = agentBaseTeam1;
 
             }
 

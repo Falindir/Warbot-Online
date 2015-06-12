@@ -1186,4 +1186,4 @@ initStreaming();
 animate();
 
 cameraMove(stage, camera);
-//addWheelListener();
+addWheelListener();
