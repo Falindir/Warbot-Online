@@ -6,6 +6,7 @@ var HexaEditorStream = Stream.extend({
         this.nextHexagonToCreateObject = null;
         this.minZoom = 0.5;
         this.maxZoom = 2;
+        this.minDistanceBlock = 25;
         this.activeZoom = false;
         this.nameActiveMasterAgent = null;
         this.lastIndexActiveMasterTab = null;
@@ -38,23 +39,34 @@ var HexaEditorStream = Stream.extend({
         this.agentsMasterTab.push(tab5);
         this.agentsMasterTab.push(tab6);
 
-        this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 35, 1, 0);
-        this.createBlock(this.camera, this.getSpriteMaster(tab2.nameMaster), 90, 35, 1, 1);
-        this.createBlock(this.camera, this.getSpriteMaster(tab3.nameMaster), 90, 35, 1, 2);
-        this.createBlock(this.camera, this.getSpriteMaster(tab4.nameMaster), 90, 35, 1, 3);
-        this.createBlock(this.camera, this.getSpriteMaster(tab5.nameMaster), 90, 35, 1, 4);
-        this.createBlock(this.camera, this.getSpriteMaster(tab6.nameMaster), 90, 35, 1, 5);
+        for (i = 0; i < 6; i++) {
+            this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 35, 1, i);
+            this.createBlock(this.camera, listAction, 90, 200, 0, i);
+            this.createBlock(this.camera, emptyBlock, 90, 125, 0.5, i);
 
-        this.createBlock(this.camera, listAction, 90, 200, 0, 0);
-        this.createBlock(this.camera, listAction, 90, 200, 0, 1);
-        this.createBlock(this.camera, listAction, 90, 200, 0, 2);
-        this.createBlock(this.camera, listAction, 90, 200, 0, 3);
-        this.createBlock(this.camera, listAction, 90, 200, 0, 4);
-        this.createBlock(this.camera, listAction, 90, 200, 0, 5);
+            //TEST
 
+            this.createBlock(this.camera, actionWhen, 300, 300, 2, i);
+
+            this.createBlock(this.camera, emptyBlock, 352, 300, 0.5, i);
+            this.createBlock(this.camera, emptyBlock, 248, 300, 0.5, i);
+            this.createBlock(this.camera, emptyBlock, 326, 345, 0.5, i);
+            this.createBlock(this.camera, emptyBlock, 326, 255, 0.5, i);
+            this.createBlock(this.camera, emptyBlock, 274, 345, 0.5, i);
+            this.createBlock(this.camera, emptyBlock, 274, 255, 0.5, i);
+        }
 
         this.camera.children.sort(depthCompare);
+    },
 
+    getDistanceInterBlock : function (b1, b2) {
+        if( b1 == null || b2 == null)
+            return 100000;
+
+        var x = (b2.position.x - b1.position.x) * (b2.position.x - b1.position.x);
+        var y = (b2.position.y - b1.position.y) * (b2.position.y - b1.position.y);
+        var dist = Math.sqrt(x + y);
+        return dist;
     },
 
     loadMasterAgent : function () {
@@ -116,6 +128,225 @@ var HexaEditorStream = Stream.extend({
         return null;
     },
 
+    getSpriteOfAgent : function (nameHexagon) {
+
+        var hexagon = {
+            name : nameHexagon,
+            sprite : null,
+            typeOfType : -1
+        }
+
+        if(nameHexagon != null) {
+            switch(nameHexagon) {
+                case "actionWhen":
+                    hexagon.sprite = actionWhen;
+                    hexagon.typeOfType = 11;
+                    return hexagon;
+                    break;
+                case "actionDo":
+                    hexagon.sprite = actionDo;
+                    hexagon.typeOfType = 12;
+                    return hexagon;
+                    break;
+                case "agentBaseTeam1":
+                    hexagon.sprite = agentBaseTeam1;
+                    hexagon.typeOfType = 211;
+                    return hexagon;
+                    break;
+                case "agentEngineerTeam1":
+                    hexagon.sprite = agentEngineerTeam1;
+                    hexagon.typeOfType = 212;
+                    return hexagon;
+                    break;
+                case "agentExplorerTeam1":
+                    hexagon.sprite = agentExplorerTeam1;
+                    hexagon.typeOfType = 213;
+                    return hexagon;
+                    break;
+                case "agentKamikazeTeam1":
+                    hexagon.sprite = agentKamikazeTeam1;
+                    hexagon.typeOfType = 214;
+                    return hexagon;
+                    break;
+                case "agentRocketLauncherTeam1":
+                    hexagon.sprite = agentRocketLauncherTeam1;
+                    hexagon.typeOfType = 215;
+                    return hexagon;
+                    break;
+                case "agentTurretTeam1":
+                    hexagon.sprite = agentTurretTeam1;
+                    hexagon.typeOfType = 216;
+                    return hexagon;
+                    break;
+                case "agentWallTeam1":
+                    hexagon.sprite = agentWallTeam1;
+                    hexagon.typeOfType = 217;
+                    return hexagon;
+                    break;
+                case "agentBaseTeam2":
+                    hexagon.sprite = agentBaseTeam2;
+                    hexagon.typeOfType = 221;
+                    return hexagon;
+                    break;
+                case "agentEngineerTeam2":
+                    hexagon.sprite = agentEngineerTeam2;
+                    hexagon.typeOfType = 222;
+                    return hexagon;
+                    break;
+                case "agentExplorerTeam2":
+                    hexagon.sprite = agentExplorerTeam2;
+                    hexagon.typeOfType = 223;
+                    return hexagon;
+                    break;
+                case "agentKamikazeTeam2":
+                    hexagon.sprite = agentKamikazeTeam2;
+                    hexagon.typeOfType = 224;
+                    return hexagon;
+                    break;
+                case "agentRocketLauncherTeam2":
+                    hexagon.sprite = agentRocketLauncherTeam2;
+                    hexagon.typeOfType = 225;
+                    return hexagon;
+                    break;
+                case "agentTurretTeam2":
+                    hexagon.sprite = agentTurretTeam2;
+                    hexagon.typeOfType = 226;
+                    return hexagon;
+                    break;
+                case "agentWallTeam2":
+                    hexagon.sprite = agentWallTeam2;
+                    hexagon.typeOfType = 227;
+                    return hexagon;
+                    break;
+                case "agentFood":
+                    hexagon.sprite = agentFood;
+                    hexagon.typeOfType = 231;
+                    return hexagon;
+                    break;
+                case "viewAgent":
+                    hexagon.sprite = viewAgent;
+                    hexagon.typeOfType = 301;
+                    return hexagon;
+                    break;
+                case "viewBaseTeam1":
+                    hexagon.sprite = viewBaseTeam1;
+                    hexagon.typeOfType = 311;
+                    return hexagon;
+                    break;
+                case "viewEngineerTeam1":
+                    hexagon.sprite = viewEngineerTeam1;
+                    hexagon.typeOfType = 312;
+                    return hexagon;
+                    break;
+                case "viewExplorerTeam1":
+                    hexagon.sprite = viewExplorerTeam1;
+                    hexagon.typeOfType = 313;
+                    return hexagon;
+                    break;
+                case "viewKamikazeTeam1":
+                    hexagon.sprite = viewKamikazeTeam1;
+                    hexagon.typeOfType = 314;
+                    return hexagon;
+                    break;
+                case "viewRocketLauncherTeam1":
+                    hexagon.sprite = viewRocketLauncherTeam1;
+                    hexagon.typeOfType = 315;
+                    return hexagon;
+                    break;
+                case "viewTurretTeam1":
+                    hexagon.sprite = viewTurretTeam1;
+                    hexagon.typeOfType = 316;
+                    return hexagon;
+                    break;
+                case "viewWallTeam1":
+                    hexagon.sprite = viewWallTeam1;
+                    hexagon.typeOfType = 317;
+                    return hexagon;
+                    break;
+                case "viewBaseTeam2":
+                    hexagon.sprite = viewBaseTeam2;
+                    hexagon.typeOfType = 321;
+                    return hexagon;
+                    break;
+                case "viewEngineerTeam2":
+                    hexagon.sprite = viewEngineerTeam2;
+                    hexagon.typeOfType = 322;
+                    return hexagon;
+                    break;
+                case "viewExplorerTeam2":
+                    hexagon.sprite = viewExplorerTeam2;
+                    hexagon.typeOfType = 323;
+                    return hexagon;
+                    break;
+                case "viewKamikazeTeam2":
+                    hexagon.sprite = viewKamikazeTeam2;
+                    hexagon.typeOfType = 324;
+                    return hexagon;
+                    break;
+                case "viewRocketLauncherTeam2":
+                    hexagon.sprite = viewRocketLauncherTeam2;
+                    hexagon.typeOfType = 325;
+                    return hexagon;
+                    break;
+                case "viewTurretTeam2":
+                    hexagon.sprite = viewTurretTeam2;
+                    hexagon.typeOfType = 326;
+                    return hexagon;
+                    break;
+                case "viewWallTeam2":
+                    hexagon.sprite = viewWallTeam2;
+                    hexagon.typeOfType = 327;
+                    return hexagon;
+                    break;
+                case "viewFood":
+                    hexagon.sprite = viewFood;
+                    hexagon.typeOfType = 331;
+                    return hexagon;
+                    break;
+                case "actionEat":
+                    hexagon.sprite = actionEat;
+                    hexagon.typeOfType = 41;
+                    return hexagon;
+                    break;
+                case "actionGive":
+                    hexagon.sprite = actionGive;
+                    hexagon.typeOfType = 42;
+                    return hexagon;
+                    break;
+                case "actionIdle":
+                    hexagon.sprite = actionIdle;
+                    hexagon.typeOfType = 43;
+                    return hexagon;
+                    break;
+                case "actionMove":
+                    hexagon.sprite = actionMove;
+                    hexagon.typeOfType = 44;
+                    return hexagon;
+                    break;
+                case "actionTake":
+                    hexagon.sprite = actionTake;
+                    hexagon.typeOfType = 45;
+                    return hexagon;
+                    break;
+                case "actionFire":
+                    hexagon.sprite = actionFire;
+                    hexagon.typeOfType = 46;
+                    return hexagon;
+                    break;
+                case "actionReload":
+                    hexagon.sprite = actionReload;
+                    hexagon.typeOfType = 46;
+                    return hexagon;
+                    break;
+                default:
+                    hexagon.sprite = emptyBlock;
+                    hexagon.typeOfType = 0;
+                    return hexagon;
+            }
+        }
+        return null;
+    },
+
     createBlock : function(scene, form, cX, cY, type, indexTab) {
 
         var block = new PIXI.Sprite(form);
@@ -129,24 +360,26 @@ var HexaEditorStream = Stream.extend({
         block.scale.x = 0.3;
         block.scale.y = 0.3;
 
-        if(type != 2) {
+        if(type == 2) {
+             block.interactive = true;
+             block.buttonMode = true;
+             block.defaultCursor = "pointer";
+             block.zIndex = 100;
+        }
+        else {
              block.interactive = false;
              block.buttonMode = false;
 
              if(type == 0) {
                 block.zIndex = 10;
              }
+             else if (type == 0.5) {
+                block.zIndex = 25;
+             }
              else if (type == 1) {
                 block.zIndex = 50;
              }
         }
-        else {
-             block.interactive = true;
-             block.buttonMode = true;
-             block.defaultCursor = "pointer";
-             block.zIndex = 100;
-        }
-
        block.type = type;
 
        block.alpha = -1;
@@ -178,14 +411,34 @@ var HexaEditorStream = Stream.extend({
         block.alpha = 1;
         block.isdown = false;
 
+        block.zIndex = 1000;
+
         scene.addChild(block);
 
         block.mousedown = function(data) {
-            //self.createBlock(self.camera, self.nextHexagonToCreate, block.position.x, block.position.y, self.blockTab, 2);
+            var indexTab = self.getGoodIndexMasterTab();
+
+            if(self.nameActiveMasterAgent != null) {
+                for (i = 0; i < self.agentsMasterTab[indexTab].length; i++) {
+                    var bl = self.agentsMasterTab[indexTab][i];
+
+                    if(self.getDistanceInterBlock(this, bl) < self.minDistanceBlock) {
+                        if(bl.type == 0.5) {
+                            self.createBlock(self.camera, self.nextHexagonToCreate, bl.position.x, bl.position.y, 2, indexTab);
+                            // TODO destroy temp block maybe
+                           self.agentsMasterTab[indexTab][self.agentsMasterTab[indexTab].length-1].alpha = 1;
+                           self.camera.removeChild(self.agentsMasterTab[indexTab][i]);
+                           self.agentsMasterTab[indexTab].splice(i, 1);
+                           self.camera.children.sort(depthCompare);
+                           // TODO destroy console log
+                           console.log("Create Block");
+                        }
+                    }
+                }
+            }
         };
 
         this.nextHexagonToCreateObject = block;
-
     },
 
     addWheelListenerHexaEditorStream : function() {
@@ -235,7 +488,7 @@ var HexaEditorStream = Stream.extend({
 function animateHexaEditor() {
         requestAnimationFrame( animateHexaEditor );
         hexaEditor.resizeStream();
-        hexaEditor.renderStream();
+        hexaEditor.renderer.render(hexaEditor.stage);
 }
 
 function cameraZoomHexaEditorStream (e) {

@@ -256,6 +256,35 @@ margin-top:5%;
 }
 
 .imagesToolsTable {
-    width: 100%;
+    width: 100px;
 }
 
+.containImagesHexagon {
+    position: relative;
+    left: 0;
+    top: 0;
+    margin : 10px 10px 10px 10px;
+}
+
+.selectHexagon {
+    width:76px;
+    height:90px;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    visibility: hidden;
+}
+
+.imageHexagon {
+    width:66px;
+    height:80px;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.documentationToolsTable {
+    font-weight: bold;
+    font-size: 125%;
+    text-align: center;
+}
