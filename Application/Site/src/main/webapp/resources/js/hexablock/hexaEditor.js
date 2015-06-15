@@ -4,6 +4,7 @@ var HexaEditorStream = Stream.extend({
     initializeEditor : function() {
         this.nextHexagonToCreate = null;
         this.nextHexagonToCreateObject = null;
+        this.nextHexagonToCreateObjectHexagon = null;
         this.minZoom = 0.5;
         this.maxZoom = 2;
         this.minDistanceBlock = 25;
@@ -44,8 +45,8 @@ var HexaEditorStream = Stream.extend({
             this.createBlock(this.camera, listAction, 90, 200, 0, i);
             this.createBlock(this.camera, emptyBlock, 90, 125, 0.5, i);
 
-            //TEST
-
+            // FOR TEST
+            /*
             this.createBlock(this.camera, actionWhen, 300, 300, 2, i);
 
             this.createBlock(this.camera, emptyBlock, 352, 300, 0.5, i);
@@ -54,6 +55,7 @@ var HexaEditorStream = Stream.extend({
             this.createBlock(this.camera, emptyBlock, 326, 255, 0.5, i);
             this.createBlock(this.camera, emptyBlock, 274, 345, 0.5, i);
             this.createBlock(this.camera, emptyBlock, 274, 255, 0.5, i);
+            */
         }
 
         this.camera.children.sort(depthCompare);
@@ -140,12 +142,27 @@ var HexaEditorStream = Stream.extend({
             switch(nameHexagon) {
                 case "actionWhen":
                     hexagon.sprite = actionWhen;
-                    hexagon.typeOfType = 11;
+                    hexagon.typeOfType = 110;
                     return hexagon;
                     break;
                 case "actionDo":
                     hexagon.sprite = actionDo;
-                    hexagon.typeOfType = 12;
+                    hexagon.typeOfType = 120;
+                    return hexagon;
+                    break;
+                case "operatorAnd" :
+                    hexagon.sprite = operatorAnd;
+                    hexagon.typeOfType = 131;
+                    return hexagon;
+                    break;
+                case "operatorOr" :
+                    hexagon.sprite = operatorOr;
+                    hexagon.typeOfType = 132;
+                    return hexagon;
+                    break;
+                case "operatorNot" :
+                    hexagon.sprite = operatorNot;
+                    hexagon.typeOfType = 133;
                     return hexagon;
                     break;
                 case "agentBaseTeam1":
@@ -305,37 +322,37 @@ var HexaEditorStream = Stream.extend({
                     break;
                 case "actionEat":
                     hexagon.sprite = actionEat;
-                    hexagon.typeOfType = 41;
+                    hexagon.typeOfType = 410;
                     return hexagon;
                     break;
                 case "actionGive":
                     hexagon.sprite = actionGive;
-                    hexagon.typeOfType = 42;
+                    hexagon.typeOfType = 420;
                     return hexagon;
                     break;
                 case "actionIdle":
                     hexagon.sprite = actionIdle;
-                    hexagon.typeOfType = 43;
+                    hexagon.typeOfType = 430;
                     return hexagon;
                     break;
                 case "actionMove":
                     hexagon.sprite = actionMove;
-                    hexagon.typeOfType = 44;
+                    hexagon.typeOfType = 440;
                     return hexagon;
                     break;
                 case "actionTake":
                     hexagon.sprite = actionTake;
-                    hexagon.typeOfType = 45;
+                    hexagon.typeOfType = 450;
                     return hexagon;
                     break;
                 case "actionFire":
                     hexagon.sprite = actionFire;
-                    hexagon.typeOfType = 46;
+                    hexagon.typeOfType = 460;
                     return hexagon;
                     break;
                 case "actionReload":
                     hexagon.sprite = actionReload;
-                    hexagon.typeOfType = 46;
+                    hexagon.typeOfType = 470;
                     return hexagon;
                     break;
                 default:
@@ -390,6 +407,128 @@ var HexaEditorStream = Stream.extend({
 
     },
 
+    getPositionOfNeighbourBlock : function (block, type) {
+        var neighbour = {
+            x : 0,
+            y : 0
+        }
+
+        switch(type) {
+            case 1 :
+                neighbour.x = block.position.x + 52;
+                neighbour.y = block.position.y + 0;
+                return neighbour;
+                break;
+            case 2 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y + 45;
+                return neighbour;
+                break;
+            case 3 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y + 45;
+                return neighbour;
+                break;
+            case 4 :
+                 neighbour.x = block.position.x - 52;
+                 neighbour.y = block.position.y + 0;
+                 return neighbour;
+                 break;
+            case 5 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y - 45;
+                return neighbour;
+                break;
+            case 6 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y - 45;
+                return neighbour;
+                break;
+            case 7 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y + 60;
+                return neighbour;
+                break;
+            case 8 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y - 60;
+                return neighbour;
+                break;
+            case 9 :
+                neighbour.x = block.position.x + 26 + 52;
+                neighbour.y = block.position.y + 45;
+                return neighbour;
+                break;
+            default:
+                return neighbour;
+        }
+
+    },
+
+    gestionCreationBlock : function (block, index) {
+        /*
+            name : nameHexagon,
+            sprite : null,
+            typeOfType : -1
+        */
+
+        //console.log(this.nextHexagonToCreateObjectHexagon.name);
+        //console.log(this.nextHexagonToCreateObjectHexagon.typeOfType);
+
+        var type = this.nextHexagonToCreateObjectHexagon.typeOfType;
+        var tempBlock;
+
+        if(type == 110) { // BLOCK WHEN
+
+            // TODO VERIF SI PAS DANS UN WHEN
+            // TODO REMOVE SI EMPTY OU DO ECRASE BLOCK EXISTANT
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 2); // BLOCK DO
+            this.createBlock(this.camera, actionDo, tempBlock.x, tempBlock.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 9); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 211 && type <= 331) { // BLOCK AGENT + BLOCK VIEW
+
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+
+        }
+        else if (type >= 410 && type <= 470) { // BLOCK ACTION
+            // on ne crait pas de empty car après une action on ne peut plus rien faire
+
+            // TODO NE DOIT PAS ETRE DANS UN WHEN
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+        }
+        else if (type >= 131 && type <= 133) { // BLOCK OPERATOR
+            if(type != 133) {
+                // TODO verif entre 2 BLOCK FOR AND ET OR
+            }
+            else {
+                // TODO VERIF POUR NOT
+            }
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else {
+             this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+        }
+    },
+
     createTempBlock : function(scene, form, cX, cY) {
 
         var block = new PIXI.Sprite(form);
@@ -424,9 +563,8 @@ var HexaEditorStream = Stream.extend({
 
                     if(self.getDistanceInterBlock(this, bl) < self.minDistanceBlock) {
                         if(bl.type == 0.5) {
-                            self.createBlock(self.camera, self.nextHexagonToCreate, bl.position.x, bl.position.y, 2, indexTab);
+                           self.gestionCreationBlock(bl, indexTab);
                             // TODO destroy temp block maybe
-                           self.agentsMasterTab[indexTab][self.agentsMasterTab[indexTab].length-1].alpha = 1;
                            self.camera.removeChild(self.agentsMasterTab[indexTab][i]);
                            self.agentsMasterTab[indexTab].splice(i, 1);
                            self.camera.children.sort(depthCompare);
@@ -434,6 +572,10 @@ var HexaEditorStream = Stream.extend({
                            console.log("Create Block");
                         }
                     }
+                }
+
+                for (i = 0; i < self.agentsMasterTab[indexTab].length; i++) {
+                    self.agentsMasterTab[indexTab][i].alpha = 1;
                 }
             }
         };
@@ -513,8 +655,7 @@ function cameraZoomHexaEditorStream (e) {
     }
 };
 
-
-
+//================================================================================//
 
 var hexaEditor = new HexaEditorStream('#blocks', 0x777777);
 hexaEditor.initializeEditor();
@@ -523,140 +664,4 @@ hexaEditor.initMasterTab();
 hexaEditor.addWheelListenerHexaEditorStream();
 hexaEditor.cameraMove();
 
-//hexaEditor.createBlock(hexaEditor.camera, redHexagon, 250, 250, hexaEditor.blockTab, 2);
-//hexaEditor.createBlock(hexaEditor.camera, redHexagon, 200, 200, hexaEditor.blockTab, 2);
-
 animateHexaEditor();
-
-/*var containerEditor = $('#blocks')[0];
-var stageEditor = new PIXI.Container();
-var rendererEditor = new PIXI.autoDetectRenderer(container.offsetWidth,container.offsetHeight,{backgroundColor : 0x777777});
-var cameraEditor = new PIXI.Container();
-var hudEditor = new PIXI.Container();
-
-var nextHexagonToCreate = null;
-
-requestAnimationFrame( animateEditor );
-initEditor();
-cameraEditorMove(stageEditor, cameraEditor);
-addWheelListerEditor();
-
-function animateEditor () {
-
-    requestAnimationFrame( animateEditor );
-
-    rendererEditor.resize(containerEditor.offsetWidth-1, containerEditor.offsetHeight-1);
-
-    var coordCenterX = containerEditor.offsetWidth-1 / 2;
-    var coordCenterY = containerEditor.offsetHeight-1 / 2;
-
-    rendererEditor.render(stageEditor);
-
-
-}
-
-function initEditor() {
-	stageEditor.interactive = true;
-	rendererEditor.view.style.display = "block";
-    containerEditor.appendChild(rendererEditor.view);
-    cameraEditor.zoom = 1;
-    stageEditor.addChild(cameraEditor);
-    stageEditor.addChild(hudEditor);
-
-
-    //test
-
-    createBlock(cameraEditor, listAction, null, null, 400, 400, null, 0);
-
-    createBlock(cameraEditor, masterRocketLauncher, null, null, 400, 400, null, 1);
-
-    createBlock(cameraEditor, redHexagon, null, null, 165, 250, null, 2);
-
-    createBlock(cameraEditor, redHexagon, null, null, 250, 250, null, 2);
-
-
-
-
-}
-
-function cameraEditorMove(stg, cam) {
-
-    var isDragging = false;
-	var prevX;
-	var prevY;
-
-	stg.mousedown = function (moveData) {
-		var pos = moveData.global;
-		prevX = pos.x;
-		prevY = pos.y;
-		isDragging = true;
-	};
-
-	stg.mouseup = function (moveDate) {
-		isDragging = false;
-	};
-
-
-	stg.mousemove = function (moveData) {
-		if (!isDragging) {
-			return;
-		}
-
-		var pos = moveData.global;
-		var dx = pos.x - prevX;
-		var dy = pos.y - prevY;
-
-		cam.position.x += dx;
-		cam.position.y += dy;
-
-		prevX = pos.x;
-		prevY = pos.y;
-	};
-
-	 stg.mouseover = function(moveData) {
-
-	 	var pos = moveData.global;
-
-	 	alert(nextHexagonToCreate);
-
-        if(nextHexagonToCreate != null) {
-            createBlock(cam, nextHexagonToCreate, null, null, pos.x - cam.position.x, pos.y - cam.position.y, null, 0);
-        }
-
-     };
-}
-
-function addWheelListerEditor() {
-
-
-}
-
-function createBlock (scene, form, formDown, formTrans, cX, cY, tab, type) {
-
-    var block = new PIXI.Sprite(form);
-
-    block.position.x = cX;
-    block.position.y = cY;
-
-   	block.anchor.x = 0.5;
-    block.anchor.y = 0.5;
-
-    block.scale.x = 0.5;
-    block.scale.y = 0.5;
-
-    block.interactive = true;
-    block.buttonMode = true;
-    block.defaultCursor = "pointer";
-    block.type = type;
-
-    block.alpha = 1;
-    block.isdown = false;
-
-    scene.addChild(block);
-
-    // not working
-    //block.draggable();
-}
-
-
-*/
