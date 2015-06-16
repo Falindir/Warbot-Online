@@ -84,3 +84,12 @@ var life75 = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/life/75.png");
 var life80 = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/life/80.png");
 var life90 = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/life/90.png");
 var life100 = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/life/100.png");
+
+//===================================================================================//
+//                                     HUD
+//===================================================================================//
+
+var revertOff = PIXI.Texture.fromImage("/resources/hexaBlocks/hud/revertOff.png");
+var revertOn = PIXI.Texture.fromImage("/resources/hexaBlocks/hud/revertOn.png");
+var trashOff = PIXI.Texture.fromImage("/resources/hexaBlocks/hud/trashOff.png");
+var trashOn = PIXI.Texture.fromImage("/resources/hexaBlocks/hud/trashOn.png");
