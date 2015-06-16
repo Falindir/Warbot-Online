@@ -14,24 +14,43 @@ var HexaEditorStream = Stream.extend({
         this.agentsMasterTab = [];
     },
 
+    getNewActionBlock : function () {
+        var newActionBlock = {
+            x : 90,
+            y : 165,
+            addY : 120,
+            index : -1,
+            indexInTab : 2
+        };
+
+        return newActionBlock;
+    },
+
     initMasterTab : function () {
+
         var tab1 = [];
         tab1.nameMaster = "WarBase";
+        tab1.currentActionBlock = this.getNewActionBlock();
 
         var tab2 = [];
         tab2.nameMaster = "WarEngineer";
+        tab2.currentActionBlock = this.getNewActionBlock();
 
         var tab3 = [];
         tab3.nameMaster = "WarExplorer";
+        tab3.currentActionBlock = this.getNewActionBlock();
 
         var tab4 = [];
         tab4.nameMaster = "WarKamikaze";
+        tab4.currentActionBlock = this.getNewActionBlock();
 
         var tab5 = [];
         tab5.nameMaster = "WarRocketLauncher";
+        tab5.currentActionBlock = this.getNewActionBlock();
 
         var tab6 = [];
         tab6.nameMaster = "WarTurret";
+        tab6.currentActionBlock = this.getNewActionBlock();
 
         this.agentsMasterTab.push(tab1);
         this.agentsMasterTab.push(tab2);
@@ -41,9 +60,9 @@ var HexaEditorStream = Stream.extend({
         this.agentsMasterTab.push(tab6);
 
         for (i = 0; i < 6; i++) {
-            this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 35, 1, i);
-            this.createBlock(this.camera, listAction, 90, 200, 0, i);
-            this.createBlock(this.camera, emptyBlock, 90, 125, 0.5, i);
+            this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 75, 1, i);
+            this.createBlock(this.camera, listAction, 90, 240, 0, i);
+            this.createBlock(this.camera, emptyBlock, 90, 165, 0.5, i);
 
             // FOR TEST
             /*
@@ -525,7 +544,47 @@ var HexaEditorStream = Stream.extend({
 
     },
 
-    gestionCreationBlock : function (block, index) {
+    managementOfNewActionBlocks : function (block, index, tempI) {
+
+        var actionBlock = this.agentsMasterTab[index].currentActionBlock;
+
+        console.log ("BITE");
+
+        if(block.position.y > actionBlock.y && block.position.x == actionBlock.x) {
+            console.log ("2");
+
+            console.log (block.position.x);
+            console.log (block.position.y);
+            console.log (actionBlock.x);
+            console.log (actionBlock.y);
+
+
+            if(actionBlock.indexInTab != 2) {
+               // this.agentsMasterTab[index].currentActionBlock.y + actionBlock.addY;
+               // this.agentsMasterTab[index][actionBlock.indexInTab].position.y += actionBlock.addY;
+            }
+            else {
+                //tempI[0] -= 1;
+               // this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y + actionBlock.addY, 0.5, index);
+               // this.agentsMasterTab[index].currentActionBlock.y + actionBlock.addY;
+               // this.agentsMasterTab[index].splice(actionBlock.indexInTab, 1); // on supprime l'ancien emptyBlock du tableau
+               // this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 1; // on lui donne son nouveau index
+
+            }
+        }
+        else if (block.position.y == actionBlock.y && block.position.x == actionBlock.x) {
+                console.log ("3");
+               //tempI[0] -= 1;
+               console.log (this.agentsMasterTab[index].currentActionBlock.indexInTab);
+                this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y + actionBlock.addY, 0.5, index);
+                this.agentsMasterTab[index].currentActionBlock.y += actionBlock.addY;
+                //this.agentsMasterTab[index].splice(actionBlock.indexInTab, 1); // on supprime l'ancien emptyBlock du tableau
+                this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 2; // on lui donne son nouveau index
+                console.log (this.agentsMasterTab[index].currentActionBlock.indexInTab);
+        }
+    },
+
+    gestionCreationBlock : function (block, index, tempI) {
         /*
             name : nameHexagon,
             sprite : null,
@@ -534,6 +593,7 @@ var HexaEditorStream = Stream.extend({
 
         //console.log(this.nextHexagonToCreateObjectHexagon.name);
         //console.log(this.nextHexagonToCreateObjectHexagon.typeOfType);
+
 
         var type = this.nextHexagonToCreateObjectHexagon.typeOfType;
         var tempBlock;
@@ -595,6 +655,10 @@ var HexaEditorStream = Stream.extend({
         else {
              this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
         }
+
+
+        this.managementOfNewActionBlocks(block, index, tempI);
+
     },
 
     createTempBlock : function(scene, form, cX, cY) {
@@ -625,22 +689,36 @@ var HexaEditorStream = Stream.extend({
         block.mousedown = function(data) {
             var indexTab = self.getGoodIndexMasterTab();
 
+            var ind = -1;
+            var cont = true
+            var i = 0;
+
             if(self.nameActiveMasterAgent != null) {
-                for (i = 0; i < self.agentsMasterTab[indexTab].length; i++) {
+                while (i < self.agentsMasterTab[indexTab].length && cont) {
                     var bl = self.agentsMasterTab[indexTab][i];
 
                     if(self.getDistanceInterBlock(this, bl) < self.minDistanceBlock) {
                         if(bl.type == 0.5) {
-                           self.gestionCreationBlock(bl, indexTab);
+                           var tempI = [];
+                           tempI[0] = i;
+
+                           self.gestionCreationBlock(bl, indexTab, tempI);
                             // TODO destroy temp block maybe
-                           self.camera.removeChild(self.agentsMasterTab[indexTab][i]);
-                           self.agentsMasterTab[indexTab].splice(i, 1);
+
+                           self.camera.removeChild(self.agentsMasterTab[indexTab][tempI[0]]);
+                           self.agentsMasterTab[indexTab].splice(tempI[0], 1);
                            self.camera.children.sort(depthCompare);
+                           //console.log(self.agentsMasterTab[indexTab].length);
                            // TODO destroy console log
                            console.log("Create Block");
+                           cont = false;
                         }
                     }
+
+                    i++;
                 }
+
+
 
                 for (i = 0; i < self.agentsMasterTab[indexTab].length; i++) {
                     self.agentsMasterTab[indexTab][i].alpha = 1;
@@ -723,6 +801,62 @@ function cameraZoomHexaEditorStream (e) {
     }
 };
 
+function addButton(scene, form, formDown, cX, cY, type) {
+
+	var button = new PIXI.Sprite(form);
+
+	button.position.x = cX;
+	button.position.y = cY;
+
+	button.anchor.x = 0.5;
+	button.anchor.y = 0.5;
+
+	button.scale.x = 0.15;
+	button.scale.y = 0.15;
+
+	button.interactive = true;
+	button.buttonMode = true;
+	button.defaultCursor = "pointer";
+	button.type = type;
+
+	button.alpha = 1;
+	button.isdown = false;
+
+	button.mouseover = function(data) {
+        this.isOver = true;
+        if (this.isdown)
+            return;
+        this.texture = formDown;
+    };
+
+    button.mouseout = function(data) {
+        this.isOver = false;
+        if (this.isdown)
+            return;
+        this.texture = form;
+   	};
+
+   	button.mousedown = function(data) {
+        if( type == 1 ) {
+            var index = scene.getGoodIndexMasterTab();
+            var size = scene.agentsMasterTab[index].length;
+            for (i = size; i > 1; i--) {
+                scene.camera.removeChild(scene.agentsMasterTab[index][i]);
+                scene.agentsMasterTab[index].splice(i, 1);
+                scene.agentsMasterTab[index].currentActionBlock.y = 165;
+                scene.agentsMasterTab[index].currentActionBlock.indexInTab = 2;
+            }
+
+            scene.camera.position.x = 0;
+            scene.camera.position.y = 0;
+            scene.createBlock(scene.camera, emptyBlock, 90, 165, 0.5, index);
+            scene.agentsMasterTab[index][2].alpha = 1;
+        }
+    };
+
+	scene.hud.addChild(button);
+}
+
 //================================================================================//
 
 var hexaEditor = new HexaEditorStream('#blocks', 0x777777);
@@ -732,4 +866,10 @@ hexaEditor.initMasterTab();
 hexaEditor.addWheelListenerHexaEditorStream();
 hexaEditor.cameraMove();
 
+addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
+addButton(hexaEditor, trashOff, trashOn, 65, 25, 1);
+
 animateHexaEditor();
+
+
+
