@@ -14,6 +14,34 @@ var HexaEditorStream = Stream.extend({
         this.agentsMasterTab = [];
     },
 
+    getConstantHexaEditor : function () {
+
+        var typeB = {
+            list   : 0,
+            empty  : 0.5,
+            master : 1,
+            normal : 2
+        };
+
+        var coord = {
+            xFirstBlock  : 90,
+            yFirstBlock  : 165,
+            xMasterBlock : 90,
+            yMasterBlock : 75,
+            xFirstList   : 90,
+            yFirstList   : 240,
+        };
+
+        var constant = {
+            coordinate      : coord,
+            sizeBlock       : 60,
+            indexFirstBlock : 2,
+            typeBlock       : typeB
+        };
+
+        return constant;
+    },
+
     getNewActionBlock : function () {
         var newActionBlock = {
             x : 90,
@@ -331,6 +359,10 @@ var HexaEditorStream = Stream.extend({
                     hexagon.sprite = actionReload;
                     hexagon.typeOfType = 470;
                     break;
+                case "actionRepair":
+                    hexagon.sprite = actionRepair;
+                    hexagon.typeOfType = 480;
+                    break;
                 case "bag00" :
                     hexagon.sprite = bag00;
                     hexagon.typeOfType = 500;
@@ -435,6 +467,105 @@ var HexaEditorStream = Stream.extend({
                     hexagon.sprite = life100;
                     hexagon.typeOfType = 610;
                     break;
+                case "createAgent" :
+                    hexagon.sprite = createAgent;
+                    hexagon.typeOfType = 700;
+                    break;
+                case "createBase" :
+                    hexagon.sprite = createBase;
+                    hexagon.typeOfType = 710;
+                    break;
+                case "createEngineer" :
+                    hexagon.sprite = createEngineer;
+                    hexagon.typeOfType = 720;
+                    break;
+                case "createExplorer" :
+                    hexagon.sprite = createExplorer;
+                    hexagon.typeOfType = 730;
+                    break;
+                case "createKamikaze" :
+                    hexagon.sprite = createKamikaze;
+                    hexagon.typeOfType = 740;
+                    break;
+                case "createRocketLauncher" :
+                    hexagon.sprite = createRocketLauncher;
+                    hexagon.typeOfType = 750;
+                    break;
+                case "createTurret" :
+                    hexagon.sprite = createTurret;
+                    hexagon.typeOfType = 760;
+                    break;
+                case "createWall" :
+                    hexagon.sprite = createWall;
+                    hexagon.typeOfType = 770;
+                    break;
+                case "messageContent" :
+                    hexagon.sprite = messageContent;
+                    hexagon.typeOfType = 800;
+                    break;
+                case "messageReceive" :
+                    hexagon.sprite = messageReceive;
+                    hexagon.typeOfType = 810;
+                    break;
+                case "messageSend" :
+                    hexagon.sprite = messageSend;
+                    hexagon.typeOfType = 820;
+                    break;
+                case "targetBase" :
+                    hexagon.sprite = messageTargetBase;
+                    hexagon.typeOfType = 830;
+                    break;
+                case "targetEngineer" :
+                    hexagon.sprite = messageTargetEngineer;
+                    hexagon.typeOfType = 840;
+                    break;
+                case "targetExplorer" :
+                    hexagon.sprite = messageTargetExplorer;
+                    hexagon.typeOfType = 850;
+                    break;
+                case "targetKamikaze" :
+                    hexagon.sprite = messageTargetKamikaze;
+                    hexagon.typeOfType = 860;
+                    break;
+                case "targetRocketLauncher" :
+                    hexagon.sprite = messageTargetRocketLauncher;
+                    hexagon.typeOfType = 870;
+                    break;
+                case "targetTurret" :
+                    hexagon.sprite = messageTargetTurret;
+                    hexagon.typeOfType = 880;
+                    break;
+                case "interactionBlocked" :
+                    hexagon.sprite = interactionBlocked;
+                    hexagon.typeOfType = 900;
+                    break;
+                case "interactionDebugMessage" :
+                    hexagon.sprite = interactionDebugMessage;
+                    hexagon.typeOfType = 910;
+                    break;
+                case "interactionDistance" :
+                    hexagon.sprite = interactionDistance;
+                    hexagon.typeOfType = 920;
+                    break;
+                case "interactionFollow" :
+                    hexagon.sprite = interactionFollow;
+                    hexagon.typeOfType = 930;
+                    break;
+                case "positionFirst" :
+                    hexagon.sprite = positionFirst;
+                    hexagon.typeOfType = 1000;
+                    break;
+                case "positionLast" :
+                    hexagon.sprite = positionFirst;
+                    hexagon.typeOfType = 1010;
+                    break;
+                case "positionRandom" :
+                    hexagon.sprite = positionFirst;
+                    hexagon.typeOfType = 1020;
+                    break;
+
+
+
                 default:
                     hexagon.sprite = emptyBlock;
                     hexagon.typeOfType = 0;
@@ -624,7 +755,7 @@ var HexaEditorStream = Stream.extend({
             this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
 
         }
-        else if (type >= 410 && type <= 470) { // BLOCK ACTION
+        else if (type >= 410 && type <= 480) { // BLOCK ACTION
             // on ne crait pas de empty car après une action on ne peut plus rien faire
 
             // TODO NE DOIT PAS ETRE DANS UN WHEN
@@ -645,6 +776,38 @@ var HexaEditorStream = Stream.extend({
             this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
         }
         else if (type >= 500 && type <= 610) { // BLOCK BAG + LIFE
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 700 && type <= 770) { // BLOCK CREATE
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 800 && type <= 880) { // BLOCK MESSAGE
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 900 && type <= 930) { // BLOCK INTERACTION
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 1000 && type <= 1020) { // BLOCK INTERACTION
             // TODO VERIF EMPTY NO ECRASE
 
             this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
