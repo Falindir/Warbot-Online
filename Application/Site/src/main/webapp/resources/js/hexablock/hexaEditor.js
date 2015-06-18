@@ -87,8 +87,14 @@ var HexaEditorStream = Stream.extend({
         this.agentsMasterTab.push(tab5);
         this.agentsMasterTab.push(tab6);
 
+        this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 75, 1, 0);
+        this.createBlock(this.camera, this.getSpriteMaster(tab2.nameMaster), 90, 75, 1, 1);
+        this.createBlock(this.camera, this.getSpriteMaster(tab3.nameMaster), 90, 75, 1, 2);
+        this.createBlock(this.camera, this.getSpriteMaster(tab4.nameMaster), 90, 75, 1, 3);
+        this.createBlock(this.camera, this.getSpriteMaster(tab5.nameMaster), 90, 75, 1, 4);
+        this.createBlock(this.camera, this.getSpriteMaster(tab6.nameMaster), 90, 75, 1, 5);
+
         for (i = 0; i < 6; i++) {
-            this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 75, 1, i);
             this.createBlock(this.camera, listAction, 90, 240, 0, i);
             this.createBlock(this.camera, emptyBlock, 90, 165, 0.5, i);
 
@@ -563,9 +569,66 @@ var HexaEditorStream = Stream.extend({
                     hexagon.sprite = positionFirst;
                     hexagon.typeOfType = 1020;
                     break;
-
-
-
+                case "ableGive" :
+                    hexagon.sprite = ableGive;
+                    hexagon.typeOfType = 1100;
+                    break;
+                case "ableTake" :
+                    hexagon.sprite = ableTake;
+                    hexagon.typeOfType = 1110;
+                    break;
+                case "heading00" :
+                    hexagon.sprite = heading00;
+                    hexagon.typeOfType = 1200;
+                    break;
+                case "heading45" :
+                    hexagon.sprite = heading45;
+                    hexagon.typeOfType = 1210;
+                    break;
+                case "heading90" :
+                    hexagon.sprite = heading90;
+                    hexagon.typeOfType = 1220;
+                    break;
+                case "heading135" :
+                    hexagon.sprite = heading135;
+                    hexagon.typeOfType = 1230;
+                    break;
+                case "heading180" :
+                    hexagon.sprite = heading180;
+                    hexagon.typeOfType = 1240;
+                    break;
+                case "heading225" :
+                    hexagon.sprite = heading225;
+                    hexagon.typeOfType = 1250;
+                    break;
+                case "heading270" :
+                    hexagon.sprite = heading270;
+                    hexagon.typeOfType = 1260;
+                    break;
+                case "heading315" :
+                    hexagon.sprite = heading315;
+                    hexagon.typeOfType = 1270;
+                    break;
+                case "heading360" :
+                    hexagon.sprite = heading360;
+                    hexagon.typeOfType = 1280;
+                    break;
+                case "headingRandom" :
+                    hexagon.sprite = headingRandom;
+                    hexagon.typeOfType = 1290;
+                    break;
+                case "moreCost" :
+                    hexagon.sprite = moreCost;
+                    hexagon.typeOfType = 1500;
+                    break;
+                case "stringIAmHere" :
+                    hexagon.sprite = stringIAmHere;
+                    hexagon.typeOfType = 1300;
+                    break;
+                case "stringWhereAreYou" :
+                    hexagon.sprite = stringWhereAreYou;
+                    hexagon.typeOfType = 1301;
+                    break;
                 default:
                     hexagon.sprite = emptyBlock;
                     hexagon.typeOfType = 0;
@@ -814,6 +877,38 @@ var HexaEditorStream = Stream.extend({
 
             tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
             this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 1100 && type <= 1110) { // BLOCK ABLE
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 1200 && type <= 1290) { // BLOCK HEADING
+            // TODO VERIF EMPTY NO ECRASE
+
+            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 1300 && type <= 1301) { // BLOCK STRING
+                    // TODO VERIF EMPTY NO ECRASE
+
+                    this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                    tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                    this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+        }
+        else if (type >= 1500 && type <= 1501) { // BLOCK HEADING
+                    // TODO VERIF EMPTY NO ECRASE
+
+                    this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                    tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                    this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
         }
         else {
              this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);

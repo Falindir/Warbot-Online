@@ -152,6 +152,9 @@ var positionRandom = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/positi
 var stringIAmHere = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/string/iAmHere.png");
 var stringWhereAreYou = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/string/whereAreYou.png");
 
+// HEXAGON OTHER //
+var moreCost = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/more/cost.png");
+
 //===================================================================================//
 //                                     HUD                                           //
 //===================================================================================//
