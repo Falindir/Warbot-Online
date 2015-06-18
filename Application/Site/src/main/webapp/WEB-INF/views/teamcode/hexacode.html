@@ -71,10 +71,17 @@
             <li role="presentation"><a href="#actions" aria-controls="actions" role="tab" data-toggle="tab">Actions</a></li>
             <li role="presentation"><a href="#bag" aria-controls="bag" role="tab" data-toggle="tab">Bag</a></li>
             <li role="presentation"><a href="#life" aria-controls="life" role="tab" data-toggle="tab">Life</a></li>
+            <li role="presentation"><a href="#create" aria-controls="create" role="tab" data-toggle="tab">Create</a></li>
+            <li role="presentation"><a href="#message" aria-controls="message" role="tab" data-toggle="tab">Message</a></li>
+            <li role="presentation"><a href="#interaction" aria-controls="interaction" role="tab" data-toggle="tab">Interaction</a></li>
+            <li role="presentation"><a href="#position" aria-controls="position" role="tab" data-toggle="tab">Position</a></li>
+            <li role="presentation"><a href="#able" aria-controls="able" role="tab" data-toggle="tab">Able</a></li>
+            <li role="presentation"><a href="#heading" aria-controls="heading" role="tab" data-toggle="tab">Heading</a></li>
+            <li role="presentation"><a href="#string" aria-controls="string" role="tab" data-toggle="tab">String</a></li>
+            <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
         </ul>
 
         <div class="tab-content">
-
             <div role="tabpanel" class="tab-pane active" id="home">
                 <table class="table table-bordered">
                     <tr class="">
@@ -565,6 +572,17 @@
                             Action de recharger
                         </td>
                     </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="actionRepair_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="actionRepair" class = "imageHexagon" src="/resources/hexaBlocks/blocks/action/repair.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Action de réparer
+                        </td>
+                    </tr>
                 </table>
             </div>
 
@@ -852,9 +870,460 @@
                     </tr>
                 </table>
             </div>
-
+            <div role="tabpanel" class="tab-pane" id="create">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createAgent_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createAgent" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/agent.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createEngineer_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createEngineer" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/engineer.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type Engineer
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createExplorer_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createExplorer" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/explorer.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type Explorer
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createKamikaze_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createKamikaze" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/kamikaze.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type Kamikaze
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createRocketLauncher_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createRocketLauncher" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/rocketLauncher.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type RocketLauncher
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createTurret_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createTurret" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/turret.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type Turret
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="createWall_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="createWall" class = "imageHexagon" src="/resources/hexaBlocks/blocks/create/wall.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Créer un agent de type Wall
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="message">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="messageContent_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="messageContent" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/content.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Contenu d'un message
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="messageReceive_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="messageReceive" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/receive.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Récupérer les messages reçus
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="messageSend_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="messageSend" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/send.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Envoyer un message
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetBase_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetBase" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetBase.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type Base
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetEngineer_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetEngineer" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetEngineer.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type Engineer
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetExplorer_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetExplorer" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetExplorer.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type Explorer
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetKamikaze_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetKamikaze" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetKamikaze.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type Kamikaze
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetRocketLauncher_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetRocketLauncher" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetRocketLauncher.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type RocketLauncher
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="targetTurret_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="targetTurret" class = "imageHexagon" src="/resources/hexaBlocks/blocks/message/targetTurret.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le destinataire / l'expéditeur est un agent de type Turret
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="interaction">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="interactionBlocked_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="interactionBlocked" class = "imageHexagon" src="/resources/hexaBlocks/blocks/interaction/blocked.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Si l'agent se retrouve bloqué
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="interactionDebugMessage_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="interactionDebugMessage" class = "imageHexagon" src="/resources/hexaBlocks/blocks/interaction/debugMessage.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Les messages de debug de l'agent
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="interactionDistance_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="interactionDistance" class = "imageHexagon" src="/resources/hexaBlocks/blocks/interaction/distance.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            La distance entre deux agent
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="interactionFollow_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="interactionFollow" class = "imageHexagon" src="/resources/hexaBlocks/blocks/interaction/follow.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Un agent suit un autre agent
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="position">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="positionFirst_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="positionFirst" class = "imageHexagon" src="/resources/hexaBlocks/blocks/position/first.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Être premier
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="positionLast_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="positionLast" class = "imageHexagon" src="/resources/hexaBlocks/blocks/position/last.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Être dernier
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="positionRandom_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="positionRandom" class = "imageHexagon" src="/resources/hexaBlocks/blocks/position/random.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Être random
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="able">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="ableGive_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="ableGive" class = "imageHexagon" src="/resources/hexaBlocks/blocks/able/give.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Peut t'on donner de la nourriture
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="ableTake_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="ableTake" class = "imageHexagon" src="/resources/hexaBlocks/blocks/able/take.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Peut t'on prendre de la nourriture
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="heading">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading00_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading00" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/0.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 0 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading45_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading45" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/45.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 45 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading90_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading90" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/90.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 90 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading135_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading135" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/135.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 135 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading180_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading180" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/180.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 180 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading225_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading225" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/225.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 225 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading270_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading270" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/270.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 270 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading315_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading315" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/315.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 315 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="heading360_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="heading360" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/360.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent à 360 degré
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="headingRandom_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="headingRandom" class = "imageHexagon" src="/resources/hexaBlocks/blocks/heading/random.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Heading de l'agent random
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="string">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="stringIAmHere_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="stringIAmHere" class = "imageHexagon" src="/resources/hexaBlocks/blocks/string/iAmHere.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Chaîne de caractère : I AM HERE
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="stringWhereAreYou_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="stringWhereAreYou" class = "imageHexagon" src="/resources/hexaBlocks/blocks/string/whereAreYou.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Chaîne de caractère : WHERE ARE YOU
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="other">
+                <table class="table table-bordered">
+                    <tr class="">
+                        <td class="imagesToolsTable">
+                            <div class ="containImagesHexagon">
+                                <img id="moreCost_select" class = "selectHexagon" src="/resources/hexaBlocks/blocks/other/selectHexagon.png"/>
+                                <img id="moreCost" class = "imageHexagon" src="/resources/hexaBlocks/blocks/more/cost.png"/>
+                            </div>
+                        </td>
+                        <td class="documentationToolsTable">
+                            Le cout d'un agent
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
+
+
 
     <div class="outer-west">
 
