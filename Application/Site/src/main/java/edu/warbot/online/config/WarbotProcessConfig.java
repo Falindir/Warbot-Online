@@ -2,7 +2,9 @@ package edu.warbot.online.config;
 
 import edu.warbot.online.Application;
 import edu.warbot.online.services.TeamService;
+import edu.warbot.online.services.TrainingConfigurationService;
 import edu.warbot.online.services.impl.TeamServiceImpl;
+import edu.warbot.online.services.impl.TrainingConfigurationServiceImpl;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,6 +33,11 @@ public class WarbotProcessConfig {
     @Bean
     public TeamService teamService() {
         return new TeamServiceImpl();
+    }
+
+    @Bean
+    public TrainingConfigurationService trainingConfigurationService() {
+        return new TrainingConfigurationServiceImpl();
     }
 
 }

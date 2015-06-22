@@ -1,6 +1,7 @@
 package edu.warbot.online.process.game;
 
 import edu.warbot.agents.ControllableWarAgent;
+import edu.warbot.agents.WarResource;
 import edu.warbot.game.InGameTeam;
 import edu.warbot.game.WarGame;
 import edu.warbot.launcher.WarLauncher;
@@ -35,6 +36,14 @@ public class TrainingConfigurationSituationLoader implements SituationLoader {
         return trainingConfiguration;
     }
 
+
+    private void initAgentInFunctionOfTrainingAgent(ControllableWarAgent ca, TrainingAgent ta) {
+        ca.setX(ta.getX());
+        ca.setY(ta.getY());
+        ca.setHeading(ta.getAngle());
+        ca.init((int) ta.getLife());
+    }
+
     @Override
     public void launchAllAgentsFromSituation(WarLauncher warLauncher, WarGame warGame) {
         List<InGameTeam> players = warGame.getPlayerTeams();
@@ -45,17 +54,21 @@ public class TrainingConfigurationSituationLoader implements SituationLoader {
             try {
                 TrainingAgent agent = it.next();
                 //TODO CHANGE VALUE TO KNOWN CONSTANTS LIKE 0, 1, 2
-                if (agent.getTeamName().equals("myTeam")) {
+                if (agent.getTeamName().equals("red")) {
 
                     ControllableWarAgent ca =
                             players.get(0).instantiateNewControllableWarAgent(agent.getType().name());
+                    initAgentInFunctionOfTrainingAgent(ca, agent);
                     players.get(0).addWarAgent(ca);
-                } else if (agent.getTeamName().equals("other")) {
+                } else if (agent.getTeamName().equals("blue")) {
                     ControllableWarAgent ca =
                             players.get(1).instantiateNewControllableWarAgent(agent.getType().name());
+                    initAgentInFunctionOfTrainingAgent(ca, agent);
                     players.get(1).addWarAgent(ca);
                 } else {
-                    warGame.getMotherNatureTeam().createAndLaunchResource(warGame.getMap(), warLauncher, agent.getType());
+                    WarResource wr = warGame.getMotherNatureTeam().instantiateNewWarResource(agent.getType().name());
+                    wr.setHeading(agent.getAngle());
+                    wr.setXY(agent.getX(), agent.getY());
                 }
 
             } catch (InstantiationException e) {
