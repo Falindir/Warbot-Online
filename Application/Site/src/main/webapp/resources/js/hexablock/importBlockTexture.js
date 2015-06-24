@@ -20,6 +20,9 @@ var emptyBlock = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/other/empt
 var actionWhen = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/condition/when.png");
 var actionDo = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/condition/do.png");
 
+// HEXAGON NOTHING //
+var nothing = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/more/nothing.png");
+
 // HEXAGON OPERATOR //
 var operatorAnd = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/operator/and.png");
 var operatorOr = PIXI.Texture.fromImage("/resources/hexaBlocks/blocks/operator/or.png");

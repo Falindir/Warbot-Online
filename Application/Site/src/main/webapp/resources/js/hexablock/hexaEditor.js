@@ -1,5 +1,5 @@
 
-var HexaEditorStream = Stream.extend({
+var HexagonEditorStream = Stream.extend({
 
     initializeEditor : function() {
         this.nextHexagonToCreate = null;
@@ -12,10 +12,17 @@ var HexaEditorStream = Stream.extend({
         this.nameActiveMasterAgent = null;
         this.lastIndexActiveMasterTab = null;
         this.agentsMasterTab = [];
+        this.idBlock = 0;
+        this.blockXmlTab = [];
+        this.CONSTANT = this.getConstant();
+    },
+    
+    getNextIdBlock : function () {
+        this.idBlock += 1;
+        return this.idBlock;
     },
 
-    getConstantHexaEditor : function () {
-
+    getConstant : function () {
         var typeB = {
             list   : 0,
             empty  : 0.5,
@@ -29,7 +36,7 @@ var HexaEditorStream = Stream.extend({
             xMasterBlock : 90,
             yMasterBlock : 75,
             xFirstList   : 90,
-            yFirstList   : 240,
+            yFirstList   : 240
         };
 
         var constant = {
@@ -54,62 +61,32 @@ var HexaEditorStream = Stream.extend({
         return newActionBlock;
     },
 
+    initMasterBlock : function(name, index) {
+        var tab = [];
+        tab.nameMaster = name;
+        tab.currentActionBlock = this.getNewActionBlock();
+        tab.numberList = 1;
+        tab.lastPosYList = this.CONSTANT.coordinate.yFirstList;
+
+        this.agentsMasterTab.push(tab);
+        this.createBlock(this.camera, getSpriteMaster(tab.nameMaster), this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, 1, index);
+
+        var blockXml = new Block(this.getNextIdBlock(), 'master', this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, name);
+        this.blockXmlTab.push(blockXml);
+
+        this.createBlock(this.camera, listAction, this.CONSTANT.coordinate.xFirstList, this.CONSTANT.coordinate.yFirstList, this.CONSTANT.typeBlock.list, index);
+        this.createBlock(this.camera, emptyBlock, this.CONSTANT.coordinate.xFirstBlock, this.CONSTANT.coordinate.yFirstBlock, this.CONSTANT.typeBlock.empty, index);
+        //var actionUser = new Block(this.getNextIdBlock(), 'actionUser', this.CONSTANT.coordinate.xFirstBlock, this.CONSTANT.coordinate.yFirstBlock, "ActionUser");
+        //this.blockXmlTab[index].addChild(actionUser);
+    },
+
     initMasterTab : function () {
-
-        var tab1 = [];
-        tab1.nameMaster = "WarBase";
-        tab1.currentActionBlock = this.getNewActionBlock();
-
-        var tab2 = [];
-        tab2.nameMaster = "WarEngineer";
-        tab2.currentActionBlock = this.getNewActionBlock();
-
-        var tab3 = [];
-        tab3.nameMaster = "WarExplorer";
-        tab3.currentActionBlock = this.getNewActionBlock();
-
-        var tab4 = [];
-        tab4.nameMaster = "WarKamikaze";
-        tab4.currentActionBlock = this.getNewActionBlock();
-
-        var tab5 = [];
-        tab5.nameMaster = "WarRocketLauncher";
-        tab5.currentActionBlock = this.getNewActionBlock();
-
-        var tab6 = [];
-        tab6.nameMaster = "WarTurret";
-        tab6.currentActionBlock = this.getNewActionBlock();
-
-        this.agentsMasterTab.push(tab1);
-        this.agentsMasterTab.push(tab2);
-        this.agentsMasterTab.push(tab3);
-        this.agentsMasterTab.push(tab4);
-        this.agentsMasterTab.push(tab5);
-        this.agentsMasterTab.push(tab6);
-
-        this.createBlock(this.camera, this.getSpriteMaster(tab1.nameMaster), 90, 75, 1, 0);
-        this.createBlock(this.camera, this.getSpriteMaster(tab2.nameMaster), 90, 75, 1, 1);
-        this.createBlock(this.camera, this.getSpriteMaster(tab3.nameMaster), 90, 75, 1, 2);
-        this.createBlock(this.camera, this.getSpriteMaster(tab4.nameMaster), 90, 75, 1, 3);
-        this.createBlock(this.camera, this.getSpriteMaster(tab5.nameMaster), 90, 75, 1, 4);
-        this.createBlock(this.camera, this.getSpriteMaster(tab6.nameMaster), 90, 75, 1, 5);
-
-        for (i = 0; i < 6; i++) {
-            this.createBlock(this.camera, listAction, 90, 240, 0, i);
-            this.createBlock(this.camera, emptyBlock, 90, 165, 0.5, i);
-
-            // FOR TEST
-            /*
-            this.createBlock(this.camera, actionWhen, 300, 300, 2, i);
-
-            this.createBlock(this.camera, emptyBlock, 352, 300, 0.5, i);
-            this.createBlock(this.camera, emptyBlock, 248, 300, 0.5, i);
-            this.createBlock(this.camera, emptyBlock, 326, 345, 0.5, i);
-            this.createBlock(this.camera, emptyBlock, 326, 255, 0.5, i);
-            this.createBlock(this.camera, emptyBlock, 274, 345, 0.5, i);
-            this.createBlock(this.camera, emptyBlock, 274, 255, 0.5, i);
-            */
-        }
+        this.initMasterBlock("WarBase", 0);
+        this.initMasterBlock("WarEngineer", 1);
+        this.initMasterBlock("WarExplorer", 2);
+        this.initMasterBlock("WarKamikaze", 3);
+        this.initMasterBlock("WarRocketLauncher", 4);
+        this.initMasterBlock("WarTurret", 5);
 
         this.camera.children.sort(depthCompare);
     },
@@ -152,489 +129,6 @@ var HexaEditorStream = Stream.extend({
                     return i;
             }
         }
-    },
-
-    getSpriteMaster : function (name) {
-
-        if(name != null) {
-            switch(name) {
-                case "WarBase":
-                    return masterBase;
-                    break;
-                case "WarEngineer":
-                    return masterEngineer;
-                    break;
-                case "WarExplorer":
-                    return masterExplorer;
-                    break;
-                case "WarKamikaze":
-                    return masterKamikaze;
-                    break;
-                case "WarRocketLauncher":
-                    return masterRocketLauncher;
-                    break;
-                case "WarTurret":
-                    return masterTurret;
-                    break;
-                default:
-                  return null;
-            }
-        }
-        return null;
-    },
-
-    getSpriteOfAgent : function (nameHexagon) {
-
-        var hexagon = {
-            name : nameHexagon,
-            sprite : null,
-            typeOfType : -1
-        }
-
-        if(nameHexagon != null) {
-            switch(nameHexagon) {
-                case "actionWhen":
-                    hexagon.sprite = actionWhen;
-                    hexagon.typeOfType = 110;
-                    break;
-                case "actionDo":
-                    hexagon.sprite = actionDo;
-                    hexagon.typeOfType = 120;
-                    break;
-                case "operatorAnd" :
-                    hexagon.sprite = operatorAnd;
-                    hexagon.typeOfType = 131;
-                    break;
-                case "operatorOr" :
-                    hexagon.sprite = operatorOr;
-                    hexagon.typeOfType = 132;
-                    break;
-                case "operatorNot" :
-                    hexagon.sprite = operatorNot;
-                    hexagon.typeOfType = 133;
-                    break;
-                case "agentBaseTeam1":
-                    hexagon.sprite = agentBaseTeam1;
-                    hexagon.typeOfType = 211;
-                    break;
-                case "agentEngineerTeam1":
-                    hexagon.sprite = agentEngineerTeam1;
-                    hexagon.typeOfType = 212;
-                    break;
-                case "agentExplorerTeam1":
-                    hexagon.sprite = agentExplorerTeam1;
-                    hexagon.typeOfType = 213;
-                    break;
-                case "agentKamikazeTeam1":
-                    hexagon.sprite = agentKamikazeTeam1;
-                    hexagon.typeOfType = 214;
-                    break;
-                case "agentRocketLauncherTeam1":
-                    hexagon.sprite = agentRocketLauncherTeam1;
-                    hexagon.typeOfType = 215;
-                    break;
-                case "agentTurretTeam1":
-                    hexagon.sprite = agentTurretTeam1;
-                    hexagon.typeOfType = 216;
-                    break;
-                case "agentWallTeam1":
-                    hexagon.sprite = agentWallTeam1;
-                    hexagon.typeOfType = 217;
-                    break;
-                case "agentBaseTeam2":
-                    hexagon.sprite = agentBaseTeam2;
-                    hexagon.typeOfType = 221;
-                    break;
-                case "agentEngineerTeam2":
-                    hexagon.sprite = agentEngineerTeam2;
-                    hexagon.typeOfType = 222;
-                    break;
-                case "agentExplorerTeam2":
-                    hexagon.sprite = agentExplorerTeam2;
-                    hexagon.typeOfType = 223;
-                    break;
-                case "agentKamikazeTeam2":
-                    hexagon.sprite = agentKamikazeTeam2;
-                    hexagon.typeOfType = 224;
-                    break;
-                case "agentRocketLauncherTeam2":
-                    hexagon.sprite = agentRocketLauncherTeam2;
-                    hexagon.typeOfType = 225;
-                    break;
-                case "agentTurretTeam2":
-                    hexagon.sprite = agentTurretTeam2;
-                    hexagon.typeOfType = 226;
-                    break;
-                case "agentWallTeam2":
-                    hexagon.sprite = agentWallTeam2;
-                    hexagon.typeOfType = 227;
-                    break;
-                case "agentFood":
-                    hexagon.sprite = agentFood;
-                    hexagon.typeOfType = 231;
-                    break;
-                case "viewAgent":
-                    hexagon.sprite = viewAgent;
-                    hexagon.typeOfType = 301;
-                    break;
-                case "viewBaseTeam1":
-                    hexagon.sprite = viewBaseTeam1;
-                    hexagon.typeOfType = 311;
-                    break;
-                case "viewEngineerTeam1":
-                    hexagon.sprite = viewEngineerTeam1;
-                    hexagon.typeOfType = 312;
-                    break;
-                case "viewExplorerTeam1":
-                    hexagon.sprite = viewExplorerTeam1;
-                    hexagon.typeOfType = 313;
-                    break;
-                case "viewKamikazeTeam1":
-                    hexagon.sprite = viewKamikazeTeam1;
-                    hexagon.typeOfType = 314;
-                    break;
-                case "viewRocketLauncherTeam1":
-                    hexagon.sprite = viewRocketLauncherTeam1;
-                    hexagon.typeOfType = 315;
-                    break;
-                case "viewTurretTeam1":
-                    hexagon.sprite = viewTurretTeam1;
-                    hexagon.typeOfType = 316;
-                    break;
-                case "viewWallTeam1":
-                    hexagon.sprite = viewWallTeam1;
-                    hexagon.typeOfType = 317;
-                    break;
-                case "viewBaseTeam2":
-                    hexagon.sprite = viewBaseTeam2;
-                    hexagon.typeOfType = 321;
-                    break;
-                case "viewEngineerTeam2":
-                    hexagon.sprite = viewEngineerTeam2;
-                    hexagon.typeOfType = 322;
-                    break;
-                case "viewExplorerTeam2":
-                    hexagon.sprite = viewExplorerTeam2;
-                    hexagon.typeOfType = 323;
-                    break;
-                case "viewKamikazeTeam2":
-                    hexagon.sprite = viewKamikazeTeam2;
-                    hexagon.typeOfType = 324;
-                    break;
-                case "viewRocketLauncherTeam2":
-                    hexagon.sprite = viewRocketLauncherTeam2;
-                    hexagon.typeOfType = 325;
-                    break;
-                case "viewTurretTeam2":
-                    hexagon.sprite = viewTurretTeam2;
-                    hexagon.typeOfType = 326;
-                    break;
-                case "viewWallTeam2":
-                    hexagon.sprite = viewWallTeam2;
-                    hexagon.typeOfType = 327;
-                    break;
-                case "viewFood":
-                    hexagon.sprite = viewFood;
-                    hexagon.typeOfType = 331;
-                    break;
-                case "actionEat":
-                    hexagon.sprite = actionEat;
-                    hexagon.typeOfType = 410;
-                    break;
-                case "actionGive":
-                    hexagon.sprite = actionGive;
-                    hexagon.typeOfType = 420;
-                    break;
-                case "actionIdle":
-                    hexagon.sprite = actionIdle;
-                    hexagon.typeOfType = 430;
-                    break;
-                case "actionMove":
-                    hexagon.sprite = actionMove;
-                    hexagon.typeOfType = 440;
-                    break;
-                case "actionTake":
-                    hexagon.sprite = actionTake;
-                    hexagon.typeOfType = 450;
-                    break;
-                case "actionFire":
-                    hexagon.sprite = actionFire;
-                    hexagon.typeOfType = 460;
-                    break;
-                case "actionReload":
-                    hexagon.sprite = actionReload;
-                    hexagon.typeOfType = 470;
-                    break;
-                case "actionRepair":
-                    hexagon.sprite = actionRepair;
-                    hexagon.typeOfType = 480;
-                    break;
-                case "bag00" :
-                    hexagon.sprite = bag00;
-                    hexagon.typeOfType = 500;
-                    break;
-                case "bag10" :
-                    hexagon.sprite = bag10;
-                    hexagon.typeOfType = 501;
-                    break;
-                case "bag20" :
-                    hexagon.sprite = bag20;
-                    hexagon.typeOfType = 502;
-                    break;
-                case "bag25" :
-                    hexagon.sprite = bag25;
-                    hexagon.typeOfType = 502.5;
-                    break;
-                case "bag30" :
-                    hexagon.sprite = bag30;
-                    hexagon.typeOfType = 503;
-                    break;
-                case "bag40" :
-                    hexagon.sprite = bag40;
-                    hexagon.typeOfType = 504;
-                    break;
-                case "bag50" :
-                    hexagon.sprite = bag50;
-                    hexagon.typeOfType = 505;
-                    break;
-                case "bag60" :
-                    hexagon.sprite = bag60;
-                    hexagon.typeOfType = 506;
-                    break;
-                case "bag70" :
-                    hexagon.sprite = bag70;
-                    hexagon.typeOfType = 507;
-                    break;
-                case "bag75" :
-                    hexagon.sprite = bag75;
-                    hexagon.typeOfType = 507.5;
-                    break;
-                case "bag80" :
-                    hexagon.sprite = bag80;
-                    hexagon.typeOfType = 508;
-                    break;
-                case "bag90" :
-                    hexagon.sprite = bag90;
-                    hexagon.typeOfType = 509;
-                    break;
-                case "bag100" :
-                    hexagon.sprite = bag100;
-                    hexagon.typeOfType = 510;
-                    break;
-                case "life00" :
-                    hexagon.sprite = life00;
-                    hexagon.typeOfType = 600;
-                    break;
-                case "life10" :
-                    hexagon.sprite = life10;
-                    hexagon.typeOfType = 601;
-                    break;
-                case "life20" :
-                    hexagon.sprite = life20;
-                    hexagon.typeOfType = 602;
-                    break;
-                case "life25" :
-                    hexagon.sprite = life25;
-                    hexagon.typeOfType = 602.5;
-                    break;
-                case "life30" :
-                    hexagon.sprite = life30;
-                    hexagon.typeOfType = 603;
-                    break;
-                case "life40" :
-                    hexagon.sprite = life40;
-                    hexagon.typeOfType = 604;
-                    break;
-                case "life50" :
-                    hexagon.sprite = life50;
-                    hexagon.typeOfType = 605;
-                    break;
-                case "life60" :
-                    hexagon.sprite = life60;
-                    hexagon.typeOfType = 606;
-                    break;
-                case "life70" :
-                    hexagon.sprite = life70;
-                    hexagon.typeOfType = 607;
-                    break;
-                case "life75" :
-                    hexagon.sprite = life75;
-                    hexagon.typeOfType = 607.5;
-                    break;
-                case "life80" :
-                    hexagon.sprite = life80;
-                    hexagon.typeOfType = 608;
-                    break;
-                case "life90" :
-                    hexagon.sprite = life90;
-                    hexagon.typeOfType = 609;
-                    break;
-                case "life100" :
-                    hexagon.sprite = life100;
-                    hexagon.typeOfType = 610;
-                    break;
-                case "createAgent" :
-                    hexagon.sprite = createAgent;
-                    hexagon.typeOfType = 700;
-                    break;
-                case "createBase" :
-                    hexagon.sprite = createBase;
-                    hexagon.typeOfType = 710;
-                    break;
-                case "createEngineer" :
-                    hexagon.sprite = createEngineer;
-                    hexagon.typeOfType = 720;
-                    break;
-                case "createExplorer" :
-                    hexagon.sprite = createExplorer;
-                    hexagon.typeOfType = 730;
-                    break;
-                case "createKamikaze" :
-                    hexagon.sprite = createKamikaze;
-                    hexagon.typeOfType = 740;
-                    break;
-                case "createRocketLauncher" :
-                    hexagon.sprite = createRocketLauncher;
-                    hexagon.typeOfType = 750;
-                    break;
-                case "createTurret" :
-                    hexagon.sprite = createTurret;
-                    hexagon.typeOfType = 760;
-                    break;
-                case "createWall" :
-                    hexagon.sprite = createWall;
-                    hexagon.typeOfType = 770;
-                    break;
-                case "messageContent" :
-                    hexagon.sprite = messageContent;
-                    hexagon.typeOfType = 800;
-                    break;
-                case "messageReceive" :
-                    hexagon.sprite = messageReceive;
-                    hexagon.typeOfType = 810;
-                    break;
-                case "messageSend" :
-                    hexagon.sprite = messageSend;
-                    hexagon.typeOfType = 820;
-                    break;
-                case "targetBase" :
-                    hexagon.sprite = messageTargetBase;
-                    hexagon.typeOfType = 830;
-                    break;
-                case "targetEngineer" :
-                    hexagon.sprite = messageTargetEngineer;
-                    hexagon.typeOfType = 840;
-                    break;
-                case "targetExplorer" :
-                    hexagon.sprite = messageTargetExplorer;
-                    hexagon.typeOfType = 850;
-                    break;
-                case "targetKamikaze" :
-                    hexagon.sprite = messageTargetKamikaze;
-                    hexagon.typeOfType = 860;
-                    break;
-                case "targetRocketLauncher" :
-                    hexagon.sprite = messageTargetRocketLauncher;
-                    hexagon.typeOfType = 870;
-                    break;
-                case "targetTurret" :
-                    hexagon.sprite = messageTargetTurret;
-                    hexagon.typeOfType = 880;
-                    break;
-                case "interactionBlocked" :
-                    hexagon.sprite = interactionBlocked;
-                    hexagon.typeOfType = 900;
-                    break;
-                case "interactionDebugMessage" :
-                    hexagon.sprite = interactionDebugMessage;
-                    hexagon.typeOfType = 910;
-                    break;
-                case "interactionDistance" :
-                    hexagon.sprite = interactionDistance;
-                    hexagon.typeOfType = 920;
-                    break;
-                case "interactionFollow" :
-                    hexagon.sprite = interactionFollow;
-                    hexagon.typeOfType = 930;
-                    break;
-                case "positionFirst" :
-                    hexagon.sprite = positionFirst;
-                    hexagon.typeOfType = 1000;
-                    break;
-                case "positionLast" :
-                    hexagon.sprite = positionFirst;
-                    hexagon.typeOfType = 1010;
-                    break;
-                case "positionRandom" :
-                    hexagon.sprite = positionFirst;
-                    hexagon.typeOfType = 1020;
-                    break;
-                case "ableGive" :
-                    hexagon.sprite = ableGive;
-                    hexagon.typeOfType = 1100;
-                    break;
-                case "ableTake" :
-                    hexagon.sprite = ableTake;
-                    hexagon.typeOfType = 1110;
-                    break;
-                case "heading00" :
-                    hexagon.sprite = heading00;
-                    hexagon.typeOfType = 1200;
-                    break;
-                case "heading45" :
-                    hexagon.sprite = heading45;
-                    hexagon.typeOfType = 1210;
-                    break;
-                case "heading90" :
-                    hexagon.sprite = heading90;
-                    hexagon.typeOfType = 1220;
-                    break;
-                case "heading135" :
-                    hexagon.sprite = heading135;
-                    hexagon.typeOfType = 1230;
-                    break;
-                case "heading180" :
-                    hexagon.sprite = heading180;
-                    hexagon.typeOfType = 1240;
-                    break;
-                case "heading225" :
-                    hexagon.sprite = heading225;
-                    hexagon.typeOfType = 1250;
-                    break;
-                case "heading270" :
-                    hexagon.sprite = heading270;
-                    hexagon.typeOfType = 1260;
-                    break;
-                case "heading315" :
-                    hexagon.sprite = heading315;
-                    hexagon.typeOfType = 1270;
-                    break;
-                case "heading360" :
-                    hexagon.sprite = heading360;
-                    hexagon.typeOfType = 1280;
-                    break;
-                case "headingRandom" :
-                    hexagon.sprite = headingRandom;
-                    hexagon.typeOfType = 1290;
-                    break;
-                case "moreCost" :
-                    hexagon.sprite = moreCost;
-                    hexagon.typeOfType = 1500;
-                    break;
-                case "stringIAmHere" :
-                    hexagon.sprite = stringIAmHere;
-                    hexagon.typeOfType = 1300;
-                    break;
-                case "stringWhereAreYou" :
-                    hexagon.sprite = stringWhereAreYou;
-                    hexagon.typeOfType = 1301;
-                    break;
-                default:
-                    hexagon.sprite = emptyBlock;
-                    hexagon.typeOfType = 0;
-            }
-        }
-        return hexagon;
     },
 
     createBlock : function(scene, form, cX, cY, type, indexTab) {
@@ -687,6 +181,12 @@ var HexaEditorStream = Stream.extend({
         }
 
         switch(type) {
+            case 0:
+                neighbour.x = block.position.x;
+                neighbour.y = block.position.y;
+                return neighbour;
+                break;
+
             case 1 :
                 neighbour.x = block.position.x + 52;
                 neighbour.y = block.position.y + 0;
@@ -742,185 +242,173 @@ var HexaEditorStream = Stream.extend({
 
         var actionBlock = this.agentsMasterTab[index].currentActionBlock;
 
-        console.log ("BITE");
-
-        if(block.position.y > actionBlock.y && block.position.x == actionBlock.x) {
-            console.log ("2");
-
-            console.log (block.position.x);
-            console.log (block.position.y);
-            console.log (actionBlock.x);
-            console.log (actionBlock.y);
-
-
-            if(actionBlock.indexInTab != 2) {
-               // this.agentsMasterTab[index].currentActionBlock.y + actionBlock.addY;
-               // this.agentsMasterTab[index][actionBlock.indexInTab].position.y += actionBlock.addY;
+        if (block.position.y == actionBlock.y && block.position.x == actionBlock.x) {
+            this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y + actionBlock.addY, 0.5, index);
+            this.agentsMasterTab[index].currentActionBlock.y += actionBlock.addY;
+            this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 2; // on lui donne son nouveau index
+            this.agentsMasterTab[index].numberList += 1;
+            var nextAction = new Block(this.getNextIdBlock(), 'actionUser', actionBlock.x, actionBlock.y + actionBlock.addY, "ActionUser");
+            this.blockXmlTab[index].addChild(nextAction);
+            if(this.agentsMasterTab[index].numberList % 2 == 1) {
+                this.createBlock(this.camera, listAction, actionBlock.x, this.agentsMasterTab[index].lastPosYList + 240, 0, index);
+                this.agentsMasterTab[index].lastPosYList += 240;
             }
-            else {
-                //tempI[0] -= 1;
-               // this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y + actionBlock.addY, 0.5, index);
-               // this.agentsMasterTab[index].currentActionBlock.y + actionBlock.addY;
-               // this.agentsMasterTab[index].splice(actionBlock.indexInTab, 1); // on supprime l'ancien emptyBlock du tableau
-               // this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 1; // on lui donne son nouveau index
-
-            }
-        }
-        else if (block.position.y == actionBlock.y && block.position.x == actionBlock.x) {
-                console.log ("3");
-               //tempI[0] -= 1;
-               console.log (this.agentsMasterTab[index].currentActionBlock.indexInTab);
-                this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y + actionBlock.addY, 0.5, index);
-                this.agentsMasterTab[index].currentActionBlock.y += actionBlock.addY;
-                //this.agentsMasterTab[index].splice(actionBlock.indexInTab, 1); // on supprime l'ancien emptyBlock du tableau
-                this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 2; // on lui donne son nouveau index
-                console.log (this.agentsMasterTab[index].currentActionBlock.indexInTab);
         }
     },
 
     gestionCreationBlock : function (block, index, tempI) {
-        /*
-            name : nameHexagon,
-            sprite : null,
-            typeOfType : -1
-        */
-
-        //console.log(this.nextHexagonToCreateObjectHexagon.name);
-        //console.log(this.nextHexagonToCreateObjectHexagon.typeOfType);
-
 
         var type = this.nextHexagonToCreateObjectHexagon.typeOfType;
         var tempBlock;
+        var actionBlock = this.agentsMasterTab[index].currentActionBlock;
 
-        if(type == 110) { // BLOCK WHEN
+        if (block.position.y == actionBlock.y && block.position.x == actionBlock.x) {
+            if(type == 110) { // BLOCK WHEN
 
-            // TODO VERIF SI PAS DANS UN WHEN
-            // TODO REMOVE SI EMPTY OU DO ECRASE BLOCK EXISTANT
+                        // TODO VERIF SI PAS DANS UN WHEN
+                        // TODO REMOVE SI EMPTY OU DO ECRASE BLOCK EXISTANT
 
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+                        this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+                        var whenBlock = new Block(this.getNextIdBlock(), 'when', block.position.x, block.position.y, 'When');
 
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+                        tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                        this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
 
-            tempBlock = this.getPositionOfNeighbourBlock(block, 2); // BLOCK DO
-            this.createBlock(this.camera, actionDo, tempBlock.x, tempBlock.y, 2, index);
+                        tempBlock = this.getPositionOfNeighbourBlock(block, 2); // BLOCK DO
+                        this.createBlock(this.camera, actionDo, tempBlock.x, tempBlock.y, 2, index);
+                        var doBlock = new Block(this.getNextIdBlock(), 'do', tempBlock.x, tempBlock.y, 'Do');
 
-            tempBlock = this.getPositionOfNeighbourBlock(block, 9); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 211 && type <= 331) { // BLOCK AGENT + BLOCK VIEW
+                        tempBlock = this.getPositionOfNeighbourBlock(block, 9); // BLOCK EMPTY
+                        this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
 
-            // TODO VERIF EMPTY NO ECRASE
+                        this.managementOfNewActionBlocks(block, index, tempI);
 
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+                        var numberAction = this.agentsMasterTab[index].numberList;
+                        this.blockXmlTab[index].childTab[numberAction - 2].addChild(whenBlock);
+                        this.blockXmlTab[index].childTab[numberAction - 2].addChild(doBlock);
 
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-
-        }
-        else if (type >= 410 && type <= 480) { // BLOCK ACTION
-            // on ne crait pas de empty car après une action on ne peut plus rien faire
-
-            // TODO NE DOIT PAS ETRE DANS UN WHEN
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-        }
-        else if (type >= 131 && type <= 133) { // BLOCK OPERATOR
-            if(type != 133) {
-                // TODO verif entre 2 BLOCK FOR AND ET OR
+                        console.log(this.blockXmlTab[index].getXmlCode());
             }
             else {
-                // TODO VERIF POUR NOT
+
+                this.createBlock(this.camera, emptyBlock, actionBlock.x, actionBlock.y, 0.5, index);
             }
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 500 && type <= 610) { // BLOCK BAG + LIFE
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 700 && type <= 770) { // BLOCK CREATE
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 800 && type <= 880) { // BLOCK MESSAGE
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 900 && type <= 930) { // BLOCK INTERACTION
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 1000 && type <= 1020) { // BLOCK INTERACTION
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 1100 && type <= 1110) { // BLOCK ABLE
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 1200 && type <= 1290) { // BLOCK HEADING
-            // TODO VERIF EMPTY NO ECRASE
-
-            this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-            tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-            this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 1300 && type <= 1301) { // BLOCK STRING
-                    // TODO VERIF EMPTY NO ECRASE
-
-                    this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-                    tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-                    this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
-        }
-        else if (type >= 1500 && type <= 1501) { // BLOCK HEADING
-                    // TODO VERIF EMPTY NO ECRASE
-
-                    this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
-
-                    tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
-                    this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
         }
         else {
-             this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+            if(type == 110) {
+                tempBlock = this.getPositionOfNeighbourBlock(block, 0); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+
+            else if (type >= 211 && type <= 331) { // BLOCK AGENT + BLOCK VIEW
+
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+
+            }
+            else if (type >= 410 && type <= 480) { // BLOCK ACTION
+                // on ne crait pas de empty car après une action on ne peut plus rien faire
+
+                // TODO NE DOIT PAS ETRE DANS UN WHEN
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+            }
+            else if (type >= 131 && type <= 134) { // BLOCK OPERATOR
+                if(type != 133) {
+                    // TODO verif entre 2 BLOCK FOR AND ET OR
+                }
+                else {
+                    // TODO VERIF POUR NOT
+                }
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 500 && type <= 610) { // BLOCK BAG + LIFE
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 700 && type <= 770) { // BLOCK CREATE
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 800 && type <= 880) { // BLOCK MESSAGE
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 900 && type <= 930) { // BLOCK INTERACTION
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 1000 && type <= 1020) { // BLOCK INTERACTION
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 1100 && type <= 1110) { // BLOCK ABLE
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 1200 && type <= 1290) { // BLOCK HEADING
+                // TODO VERIF EMPTY NO ECRASE
+
+                this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 1300 && type <= 1301) { // BLOCK STRING
+                        // TODO VERIF EMPTY NO ECRASE
+
+                        this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                        tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                        this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else if (type >= 1500 && type <= 1501) { // BLOCK HEADING
+                        // TODO VERIF EMPTY NO ECRASE
+
+                        this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+
+                        tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
+                        this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+            }
+            else {
+                 this.createBlock(this.camera, this.nextHexagonToCreate, block.position.x, block.position.y, 2, index);
+            }
         }
-
-
-        this.managementOfNewActionBlocks(block, index, tempI);
-
     },
 
     createTempBlock : function(scene, form, cX, cY) {
-
         var block = new PIXI.Sprite(form);
         var self = this;
 
@@ -966,9 +454,7 @@ var HexaEditorStream = Stream.extend({
                            self.camera.removeChild(self.agentsMasterTab[indexTab][tempI[0]]);
                            self.agentsMasterTab[indexTab].splice(tempI[0], 1);
                            self.camera.children.sort(depthCompare);
-                           //console.log(self.agentsMasterTab[indexTab].length);
                            // TODO destroy console log
-                           console.log("Create Block");
                            cont = false;
                         }
                     }
@@ -987,17 +473,17 @@ var HexaEditorStream = Stream.extend({
         this.nextHexagonToCreateObject = block;
     },
 
-    addWheelListenerHexaEditorStream : function() {
+    addWheelListenerHexagonEditorStream : function() {
         if(this.activeZoom) {
 
             if (this.container.addEventListener) {
                 // IE9, Chrome, Safari, Opera
-                this.container.addEventListener('onmousewheel', cameraZoomHexaEditorStream);
+                this.container.addEventListener('onmousewheel', cameraZoomHexagonEditorStream);
                 // Firefox
-                this.container.addEventListener("DOMMouseScroll", cameraZoomHexaEditorStream, false);
+                this.container.addEventListener("DOMMouseScroll", cameraZoomHexagonEditorStream, false);
             }
             // IE 6/7/8
-            else container.addEventListener("onmousewheel", cameraZoomHexaEditorStream);
+            else container.addEventListener("onmousewheel", cameraZoomHexagonEditorStream);
         }
     },
 
@@ -1018,8 +504,6 @@ var HexaEditorStream = Stream.extend({
                     this.nextHexagonToCreateObject.position.y = pos.y - this.camera.position.y;
                 }
             }
-
-
         }
         else {
             if(this.nextHexagonToCreateObject != null) {
@@ -1037,7 +521,7 @@ function animateHexaEditor() {
         hexaEditor.renderer.render(hexaEditor.stage);
 }
 
-function cameraZoomHexaEditorStream (e) {
+function cameraZoomHexagonEditorStream (e) {
 
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
@@ -1116,18 +600,22 @@ function addButton(scene, form, formDown, cX, cY, type) {
 }
 
 //================================================================================//
+//                                      MAIN                                      //
+//================================================================================//
 
-var hexaEditor = new HexaEditorStream('#blocks', 0x777777);
+var hexaEditor = new HexagonEditorStream('#blocks', 0x777777);
 hexaEditor.initializeEditor();
 hexaEditor.initStream();
 hexaEditor.initMasterTab();
-hexaEditor.addWheelListenerHexaEditorStream();
+hexaEditor.addWheelListenerHexagonEditorStream();
 hexaEditor.cameraMove();
-
 addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
 addButton(hexaEditor, trashOff, trashOn, 65, 25, 1);
-
 animateHexaEditor();
+
+console.log(this.hexaEditor.blockXmlTab[4].getXmlCode());
+
+
 
 
 
