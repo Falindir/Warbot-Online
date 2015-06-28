@@ -1,7 +1,8 @@
 
 var HexagonEditorStream = Stream.extend({
 
-    initializeEditor : function() {
+    init : function(cnt, color) {
+        this._super(cnt, color);
         this.nextHexagonToCreate = null;
         this.nextHexagonToCreateObject = null;
         this.nextHexagonToCreateObjectHexagon = null;
@@ -69,7 +70,7 @@ var HexagonEditorStream = Stream.extend({
         tab.lastPosYList = this.CONSTANT.coordinate.yFirstList;
 
         this.agentsMasterTab.push(tab);
-        this.createBlock(this.camera, getSpriteMaster(tab.nameMaster), this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, 1, index);
+        this.createBlock(this.camera, SpriteBlock.getMaster(tab.nameMaster), this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, 1, index);
 
         var blockXml = new Block(this.getNextIdBlock(), 'master', this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, name);
         this.blockXmlTab.push(blockXml);
@@ -259,6 +260,7 @@ var HexagonEditorStream = Stream.extend({
     gestionCreationBlock : function (block, index, tempI) {
 
         var type = this.nextHexagonToCreateObjectHexagon.typeOfType;
+        var name = this.nextHexagonToCreateObjectHexagon.name;
         var tempBlock;
         var actionBlock = this.agentsMasterTab[index].currentActionBlock;
 
@@ -287,7 +289,7 @@ var HexagonEditorStream = Stream.extend({
                         this.blockXmlTab[index].childTab[numberAction - 2].addChild(whenBlock);
                         this.blockXmlTab[index].childTab[numberAction - 2].addChild(doBlock);
 
-                        console.log(this.blockXmlTab[index].getXmlCode());
+                        //console.log(this.blockXmlTab[index].getXmlCode());
             }
             else {
 
@@ -308,6 +310,41 @@ var HexagonEditorStream = Stream.extend({
 
                 tempBlock = this.getPositionOfNeighbourBlock(block, 1); // BLOCK EMPTY
                 this.createBlock(this.camera, emptyBlock, tempBlock.x, tempBlock.y, 0.5, index);
+
+                if(type >= 301) {// VIEW
+
+                    var i = 0;
+                    var cont = true;
+                    var viewBlock = new Block(this.getNextIdBlock(), 'view', tempBlock.x, tempBlock.y, 'View');
+                    var typeViewBlock = getViewInfo(name);
+
+                    while(i < this.blockXmlTab[index].childTab.length && cont) {
+                        var list = this.blockXmlTab[index].childTab[i];
+                        var w = list.childTab[0];
+                        var d = list.childTab[1];
+
+                        if(w.posY == tempBlock.y) {
+                            cont = false;
+                            viewBlock.createNode(typeViewBlock.agent);
+                            viewBlock.createNode(typeViewBlock.team);
+                            this.blockXmlTab[index].childTab[i].childTab[0].addChild(viewBlock);
+
+                        }
+                        else if(d.posY == tempBlock.y) {
+                            cont = false;
+                            viewBlock.createNode(typeViewBlock.agent);
+                            viewBlock.createNode(typeViewBlock.team);
+                            this.blockXmlTab[index].childTab[i].childTab[1].addChild(viewBlock);
+                        }
+                        i += 1;
+                    }
+
+                }
+                else { // AGENT
+                    console.log("BITE");
+                }
+
+                console.log(this.blockXmlTab[index].getXmlCode());
 
             }
             else if (type >= 410 && type <= 480) { // BLOCK ACTION
@@ -604,7 +641,6 @@ function addButton(scene, form, formDown, cX, cY, type) {
 //================================================================================//
 
 var hexaEditor = new HexagonEditorStream('#blocks', 0x777777);
-hexaEditor.initializeEditor();
 hexaEditor.initStream();
 hexaEditor.initMasterTab();
 hexaEditor.addWheelListenerHexagonEditorStream();
@@ -612,10 +648,6 @@ hexaEditor.cameraMove();
 addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
 addButton(hexaEditor, trashOff, trashOn, 65, 25, 1);
 animateHexaEditor();
-
-console.log(this.hexaEditor.blockXmlTab[4].getXmlCode());
-
-
 
 
 

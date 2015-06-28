@@ -1,17 +1,15 @@
 
 var Stream = Class.extend({
 
-    initialize : function(cnt, color) {
+    init : function(cnt, color) {
     		this.nameContainer = cnt;
     		this.container = $(cnt)[0];
     		this.renderer = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage = new PIXI.Container();
             this.camera = new PIXI.Container();
-            this.camera.position.x = 0;
-            this.camera.position.y = 0;
             this.hud = new PIXI.Container();
             this.coordCenterX = 0;
-            this.coordCenterX = 0;
+            this.coordCenterY = 0;
             this.zoom = 1;
             this.minZoom = 0;
             this.maxZoom = 100000;
@@ -27,6 +25,8 @@ var Stream = Class.extend({
             this.container.appendChild(this.renderer.view);
             this.stage.addChild(this.camera);
             this.stage.addChild(this.hud);
+            this.camera.position.x = 0;
+            this.camera.position.y = 0;
     },
 
     resizeStream : function () {
