@@ -1,7 +1,7 @@
 
 var Block = Class.extend({
 
-    initialize : function(id, type, x, y, name) {
+    init : function(id, type, x, y, name) {
             this.id = id;
     		this.type = type;
     		this.posX = x;
@@ -9,6 +9,7 @@ var Block = Class.extend({
     		this.father = null;
     		this.depth = -1;
     		this.childTab = [];
+    		this.childTab2 = [];
     		this.name = name;
     },
 
@@ -22,13 +23,15 @@ var Block = Class.extend({
         node.attr('y', this.posY);
         node.attr('name', this.name);
 
-        console.log(this.name);
-        console.log(this.childTab.length);
-        console.log(this.id );
-
         var i = 0;
         while(i < this.childTab.length) {
             node.append(this.childTab[i].getXmlCode());
+            i += 1;
+        }
+
+        i = 0;
+        while(i < this.childTab2.length) {
+            node.append(this.childTab2[i]);
             i += 1;
         }
 
@@ -46,8 +49,29 @@ var Block = Class.extend({
         else
             child.depth = this.childTab[this.childTab.length - 1].depth + 1;
 
-    }
+    },
 
+    getChild : function(typeChild ) {
+
+        var i = 0;
+        var cont = true;
+        while (i < this.childTab.length && cont) {
+
+            if(this.childTab[i].type == typeChild) {
+                cont = false;
+                return this.childTab[i];
+            }
+
+            i++;
+        }
+
+        return false;
+    },
+
+    createNode : function (node) {
+        var node = $('<'+node+'></'+node+'>');
+        this.childTab2.push(node);
+    }
 
 
 });

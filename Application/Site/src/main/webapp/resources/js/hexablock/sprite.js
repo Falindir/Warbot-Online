@@ -1,31 +1,3 @@
-function getSpriteMaster (name) {
-    if(name != null) {
-        switch(name) {
-            case "WarBase":
-                return masterBase;
-                break;
-            case "WarEngineer":
-                return masterEngineer;
-                break;
-            case "WarExplorer":
-                return masterExplorer;
-                break;
-            case "WarKamikaze":
-                return masterKamikaze;
-                break;
-            case "WarRocketLauncher":
-                return masterRocketLauncher;
-                break;
-            case "WarTurret":
-                return masterTurret;
-                break;
-            default:
-            return null;
-        }
-    }
-    return null;
-};
-
 function getSpriteOfAgent (nameHexagon) {
 
     var hexagon = {
@@ -484,3 +456,62 @@ function getSpriteOfAgent (nameHexagon) {
 
     return hexagon;
 };
+
+function getViewInfo (viewContent) {
+
+    var content = {
+        team : null,
+        agent : null
+    }
+
+    // TODO finir tout les views possible
+
+    if(viewContent != null) {
+        switch(viewContent) {
+            case "viewBaseTeam1":
+                content.team = "ally";
+                content.agent = "warbase";
+                break;
+            case "viewEngineerTeam1":
+                content.team = "ally";
+                content.agent = "warengineer";
+                break;
+            default:
+                content.team = "";
+                content.agent = "";
+        }
+    }
+    return content;
+}
+
+var SpriteBlock = {
+
+    getMaster : function(name) {
+        if(name != null) {
+            switch(name) {
+                case "WarBase":
+                    return masterBase;
+                    break;
+                case "WarEngineer":
+                    return masterEngineer;
+                    break;
+                case "WarExplorer":
+                    return masterExplorer;
+                    break;
+                case "WarKamikaze":
+                    return masterKamikaze;
+                    break;
+                case "WarRocketLauncher":
+                    return masterRocketLauncher;
+                    break;
+                case "WarTurret":
+                    return masterTurret;
+                    break;
+                default:
+                return null;
+            }
+        }
+        return null;
+    }
+
+}
