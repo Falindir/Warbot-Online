@@ -1,45 +1,45 @@
-function getSpriteOfAgent (nameHexagon) {
+var HexagonInfo = Class.extend({
 
-    var hexagon = {
-     name : nameHexagon,
-     sprite : null,
-     typeOfType : -1
+    init : function(name, sprite, type, team, agent) {
+        this.name = name;
+        this.sprite = sprite;
+        this.typeOfType = type;
+        this.team = team;
+        this.agent = agent;
     }
 
+}); 
+
+function getSpriteOfAgent (nameHexagon) {
+
+    var hexagon = null;
+
     if(nameHexagon != null) {
-         switch(nameHexagon) {
-             case "actionWhen":
-                 hexagon.sprite = actionWhen;
-                 hexagon.typeOfType = 110;
-                 break;
-             case "actionDo":
-                 hexagon.sprite = actionDo;
-                 hexagon.typeOfType = 120;
-                 break;
-             case "operatorAnd" :
-                 hexagon.sprite = operatorAnd;
-                 hexagon.typeOfType = 131;
-                 break;
-             case "operatorOr" :
-                 hexagon.sprite = operatorOr;
-                 hexagon.typeOfType = 132;
-                 break;
-             case "operatorNot" :
-                 hexagon.sprite = operatorNot;
-                 hexagon.typeOfType = 133;
-                 break;
-             case "nothing" :
-                 hexagon.sprite = nothing;
-                 hexagon.typeOfType = 134;
-                 break;
-             case "agentBaseTeam1":
-                 hexagon.sprite = agentBaseTeam1;
-                 hexagon.typeOfType = 211;
-                 break;
-             case "agentEngineerTeam1":
-                 hexagon.sprite = agentEngineerTeam1;
-                 hexagon.typeOfType = 212;
-                 break;
+        switch(nameHexagon) {
+            case "actionWhen":
+                hexagon = new HexagonInfo(nameHexagon, actionWhen, 110, null, null);
+                break;
+            case "actionDo":
+                hexagon = new HexagonInfo(nameHexagon, actionDo, 120, null, null);
+                break;
+            case "operatorAnd" :
+                hexagon = new HexagonInfo(nameHexagon, operatorAnd, 131, null, null);
+                break;
+            case "operatorOr" :
+                hexagon = new HexagonInfo(nameHexagon, operatorOr, 132, null, null);
+                break;
+            case "operatorNot" :
+                hexagon = new HexagonInfo(nameHexagon, operatorNot, 133, null, null);                 
+                break;
+            case "nothing" :
+                hexagon = new HexagonInfo(nameHexagon, nothing, 134, null, null);                                  
+                break;
+            case "agentBaseTeam1":
+                hexagon = new HexagonInfo(nameHexagon, agentBaseTeam1, 211, "ally", "warbase"); 
+                break;
+            case "agentEngineerTeam1":
+                hexagon = new HexagonInfo(nameHexagon, agentEngineerTeam1, 212, "ally", "warengineer");                  
+                break;
              case "agentExplorerTeam1":
                  hexagon.sprite = agentExplorerTeam1;
                  hexagon.typeOfType = 213;
