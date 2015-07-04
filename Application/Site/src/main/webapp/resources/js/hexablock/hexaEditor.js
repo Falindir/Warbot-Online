@@ -3,19 +3,19 @@ var HexagonEditorStream = Stream.extend({
 
     init : function(cnt, color) {
         this._super(cnt, color);
-        this.nextHexagonToCreate = null;
-        this.nextHexagonToCreateObject = null;
+        this.nextHexagonToCreate              = null;
+        this.nextHexagonToCreateObject        = null;
         this.nextHexagonToCreateObjectHexagon = null;
-        this.minZoom = 0.5;
-        this.maxZoom = 2;
-        this.minDistanceBlock = 25;
-        this.activeZoom = false;
-        this.nameActiveMasterAgent = null;
-        this.lastIndexActiveMasterTab = null;
-        this.agentsMasterTab = [];
-        this.idBlock = 0;
-        this.blockXmlTab = [];
-        this.CONSTANT = this.getConstant();
+        this.minZoom                          = 0.5;
+        this.maxZoom                          = 2;
+        this.minDistanceBlock                 = 25;
+        this.activeZoom                       = false;
+        this.nameActiveMasterAgent            = null;
+        this.lastIndexActiveMasterTab         = null;
+        this.agentsMasterTab                  = [];
+        this.idBlock                          = 0;
+        this.blockXmlTab                      = [];
+        this.CONSTANT                         = this.getConstant();
     },
     
     getNextIdBlock : function () {
