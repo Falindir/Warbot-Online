@@ -745,7 +745,7 @@ function updateDataAgentMap(agent) {
 					document.getElementById('numberOfBaseRed').innerHTML = counterAgent.redBase;
 				}
 				else {
-					counterAgent.blueBase += 1;
+					counterAgent.blueBase -= 1;
         			document.getElementById('numberOfBaseBlue').innerHTML = counterAgent.blueBase;
 				}
 			}
