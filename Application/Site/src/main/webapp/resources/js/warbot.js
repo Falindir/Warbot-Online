@@ -1,4 +1,4 @@
-var agentWarbotType = {
+var agentType = {
 	base 		   : "WarBase",
 	engineer 	   : "WarEngineer",
 	explorer 	   : "WarExplorer",

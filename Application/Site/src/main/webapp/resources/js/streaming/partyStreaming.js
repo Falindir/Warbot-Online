@@ -303,16 +303,16 @@ var PartyStream = Stream.extend({
                             index = i;
                     }
                     else {
-                        this.agentChangeValue(this.agent.get(i), message);
+                        this.agentChangeValue(this.agents.get(i), message);
                     }
                 }
             }
 
             if(index != -1) {
-                this.counterAgent.updateData(this.agent.get(i));
-                this.camera.removeChild(this.agent.get(i).SpriteLife);
-                this.camera.removeChild(this.agent.get(i).SpritePercept);
-                this.camera.removeChild(this.agent.get(i));
+                this.counterAgent.updateData(this.agents.get(i));
+                this.camera.removeChild(this.agents.get(i).SpriteLife);
+                this.camera.removeChild(this.agents.get(i).SpritePercept);
+                this.camera.removeChild(this.agents.get(i));
                 this.agents.remove(index);
             }
         }    
@@ -321,8 +321,20 @@ var PartyStream = Stream.extend({
 
 
     messageServerEnd : function (message) {
-    
-    
+        this.counterAgent = new CounterAgent(); 
+
+        // TODO reset HTML value
+        
+        for (i = 0; i < this.agents.size(); i++) {
+            camera.removeChild(this.agents.get(i).SpritePercept);
+            camera.removeChild(this.agents.get(i).SpriteLife);
+            camera.removeChild(this.agents.get(i).debug);
+            camera.removeChild(this.agents.get(i));
+        }
+
+        // TODO HUD
+        
+        
     },
 
 

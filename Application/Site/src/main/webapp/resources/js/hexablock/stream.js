@@ -2,21 +2,21 @@
 var Stream = Class.extend({
 
     init : function(cnt, color) {
-    		this.nameContainer = cnt;
-    		this.container = $(cnt)[0];
-    		this.renderer = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
-            this.stage = new PIXI.Container();
-            this.camera = new PIXI.Container();
-            this.hud = new PIXI.Container();
-            this.coordCenterX = 0;
-            this.coordCenterY = 0;
-            this.zoom = 1;
-            this.minZoom = 0;
-            this.maxZoom = 100000;
-            this.prevX;
-            this.prevY;
-            this.isDragging = false;
-            this.activeZoom = true;
+            this.nameContainer = cnt;
+            this.container     = $(cnt)[0];
+            this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
+            this.stage         = new PIXI.Container();
+            this.camera        = new PIXI.Container();
+            this.hud           = new PIXI.Container();
+            this.coordCenterX  = 0;
+            this.coordCenterY  = 0;
+            this.zoom          = 1;
+            this.minZoom       = 0;
+            this.maxZoom       = 100000;
+            this.prevX         = 0;
+            this.prevY         = 0;
+            this.isDragging    = false;
+            this.activeZoom    = true;
     },
 
     initStream : function() {
