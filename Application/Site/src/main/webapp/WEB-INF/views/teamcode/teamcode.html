@@ -178,6 +178,9 @@
 
 <script th:inline="javascript">
 (function() {
+
+        
+
         var path =  /*[[@{/warbot}]]*/ /warbot;
         var socket = new SockJS(path);
         var stompClient = Stomp.over(socket);

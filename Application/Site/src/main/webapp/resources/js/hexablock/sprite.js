@@ -487,31 +487,64 @@ function getViewInfo (viewContent) {
 var SpriteBlock = {
 
     getMaster : function(name) {
-        if(name != null) {
-            switch(name) {
-                case "WarBase":
-                    return masterBase;
-                    break;
-                case "WarEngineer":
-                    return masterEngineer;
-                    break;
-                case "WarExplorer":
-                    return masterExplorer;
-                    break;
-                case "WarKamikaze":
-                    return masterKamikaze;
-                    break;
-                case "WarRocketLauncher":
-                    return masterRocketLauncher;
-                    break;
-                case "WarTurret":
-                    return masterTurret;
-                    break;
-                default:
-                return null;
-            }
+        switch(name) {
+            case agentType.base :
+                return masterBase;
+                break;
+            case agentType.engineer :
+                return masterEngineer;
+                break;
+            case agentType.explorer :
+                return masterExplorer;
+                break;
+            case agentType.kamikaze:
+                return masterKamikaze;
+                break;
+            case agentType.rocketLauncher:
+                return masterRocketLauncher;
+                break;
+            case agentType.turret:
+                return masterTurret;
+                break;
+            default:
+            return null;
         }
-        return null;
+    },
+
+    getAgent : function (name, red) {
+        switch(name) {
+            case agentType.base :
+                if(red)
+                    return baseRed;
+                    
+                break;
+            case agentType.engineer :
+                
+                break;
+            case agentType.explorer :
+                
+                break;
+            case agentType.kamikaze:
+                
+                break;
+            case agentType.rocketLauncher:
+
+                break;
+            case agentType.turret:
+
+                break;
+            case value:
+        
+                break;
+            case value:
+        
+                break;
+            case value:
+        
+                break;                
+            default:
+                return;    
+        }        
     }
 
 }
