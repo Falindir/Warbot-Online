@@ -636,6 +636,40 @@ function addButton(scene, form, formDown, cX, cY, type) {
 	scene.hud.addChild(button);
 }
 
+var Collections = Class.extend({
+
+    init : function() {
+       this.collections = [];
+       this.toto = 5;
+       this._tata = 8;
+    },
+
+    size : function () {
+        return this.collections.length;
+    },
+
+    clear : function () {
+        this.collections = [];
+    },
+
+    get : function (index) {
+        return this.collections[index];    
+    },
+
+    add : function (value) {
+        this.collections.push(value);
+    },
+
+    set : function (index, value) {
+        this.collections[index] = value;
+    },
+
+    remove : function (index) {
+        this.collections.splice(index, 1);
+    }
+
+}); 
+
 //================================================================================//
 //                                      MAIN                                      //
 //================================================================================//
@@ -649,5 +683,12 @@ addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
 addButton(hexaEditor, trashOff, trashOn, 65, 25, 1);
 animateHexaEditor();
 
+var tutu = new Collections();
+var tktk = new Collections();
 
+console.log(tutu.toto);
+console.log(tutu._tata);
+console.log(tutu instanceof Collections);
+console.log(tutu === tutu);
+console.log(tutu === tktk);
 

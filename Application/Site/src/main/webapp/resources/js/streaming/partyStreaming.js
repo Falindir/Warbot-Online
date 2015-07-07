@@ -183,6 +183,87 @@ var CounterAgent = Class.extend({
 
 }); 
 
+var Cursor = {
+    defaultC : 'default',
+    pointer  : 'pointer'
+
+}
+
+
+/**
+ * need Pixi.js for use
+ * @param  {[type]} sprite) {                   this.sprite [description]
+ * @return {[type]}         [description]
+ */
+var Sprite = Class.extend({
+
+    init : function(sprite) {
+        this.sprite             = new PIXI.Sprite(sprite);
+        this.sprite.position.x  = 0;
+        this.sprite.position.y  = 0;
+        this.sprite.anchor.x    = 0;
+        this.sprite.anchor.y    = 0;
+        this.sprite.alpha       = 1;
+        this.sprite.scale.x     = 1;
+        this.sprite.scale.y     = 1;
+        this.sprite.interactive = false;
+        this.sprite.buttonMode  = false;
+        this.defaultCursor      = Cursor.defaultC;
+        this.zIndex             = 0;
+    },
+
+    setPosX : function (posX) {
+        this.sprite.position.x = posX;
+    },
+
+    setPosY : function (posY) {
+        this.sprite.position.y = posY;
+    }
+
+    setAnchX : function (anchX) {
+        this.sprite.anchor.x = anchX;
+    },
+
+    setAnchY : function (anchY) {
+        this.sprite.anchor.y = anchY;
+    },
+
+    setAnchs : function (val) {
+        this.setAnchX(val);
+        this.setAnchY(val);    
+    },
+
+    setAlpha : function (alpha) {
+        this.sprite.alpha = alpha;    
+    },
+
+    setScaleX : function (scaleX) {
+        this.sprite.scale.x = scaleX;
+    },
+
+    setScaleY : function (scaleY) {
+        this.sprite.scale.y = scaleY;
+    },
+
+    setScales : function (val) {
+        this.setScaleX(val);
+        this.setScaleY(val);    
+    },
+
+    setInteractive : function (interact) {
+        this.sprite.interactive = interact;
+    },
+
+    setButtonMode : function (butMode) {
+        this.sprite.buttonMode = butMode;    
+    },
+
+    setCursor : function (cursor) {
+        this.sprite.defaultCursor = cursor;    
+    }
+
+}); 
+
 var typeMessagesServer = {
     init    : "init",
     agent   : "agent",
@@ -254,6 +335,7 @@ var PartyStream = Stream.extend({
         this.counterAgent  = new CounterAgent();
         this.Teams         = new Teams();
         this.agents        = new Collections();
+        this.map           = null;
     },
 
     analyseMessageServer : function (message) {
@@ -296,7 +378,7 @@ var PartyStream = Stream.extend({
 
             var index = -1;
 
-            for(i = 0; i < this.agents.size(); i++) {
+            for(i = 0; i < this.agents.size; i++) {
                 if(this.agents.get(i).nameg== message.name) {
                     if(typeof(message.state) != "undefined") {
                         if(message.state == -1)
@@ -321,15 +403,15 @@ var PartyStream = Stream.extend({
 
 
     messageServerEnd : function (message) {
-        this.counterAgent = new CounterAgent(); 
+        this.counterAgent = new CounterAgent();
 
         // TODO reset HTML value
         
-        for (i = 0; i < this.agents.size(); i++) {
-            camera.removeChild(this.agents.get(i).SpritePercept);
-            camera.removeChild(this.agents.get(i).SpriteLife);
-            camera.removeChild(this.agents.get(i).debug);
-            camera.removeChild(this.agents.get(i));
+        for (i = 0; i < this.agents.size; i++) {
+            this.camera.removeChild(this.agents.get(i).SpritePercept);
+            this.camera.removeChild(this.agents.get(i).SpriteLife);
+            this.camera.removeChild(this.agents.get(i).debug);
+            this.camera.removeChild(this.agents.get(i));
         }
 
         // TODO HUD
@@ -339,7 +421,13 @@ var PartyStream = Stream.extend({
 
 
     createMapJson : function () {
-    
+
+        this.map = new Sprite(map);      
+        this.map.setPosX(-14);
+        this.map.setPosY(-14);
+        this.camera.addChild(this.map);
+
+
     
     },
 
