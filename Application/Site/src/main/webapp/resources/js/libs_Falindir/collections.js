@@ -1,3 +1,4 @@
+
 var Collections = Class.extend({
 
     init : function() {
@@ -53,6 +54,16 @@ var Collections = Class.extend({
         
         return index;    
     
+    },
+
+    getInterval : function (start, end) {
+        var interval = new Collections();
+
+        for (i = start; i <= end; i++) {
+            interval.add(this.get(i));
+        }
+        
+        return interval;
     }
 
 }); 

@@ -1,3 +1,90 @@
+/**
+ * @ClassNeed   : Class
+ * @ClassNeed   : Pixi
+ * @author      : Falindir
+ * @version     : 1.0
+ * @description : Permet de géner les Sprites de Pixi.js
+ */
+var Sprite = Class.extend({
+
+    init : function(texture) {
+        this.sprite             = new PIXI.Sprite(texture);
+        this.sprite.position.x  = 0;
+        this.sprite.position.y  = 0;
+        this.sprite.anchor.x    = 0;
+        this.sprite.anchor.y    = 0;
+        this.sprite.alpha       = 1;
+        this.sprite.scale.x     = 1;
+        this.sprite.scale.y     = 1;
+        this.rotation           = 0;
+        this.visible            = true;
+        this.sprite.interactive = false;
+        this.sprite.buttonMode  = false; 
+        this.defaultCursor      = Cursor.defaultC;
+        this.zIndex             = 0;
+    },
+
+    setPosX : function (posX) {
+        this.sprite.position.x = posX;
+    },
+
+    setPosY : function (posY) {
+        this.sprite.position.y = posY;
+    }
+
+    setAnchX : function (anchX) {
+        this.sprite.anchor.x = anchX;
+    },
+
+    setAnchY : function (anchY) {
+        this.sprite.anchor.y = anchY;
+    },
+
+    setAnchs : function (val) {
+        this.setAnchX(val);
+        this.setAnchY(val);    
+    },
+
+    setAlpha : function (alpha) {
+        this.sprite.alpha = alpha;    
+    },
+
+    setScaleX : function (scaleX) {
+        this.sprite.scale.x = scaleX;
+    },
+
+    setScaleY : function (scaleY) {
+        this.sprite.scale.y = scaleY;
+    },
+
+    setScales : function (val) {
+        this.setScaleX(val);
+        this.setScaleY(val);    
+    },
+
+    setVisible : function (visible) {
+        this.visible = visible;
+    },
+
+    setRotation : function (rotation) {
+        this.rotation = rotation;
+    },
+
+    setInteractive : function (interact) {
+        this.sprite.interactive = interact;
+    },
+
+    setButtonMode : function (butMode) {
+        this.sprite.buttonMode = butMode;    
+    },
+
+    setCursor : function (cursor) {
+        this.sprite.defaultCursor = cursor;    
+    }
+
+}); 
+
+
 var HexagonInfo = Class.extend({
 
     init : function(name, sprite, type, team, agent) {

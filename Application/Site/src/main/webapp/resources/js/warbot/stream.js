@@ -1,3 +1,6 @@
+/**
+ * @author Falindir
+ */
 
 var Stream = Class.extend({
 
