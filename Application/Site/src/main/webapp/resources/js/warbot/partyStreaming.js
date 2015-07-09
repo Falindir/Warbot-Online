@@ -171,17 +171,20 @@ var CounterAgent = Class.extend({
     },
 
     getNumberRedAgents : function () {
-    
-    
+        return this.redBase + this.redEngineer + this.redExplorer + this.redKamikaze + this.redRocketLauncher + this.redTurret + this.redWall;
     },
 
     getNumberBlueAgents : function () {
-    
-    
+        return this.blueBase + this.blueEngineer + this.blueExplorer + this.blueKamikaze + this.blueRocketLauncher + this.blueTurret + this.blueWall;
     },
 
 
 }); 
+
+var Cursor = {
+    defaultC : 'default',
+    pointer  : 'pointer'
+}
 
 var typeMessagesServer = {
     init    : "init",
@@ -190,47 +193,115 @@ var typeMessagesServer = {
     end     : "end"
 }; 
 
-var Collections = Class.extend({
+var Agent = Sprite.extend({
 
-    init : function() {
-       this.collections = [];
+    init : function(texture) {
+        this._super(texture);
+        this.angle = 0;
+        this.type  = null;
+        this.name  = null;
+        this.team  = null;
+        this.life  = 100;
+        this.debug = null;
     },
 
-    size : function () {
-        return this.collections.length;
+    setAngle : function (angle) {
+        this.angle = angle;
+        this.setRotation(Math.PI * (angle / 180));
     },
 
-    clear : function () {
-        this.collections = [];
+    setType : function (type) {
+        this.type = type;
     },
 
-    get : function (index) {
-        return this.collections[index];    
+    setName : function (name) {
+        this.name = name;
     },
 
-    add : function (value) {
-        this.collections.push(value);
+    setTeam : function (team) {
+        this.team = team;
     },
 
-    set : function (index, value) {
-        this.collections[index] = value;
-    },
-
-    remove : function (index) {
-        this.collections.splice(index, 1);
+    setLife : function (life) {
+        this.life = life;
     }
-
 }); 
 
-var Teams = Collections.extend({
+var Teams = Class.extend({
     
     init : function() {
-        this._super();
-        this.nameTeamRed  = "";
-        this.nameTeamBlue = "";
+        this.teamRed    = null;
+        this.teamBlue   = null;
+        this.teamMother = null;
+        this.typeRed    = 1;
+        this.typeBlue   = 2;
+        this.typeMother = 0;
+        this.colorRed   = new ColorRGB(149, 149, 149);
+        this.colorBlue  = new ColorRGB(255, 98, 255);
+        this.colorGreen = new ColorRGB(0, 255, 0);
+    },
+
+    add : function (team) {
+        var color = new ColorRGB(team.color.r, team.color.g, team.color.b);
+
+        if(color.isSame(this.colorRed))
+            this.teamRed = team;
+        else if(color.isSame(this.colorBlue))
+            this.teamBlue = team;
+        else if(color.isSame(this.colorGreen))
+            this.teamMother = team;
+        else
+            console.log("Error : team color not supported");   
     }
 
+    getTeam : function (name) {
+        var team = null;
+
+        if(name == this.teamRed.name) {
+            team = this.teamRed;
+            team.teamType = this.typeRed;
+        }
+        else if (name == this.teamBlue.name) {
+            team = this.teamBlue;
+            team.teamType = this.typeBlue;
+        }
+        else if (name == this.teamMother.name) {
+            team = this.teamMother;
+            team.teamType = this.typeRed;
+        }
+        else 
+            console.log("Error : team name not supported");
+
+        return team;      
+    },
+
+    isRedTeam : function (team) {
+        if(this.typeRed == team.teamType)
+            return true;
+        return false;    
+    }
+
+
 }); 
+
+
+var MessageText = Class.extend({
+
+    init : function(text, color) {
+        this.text             = new PIXI.Text(agent.messageDebug, {font:"12px Arial", fill:agent.colorDebug});
+        this.text.messageText = text;
+        this.text.colorText   = color;
+        this.text.font        = "12px Arial";
+        this.text.position.x  = 0;
+        this.text.position.y  = 0;
+        this.text.anchor.x    = 0;
+        this.text.anchor.y    = 0;
+    }
+
+    // TODO setter
+
+}); 
+
 
 var PartyStream = Stream.extend({
 
@@ -254,6 +325,7 @@ var PartyStream = Stream.extend({
         this.counterAgent  = new CounterAgent();
         this.Teams         = new Teams();
         this.agents        = new Collections();
+        this.map           = null;
     },
 
     analyseMessageServer : function (message) {
@@ -296,7 +368,7 @@ var PartyStream = Stream.extend({
 
             var index = -1;
 
-            for(i = 0; i < this.agents.size(); i++) {
+            for(i = 0; i < this.agents.size; i++) {
                 if(this.agents.get(i).nameg== message.name) {
                     if(typeof(message.state) != "undefined") {
                         if(message.state == -1)
@@ -321,15 +393,15 @@ var PartyStream = Stream.extend({
 
 
     messageServerEnd : function (message) {
-        this.counterAgent = new CounterAgent(); 
+        this.counterAgent = new CounterAgent();
 
         // TODO reset HTML value
         
-        for (i = 0; i < this.agents.size(); i++) {
-            camera.removeChild(this.agents.get(i).SpritePercept);
-            camera.removeChild(this.agents.get(i).SpriteLife);
-            camera.removeChild(this.agents.get(i).debug);
-            camera.removeChild(this.agents.get(i));
+        for (i = 0; i < this.agents.size; i++) {
+            this.camera.removeChild(this.agents.get(i).SpritePercept);
+            this.camera.removeChild(this.agents.get(i).SpriteLife);
+            this.camera.removeChild(this.agents.get(i).debug);
+            this.camera.removeChild(this.agents.get(i));
         }
 
         // TODO HUD
@@ -339,13 +411,37 @@ var PartyStream = Stream.extend({
 
 
     createMapJson : function () {
-    
+
+        this.map = new Sprite(map);      
+        this.map.setPosX(-14);
+        this.map.setPosY(-14);
+        this.camera.addChild(this.map);
+
+
     
     },
 
     createAgentJson : function (agentJson) {
-    
-    
+        var team = this.Teams.getTeam(agentJson.team);
+        var isRed = this.Teams.isRedTeam(team);
+        var texture = null; // TODO SpriteBlock.getDefaultAgent(name, red);
+        var agent = new Agent(texture.get());
+        
+        this.updateData(agentJson.type, true, isRed);
+
+        agent.setAnchs(0.5);
+        agent.setName(json.name);
+        agent.setTeam(team);
+        agent.setType(json.type);
+        agent.setPosX(json.x * this.zoom);
+        agent.setPosY(json.y * this.zoom);
+        agent.setAngle(json.angle);
+        agent.setScales(0.05 * this.zoom);
+
+        if (typeof(json.lifeP) != "undefined")
+            agent.setLife(json.lifeP);
+
+
     },
 
     agentChangeValue : function (agent, agentJson) {
