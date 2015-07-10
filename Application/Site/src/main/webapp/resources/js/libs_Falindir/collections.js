@@ -82,10 +82,7 @@ var Map = Class.extend({
     init : function() {
         this.keys = new Collections();
         this.values = new Collections();
-    },
-
-    size : function () {
-        return this.keys.size();    
+        this.size = 0;
     },
 
     clear : function () {
@@ -97,18 +94,27 @@ var Map = Class.extend({
         if(this.keys.contains(key))
             return this.values.get()
 
-
         return null;
     },
 
-    position : function (index) {
-        
+    getContent : function (index) {
+
+        if(index < this.size) {
+            var key = this.keys.get(index);
+            var value = this.values.get(index);
+            var content = new MapContent(key, value);
+            return content;
+        }
+            
+        return null;
     
     }
 
     insert : function (key, value) {
-    
-    
+        if(!this.keys.contains(key)) {
+            this.keys.add(key);
+            this.values.add(value);
+        }
     }  
 
 }); 

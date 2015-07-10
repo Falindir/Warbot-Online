@@ -80,6 +80,18 @@ var Sprite = Class.extend({
 
     setCursor : function (cursor) {
         this.sprite.defaultCursor = cursor;    
+    },
+
+    getX : function () {
+        return this.sprite.position.x;
+    },
+
+    getY : function () {
+        return this.sprite.position.y;
+    },
+
+    setTexture : function (texture) {
+        this.sprite.setTexture(texture);
     }
 
 }); 
@@ -632,6 +644,102 @@ var SpriteBlock = {
             default:
                 return;    
         }        
+    },
+
+    getLife : function (life) {
+        if(lifeP == 100) {
+            return life001;
+        }
+        else if (lifeP <= 99 && lifeP > 92.5) {
+            return life002;
+        }
+        else if (lifeP <= 92.5 && lifeP > 85) {
+            return life003;
+        }
+        else if (lifeP <= 85 && lifeP > 77.5) {
+            return life004;
+        }
+        else if (lifeP <= 77.5 && lifeP > 70) {
+            return life005;
+        }
+        else if (lifeP <= 70 && lifeP > 62.5) {
+            return life006;
+        }
+        else if (lifeP <= 62.5 && lifeP > 55) {
+            return life007;
+        }
+        else if (lifeP <= 55 && lifeP > 47.5) {
+            return life008;
+        }
+        else if (lifeP <= 47.5 && lifeP > 40) {
+            return life009;
+        }
+        else if (lifeP <= 40 && lifeP > 32.5) {
+            return life010;
+        }
+        else if (lifeP <= 32.5 && lifeP > 25) {
+            return life011;
+        }
+        else if (lifeP <= 25 && lifeP > 17.5) {
+            return life012;
+        }
+        else if (lifeP <= 17.5 && lifeP > 10) {
+            return life013;
+        }
+        else if (lifeP <= 10 && lifeP > 1.5) {
+            return life014;
+        }
+        else {
+
+            return life015;
+        }
+
+    },
+
+    getPercept : function (type) {
+
+        // TODO swith  + enum + type
+
+        if(agent.type == "WarExplorer") {
+            if(agent.teamType == 1)
+                return perceptExplorerRed;
+            else
+                return perceptExplorerBlue;
+        }
+        else if(agent.type == "WarEngineer") {
+            if(agent.teamType == 1)
+                return perceptEngineerRed;
+            else
+                return perceptEngineerBlue;
+        }
+        else if(agent.type == "WarRocketLauncher") {
+            if(agent.teamType == 1)
+                return perceptRocketLauncherRed;
+            else
+                return perceptRocketLauncherBlue;
+        }
+        else if(agent.type == "WarKamikaze") {
+            if(agent.teamType == 1)
+                return perceptKamikazeRed;
+            else
+                return perceptKamikazeBlue;
+        }
+        else if(agent.type == "WarTurret") {
+            if(agent.teamType == 1)
+                return perceptTurretRed;
+            else
+                return perceptTurretBlue;
+        }
+        else if(agent.type == "WarBase") {
+            if(agent.teamType == 1)
+                return perceptBaseRed;
+            else
+                return perceptBaseBlue;
+        }
+        else {
+            return perceptOther;
+        }    
+    
     }
 
 }
