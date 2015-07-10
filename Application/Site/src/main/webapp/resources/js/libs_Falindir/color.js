@@ -15,3 +15,7 @@ var ColorRGB = Class.extend({
     }
 
 }); 
+
+function rgb2hex2(r, g, b){
+    return '#'+('0'+r.toString(16)).slice(-2)+('0'+g.toString(16)).slice(-2)+('0'+b.toString(16)).slice(-2);
+}

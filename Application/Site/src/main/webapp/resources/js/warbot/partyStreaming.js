@@ -18,174 +18,6 @@ var agentDataHTML = {
     blueWall           : "numberOfWallBlue"
 };
 
-var CounterAgent = Class.extend({
-
-    init : function() {
-	    this.food 				= 0;
-		this.redBase 			= 0;
-		this.blueBase 			= 0;
-		this.redExplorer 		= 0;
-		this.blueExplorer 		= 0;
-		this.redKamikaze 		= 0;
-		this.blueKamikaze 		= 0;
-		this.redRocketLauncher 	= 0;
-		this.blueRocketLauncher = 0;
-		this.redTurret 			= 0;
-		this.blueTurret 		= 0;
-		this.redEngineer 		= 0;
-		this.blueEngineer 		= 0;
-		this.redWall 			= 0;
-		this.blueWall 			= 0;
-    },
-
-    resetHtmlValue : function(name, value) {
-    	document.getElementById(name).innerHTML = value;
-    },
-
-    updateData : function (agent, increment, redTeam) {
-        switch(agent.type) {
-            case agentType.food:
-                if(increment)
-                    this.food += 1;
-                else
-                    this.food -= 1;
-                this.resetHtmlValue(agentDataHTML.food, this.food);
-                break;
-            case agentType.base:
-                if(redTeam) {
-                    if(increment)
-                        this.redBase += 1;
-                    else
-                        this.redBase -= 1;
-                    this.resetHtmlValue(agentDataHTML.redBase, this.redBase);
-                }    
-                else {
-                    if(increment)
-                        this.blueBase += 1;
-                    else
-                        this.blueBase -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueBase, this.blueBase);
-                }    
-                break;   
-            case agentType.engineer:
-                if(redTeam) {
-                    if(increment)
-                        this.redEngineer += 1;
-                    else
-                        this.redEngineer -= 1;
-                    this.resetHtmlValue(agentDataHTML.redEngineer, this.redEngineer);
-                }    
-                else {
-                    if(increment)
-                        this.blueEngineer += 1;
-                    else
-                        this.blueEngineer -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueEngineer, this.blueEngineer);
-                }    
-                break;
-            case agentType.explorer:
-                if(redTeam) {
-                    if(increment)
-                        this.redExplorer += 1;
-                    else
-                        this.redExplorer -= 1;
-                    this.resetHtmlValue(agentDataHTML.redExplorer, this.redExplorer);
-                }    
-                else {
-                    if(increment)
-                        this.blueExplorer += 1;
-                    else
-                        this.blueExplorer -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueExplorer, this.blueExplorer);
-                }    
-                break;                      
-             case agentType.kamikaze:
-                if(redTeam) {
-                    if(increment)
-                        this.redKamikaze += 1;
-                    else
-                        this.redKamikaze -= 1;
-                    this.resetHtmlValue(agentDataHTML.redKamikaze, this.redKamikaze);
-                }    
-                else {
-                    if(increment)
-                        this.blueKamikaze += 1;
-                    else
-                        this.blueKamikaze -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueKamikaze, this.blueKamikaze);
-                }    
-                break; 
-            case agentType.rocketLauncher:
-                if(redTeam) {
-                    if(increment)
-                        this.redRocketLauncher += 1;
-                    else
-                        this.redRocketLauncher -= 1;
-                    this.resetHtmlValue(agentDataHTML.redRocketLauncher, this.redRocketLauncher);
-                }    
-                else {
-                    if(increment)
-                        this.blueRocketLauncher += 1;
-                    else
-                        this.blueRocketLauncher -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueRocketLauncher, this.blueRocketLauncher);
-                }    
-                break;
-            case agentType.turret:
-                if(redTeam) {
-                    if(increment)
-                        this.redTurret += 1;
-                    else
-                        this.redTurret -= 1;
-                    this.resetHtmlValue(agentDataHTML.redTurret, this.redTurret);
-                }    
-                else {
-                    if(increment)
-                        this.blueTurret += 1;
-                    else
-                        this.blueTurret -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueTurret, this.blueTurret);
-                }    
-                break;
-            case agentType.wall:
-                if(redTeam) {
-                    if(increment)
-                        this.redWall += 1;
-                    else
-                        this.redWall -= 1;
-                    this.resetHtmlValue(agentDataHTML.redWall, this.redWall);
-                }    
-                else {
-                    if(increment)
-                        this.blueWall += 1;
-                    else
-                        this.blueWall -= 1;
-                    this.resetHtmlValue(agentDataHTML.blueWall, this.blueWall);
-                }    
-                break;                                                                                    
-            default:
-                return;    
-        }        
-        
-    
-    },
-
-    getNumberRedAgents : function () {
-        return this.redBase + this.redEngineer + this.redExplorer + this.redKamikaze + this.redRocketLauncher + this.redTurret + this.redWall;
-    },
-
-    getNumberBlueAgents : function () {
-        return this.blueBase + this.blueEngineer + this.blueExplorer + this.blueKamikaze + this.blueRocketLauncher + this.blueTurret + this.blueWall;
-    },
-
-
-}); 
-
-var Cursor = {
-    defaultC : 'default',
-    pointer  : 'pointer'
-}
-
 var typeMessagesServer = {
     init    : "init",
     agent   : "agent",
@@ -193,39 +25,7 @@ var typeMessagesServer = {
     end     : "end"
 }; 
 
-var Agent = Sprite.extend({
 
-    init : function(texture) {
-        this._super(texture);
-        this.angle = 0;
-        this.type  = null;
-        this.name  = null;
-        this.team  = null;
-        this.life  = 100;
-        this.debug = null;
-    },
-
-    setAngle : function (angle) {
-        this.angle = angle;
-        this.setRotation(Math.PI * (angle / 180));
-    },
-
-    setType : function (type) {
-        this.type = type;
-    },
-
-    setName : function (name) {
-        this.name = name;
-    },
-
-    setTeam : function (team) {
-        this.team = team;
-    },
-
-    setLife : function (life) {
-        this.life = life;
-    }
-}); 
 
 var Teams = Class.extend({
     
@@ -284,25 +84,6 @@ var Teams = Class.extend({
 
 }); 
 
-
-var MessageText = Class.extend({
-
-    init : function(text, color) {
-        this.text             = new PIXI.Text(agent.messageDebug, {font:"12px Arial", fill:agent.colorDebug});
-        this.text.messageText = text;
-        this.text.colorText   = color;
-        this.text.font        = "12px Arial";
-        this.text.position.x  = 0;
-        this.text.position.y  = 0;
-        this.text.anchor.x    = 0;
-        this.text.anchor.y    = 0;
-    }
-
-    // TODO setter
-
-}); 
-
-
 var PartyStream = Stream.extend({
 
     /**
@@ -326,6 +107,8 @@ var PartyStream = Stream.extend({
         this.Teams         = new Teams();
         this.agents        = new Collections();
         this.map           = null;
+        this.haveFollower  = false;
+        this.follower      = null;
     },
 
     analyseMessageServer : function (message) {
@@ -438,8 +221,84 @@ var PartyStream = Stream.extend({
         agent.setAngle(json.angle);
         agent.setScales(0.05 * this.zoom);
 
+        var message = "";
+
+        if (typeof(json.messageDebug) != "undefined")
+            message = json.messageDebug;
+
+        var color = rgb2hex2(0, 0, 0);
+
+        if (typeof(json.colorDebug) != "undefined")
+            color = rgb2hex2(json.colorDebug.r, json.colorDebug.g, json.colorDebug.b);
+
+        agent.debug = new MessageText(message, color);
+        agent.debug.setPosX(agent.getX());
+        agent.debug.setPosY(agent.getY());
+        agent.debug.setAnchX(-0.1);
+        agent.debug.setAnchY(0.5);
+
+
+        // TODO button
+
+        # agent.debug.setAlpha(false);
+
+        agent.debug.setInteractive(true);
+        agent.debug.setButtonMode(true);
+        agent.debug.setCursor(Cursor.pointer);
+
+        var lifeAgent = 100;
         if (typeof(json.lifeP) != "undefined")
-            agent.setLife(json.lifeP);
+            lifeAgent = json.lifeP
+
+        agent.life = new Sprite(SpriteBlock.getLife(lifeAgent));
+        agent.life.setAnchs(0.5);
+        agent.life.setScales(0.5 * this.zoom);
+        agent.life.setPosX(agent.getX());
+        agent.life.setPosY(agent.getY()- Math.sqrt(agent.height * agent.height) * agent.scale.y);
+        agent.setLife(lifeAgent);
+
+        // TODO button
+
+        # agent.life.setAlpha(false);
+
+        agent.percept = new Sprite(SpriteBlock.getPercept(agent.type));
+        agent.percept.setPosX(agent.getX());
+        agent.percept.setPosY(agent.getY());
+        agent.percept.setScales(0.5 * this.zoom);
+
+        // TODO button
+
+        # agent.percept.setAlpha(false);
+
+        // TODO anchor percept
+        // TODO position
+        // TODO Percept < Sprite
+        
+        this.agents.add(agent);
+        this.camera.addChild(agent.sprite);
+        this.camera.addChild(agent.debug.sprite);
+        this.camera.addChild(agent.life.sprite);
+        this.camera.addChild(agent.percept.sprite);
+
+        var self = this;
+
+        agent.mousedown = function(data) {
+            if(self.haveFollower && self.follower.name == this.name) {
+                self.haveFollower = false;
+                self.follower = null;
+
+                # TODO Update HTML
+
+            }
+            else { 
+                self.haveFollower = true;
+                self.follower = this;
+                self.camera.position.x = (self.renderer.width / 2) - this.getX();
+                self.camera.position.y = (self.renderer.width / 2) - this.getY();
+
+                # TODO Update HTML
+            }
+        };
 
 
     },
