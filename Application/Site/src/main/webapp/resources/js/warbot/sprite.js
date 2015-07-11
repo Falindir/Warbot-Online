@@ -30,7 +30,7 @@ var Sprite = Class.extend({
 
     setPosY : function (posY) {
         this.sprite.position.y = posY;
-    }
+    },
 
     setAnchX : function (anchX) {
         this.sprite.anchor.x = anchX;
@@ -718,7 +718,7 @@ var SpriteBlock = {
             else
                 return perceptRocketLauncherBlue;
         }
-        else if(agent.type == "WarKamikaze") {
+        else if(agent.type == "witch(name) {WarKamikaze") {
             if(agent.teamType == 1)
                 return perceptKamikazeRed;
             else
@@ -739,6 +739,24 @@ var SpriteBlock = {
         else {
             return perceptOther;
         }    
+    
+    },
+
+    getButton : function (type) {
+        switch(type) {
+            case ButtonsType.life:
+        
+                break;
+            case ButtonsType.life:
+        
+                break;
+            case ButtonsType.life:
+        
+                break;                                
+            default:
+                return;    
+        }        
+        
     
     }
 
