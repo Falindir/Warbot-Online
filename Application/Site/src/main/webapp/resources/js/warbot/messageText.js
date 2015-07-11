@@ -9,7 +9,7 @@ var MessageText = Class.extend({
         this.text.position.y  = 0;
         this.text.anchor.x    = 0;
         this.text.anchor.y    = 0;
-    }
+    },
 
     setText : function () {
     

@@ -19,8 +19,8 @@
 
     <script src="../../../resources/js/libs/pixi.min.js" th:src="@{/resources/js/libs/pixi.min.js}"></script>
 
-    <script src="../../../resources/js/streaming/importTexture.js"
-            th:src="@{/resources/js/streaming/importTexture.js}"></script>
+    <script src="../../../resources/js/libs_Falindir/libs_Falindir-compiled.js"
+            th:src="@{/resources/js/libs_Falindir/libs_Falindir-compiled.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header">Header</div>
@@ -173,8 +173,9 @@
 <script src="../../../resources/js/libs/stomp.min.js" th:src="@{/resources/js/libs/stomp.min.js}"></script>
 <!-- application -->
 <script src="../../../resources/js/webgame.js" th:src="@{/resources/js/webgame.js}"></script>
-<script src="../../../resources/js/streaming/drawStreaming.js"
-        th:src="@{/resources/js/streaming/drawStreaming.js}"></script>
+
+<script src="../../../resources/js/warbot/warbot-compiled.js"
+        th:src="@{/resources/js/warbot/warbot-compiled.js}"></script>
 
 <script th:inline="javascript">
 (function() {
@@ -186,13 +187,19 @@
         var stompClient = Stomp.over(socket);
 
         var appModel = new WebGameModel(stompClient);
-        appM = appModel;
-        idP = $("#idParty")[0].value;
+        var idP = $("#idParty")[0].value;
         //ko.applyBindings(appModel);
 
-        chargeAppModel(appModel);
+        //chargeAppModel(appModel);
 
         appModel.connect();
+
+        partyStreaming = new PartyStream( '#stream', 0x1099bb, appModel, idP);
+
+        partyStreaming.initStream();
+        partyStreaming.initStreaming();
+        animatePartyStream(partyStreaming);
+
         $(".btn.btn-sm.btn-success.launch").click(function (event)
         {
             /*if(!partyInGame) {

@@ -52,7 +52,7 @@ var Teams = Class.extend({
             this.teamMother = team;
         else
             console.log("Error : team color not supported");   
-    }
+    },
 
     getTeam : function (name) {
         var team = null;
@@ -109,6 +109,22 @@ var PartyStream = Stream.extend({
         this.map           = null;
         this.haveFollower  = false;
         this.follower      = null;
+        this.buttons       = new Buttons();
+    },
+
+    initStreaming : function () {
+        // var gifLoad = 
+        var play = new Sprite(gameTexture.getTexture("play"));
+        play.setAnchs(0.5);
+        play.setScales(0.8);
+        play.setInteractive(true);
+        play.setButtonMode(true);
+        play.setCursor(Cursor.pointer);
+
+        // TODO mousedown
+
+        this.buttons.insert("play", play);
+        this.hud.addChild(play.sprite);
     },
 
     analyseMessageServer : function (message) {
@@ -165,9 +181,10 @@ var PartyStream = Stream.extend({
 
             if(index != -1) {
                 this.counterAgent.updateData(this.agents.get(i));
-                this.camera.removeChild(this.agents.get(i).SpriteLife);
-                this.camera.removeChild(this.agents.get(i).SpritePercept);
-                this.camera.removeChild(this.agents.get(i));
+                this.camera.removeChild(this.agents.get(i).life.sprite);
+                this.camera.removeChild(this.agents.get(i).percept.sprite);
+                this.camera.removeChild(this.agents.get(i).debug.sprite);
+                this.camera.removeChild(this.agents.get(i).sprite);
                 this.agents.remove(index);
             }
         }    
@@ -181,11 +198,11 @@ var PartyStream = Stream.extend({
         // TODO reset HTML value
         
         for (i = 0; i < this.agents.size; i++) {
-            this.camera.removeChild(this.agents.get(i).SpritePercept);
-            this.camera.removeChild(this.agents.get(i).SpriteLife);
-            this.camera.removeChild(this.agents.get(i).debug);
-            this.camera.removeChild(this.agents.get(i));
-        }
+            this.counterAgent.updateData(this.agents.get(i));
+            this.camera.removeChild(this.agents.get(i).life.sprite);
+            this.camera.removeChild(this.agents.get(i).percept.sprite);
+            this.camera.removeChild(this.agents.get(i).debug.sprite);
+            this.camera.removeChild(this.agents.get(i).sprite);        }
 
         // TODO HUD
         
@@ -240,7 +257,7 @@ var PartyStream = Stream.extend({
 
         // TODO button
 
-        # agent.debug.setAlpha(false);
+        // agent.debug.setAlpha(-1);
 
         agent.debug.setInteractive(true);
         agent.debug.setButtonMode(true);
@@ -259,7 +276,7 @@ var PartyStream = Stream.extend({
 
         // TODO button
 
-        # agent.life.setAlpha(false);
+        // agent.life.setAlpha(-1);
 
         agent.percept = new Sprite(SpriteBlock.getPercept(agent.type));
         agent.percept.setPosX(agent.getX());
@@ -268,7 +285,7 @@ var PartyStream = Stream.extend({
 
         // TODO button
 
-        # agent.percept.setAlpha(false);
+        // agent.percept.setAlpha(-1);
 
         // TODO anchor percept
         // TODO position
@@ -287,7 +304,7 @@ var PartyStream = Stream.extend({
                 self.haveFollower = false;
                 self.follower = null;
 
-                # TODO Update HTML
+                // TODO Update HTML
 
             }
             else { 
@@ -296,7 +313,7 @@ var PartyStream = Stream.extend({
                 self.camera.position.x = (self.renderer.width / 2) - this.getX();
                 self.camera.position.y = (self.renderer.width / 2) - this.getY();
 
-                # TODO Update HTML
+                // TODO Update HTML
             }
         };
 
@@ -306,13 +323,54 @@ var PartyStream = Stream.extend({
     agentChangeValue : function (agent, agentJson) {
     
     
+    },
+
+    addButton : function (formDefault, formDown, formTrans, cX, cY, type) {
+        
+        var button = new ButtonUI(formDefault, formDown, formTrans);
+        button.setPosX(cX);
+        button.setPosY(cY);
+        button.setType(type);
+        button.setAnchs(0.5);
+
+        this.buttons.insert(button.type, button);
+
+        button.mouseover = function(data) {
+            this.isOver = true;
+            if (this.isdown)
+                return;
+            this.setTexture(this.default);
+        };    
+
+        button.mouseout = function(data) {
+            this.isOver = false;
+            if (this.isdown)
+                return;
+            this.setTexture(this.trans);
+        };  
+
+
+        // TODO mousedown
+
+
+        this.hud.addChild(button.sprite);      
+
     }
 
 }); 
 
+var partyStreaming = null;
+
 function animatePartyStream() {
 	requestAnimationFrame( animatePartyStream );
-	partyStream.resizeStream();
-    partyStream.renderer.render(partyStream.stage);
+	partyStreaming.resizeStream();
+    partyStreaming.renderer.render(partyStreaming.stage);
+
+    partyStreaming.buttons.get("play").setPosX(partyStreaming.coordCenterX / 2);
+    partyStreaming.buttons.get("play").setPosY(partyStreaming.coordCenterY / 2);
+}
+
+function stopGame() {
+    partyStreaming.appModel.stop();
 }
 
