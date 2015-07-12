@@ -63,20 +63,20 @@ var MessageText = Class.extend({
 var Sprite = Class.extend({
 
     init : function(texture) {
-        this.sprite             = new PIXI.Sprite(texture);
-        this.sprite.position.x  = 0;
-        this.sprite.position.y  = 0;
-        this.sprite.anchor.x    = 0;
-        this.sprite.anchor.y    = 0;
-        this.sprite.alpha       = 1;
-        this.sprite.scale.x     = 1;
-        this.sprite.scale.y     = 1;
-        this.rotation           = 0;
-        this.visible            = true;
-        this.sprite.interactive = false;
-        this.sprite.buttonMode  = false; 
-        this.defaultCursor      = Cursor.defaultC;
-        this.zIndex             = 0;
+        this.sprite               = new PIXI.Sprite(texture);
+        this.sprite.position.x    = 0;
+        this.sprite.position.y    = 0;
+        this.sprite.anchor.x      = 0;
+        this.sprite.anchor.y      = 0;
+        this.sprite.alpha         = 1;
+        this.sprite.scale.x       = 1;
+        this.sprite.scale.y       = 1;
+        this.sprite.rotation      = 0;
+        this.sprite.visible       = true;
+        this.sprite.interactive   = false;
+        this.sprite.buttonMode    = false; 
+        this.sprite.defaultCursor = Cursor.defaultC;
+        this.zIndex               = 0;
     },
 
     setPosX : function (posX) {
@@ -118,11 +118,15 @@ var Sprite = Class.extend({
     },
 
     setVisible : function (visible) {
-        this.visible = visible;
+        this.sprite.visible = visible;
     },
 
     setRotation : function (rotation) {
-        this.rotation = rotation;
+        this.sprite.rotation = rotation;
+    },
+
+    incrementRotation : function (rotation) {
+        this.sprite.rotation += rotation;
     },
 
     setInteractive : function (interact) {
@@ -1098,10 +1102,43 @@ var PartyStream = Stream.extend({
         play.setButtonMode(true);
         play.setCursor(Cursor.pointer);
 
-        // TODO mousedown
+        var self = this;
+
+        play.sprite.mousedown = function(data) {
+
+            console.log(self.partyStarting);
+
+            if(!self.partyStarting) {
+                //self.appModel.launchParty(self.idParty,-1);
+                self.partyStarting = true;
+                play.setAlpha(-1);
+                play.setInteractive(false);
+                play.setVisible(false);
+            }
+        };
 
         this.buttons.insert("play", play);
         this.hud.addChild(play.sprite);
+
+        var load0 = new Sprite(gameTexture.getTexture("loading0"));
+        load0.setAnchs(0.5);
+        load0.setScales(0.3);
+        load0.setAlpha(1);
+        load0.setVisible(false);
+        
+        this.buttons.insert("loading0", load0);
+        this.hud.addChild(load0.sprite);
+
+        var load = new Sprite(gameTexture.getTexture("loading"));
+        load.setAnchs(0.5);
+        load.setScales(0.3);
+        load.setAlpha(1);
+        load.setVisible(false);
+        
+        this.buttons.insert("loading", load);
+        this.hud.addChild(load.sprite);
+
+
     },
 
     analyseMessageServer : function (message) {
@@ -1345,6 +1382,29 @@ function animatePartyStream() {
 
     partyStreaming.buttons.get("play").setPosX(partyStreaming.coordCenterX / 2);
     partyStreaming.buttons.get("play").setPosY(partyStreaming.coordCenterY / 2);
+
+    partyStreaming.buttons.get("loading").setPosX(partyStreaming.coordCenterX / 2);
+    partyStreaming.buttons.get("loading").setPosY(partyStreaming.coordCenterY / 2);
+
+    partyStreaming.buttons.get("loading0").setPosX(partyStreaming.coordCenterX / 2);
+    partyStreaming.buttons.get("loading0").setPosY(partyStreaming.coordCenterY / 2);
+
+    console.log(partyStreaming.partyStarting);
+    
+    if(partyStreaming.partyStarting) {
+        partyStreaming.buttons.get("loading0").setAlpha(1);
+        partyStreaming.buttons.get("loading0").setVisible(true);
+        partyStreaming.buttons.get("loading").incrementRotation(0.05);
+        partyStreaming.buttons.get("loading").setAlpha(1);
+        partyStreaming.buttons.get("loading").setVisible(true);
+    }
+    else {
+        partyStreaming.buttons.get("loading").setAlpha(-1);
+        if(!partyStreaming.partyRunning) {
+            partyStreaming.buttons.get("play").setAlpha(1); 
+            partyStreaming.buttons.get("play").setInteractive(true);
+        }
+    }
 }
 
 function stopGame() {
@@ -1387,13 +1447,14 @@ var TextureFolder = {
 }
 
 var gameTextureFile = {
-	hud : {play : "playButton"},
+	hud : {play : "playButton", load : "loading", load0 : "load0"},
 	mother 	 : {food : "food02", map : "map004", rocket : "rocket2"}
 }
 
 var TextureExtension = {
 
-	png : "png"
+	png : "png",
+	gif : "gif"
 }
 
 var WarbotTexture = MapCollections.extend({
@@ -1421,6 +1482,12 @@ gameTexture.insert("map", mapTexture);
 
 var playTexture = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.play, TextureExtension.png);
 gameTexture.insert("play", playTexture);
+
+var loading = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load, TextureExtension.png);
+gameTexture.insert("loading", loading);
+
+var loading0 = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load0, TextureExtension.png);
+gameTexture.insert("loading0", loading0);
 
 var CounterAgent = Class.extend({
 

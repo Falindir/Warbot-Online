@@ -121,10 +121,43 @@ var PartyStream = Stream.extend({
         play.setButtonMode(true);
         play.setCursor(Cursor.pointer);
 
-        // TODO mousedown
+        var self = this;
+
+        play.sprite.mousedown = function(data) {
+
+            console.log(self.partyStarting);
+
+            if(!self.partyStarting) {
+                //self.appModel.launchParty(self.idParty,-1);
+                self.partyStarting = true;
+                play.setAlpha(-1);
+                play.setInteractive(false);
+                play.setVisible(false);
+            }
+        };
 
         this.buttons.insert("play", play);
         this.hud.addChild(play.sprite);
+
+        var load0 = new Sprite(gameTexture.getTexture("loading0"));
+        load0.setAnchs(0.5);
+        load0.setScales(0.3);
+        load0.setAlpha(1);
+        load0.setVisible(false);
+        
+        this.buttons.insert("loading0", load0);
+        this.hud.addChild(load0.sprite);
+
+        var load = new Sprite(gameTexture.getTexture("loading"));
+        load.setAnchs(0.5);
+        load.setScales(0.3);
+        load.setAlpha(1);
+        load.setVisible(false);
+        
+        this.buttons.insert("loading", load);
+        this.hud.addChild(load.sprite);
+
+
     },
 
     analyseMessageServer : function (message) {
@@ -368,6 +401,29 @@ function animatePartyStream() {
 
     partyStreaming.buttons.get("play").setPosX(partyStreaming.coordCenterX / 2);
     partyStreaming.buttons.get("play").setPosY(partyStreaming.coordCenterY / 2);
+
+    partyStreaming.buttons.get("loading").setPosX(partyStreaming.coordCenterX / 2);
+    partyStreaming.buttons.get("loading").setPosY(partyStreaming.coordCenterY / 2);
+
+    partyStreaming.buttons.get("loading0").setPosX(partyStreaming.coordCenterX / 2);
+    partyStreaming.buttons.get("loading0").setPosY(partyStreaming.coordCenterY / 2);
+
+    console.log(partyStreaming.partyStarting);
+    
+    if(partyStreaming.partyStarting) {
+        partyStreaming.buttons.get("loading0").setAlpha(1);
+        partyStreaming.buttons.get("loading0").setVisible(true);
+        partyStreaming.buttons.get("loading").incrementRotation(0.05);
+        partyStreaming.buttons.get("loading").setAlpha(1);
+        partyStreaming.buttons.get("loading").setVisible(true);
+    }
+    else {
+        partyStreaming.buttons.get("loading").setAlpha(-1);
+        if(!partyStreaming.partyRunning) {
+            partyStreaming.buttons.get("play").setAlpha(1); 
+            partyStreaming.buttons.get("play").setInteractive(true);
+        }
+    }
 }
 
 function stopGame() {
