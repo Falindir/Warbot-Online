@@ -53,6 +53,63 @@ var MessageText = Class.extend({
     },    
 }); 
 
+var Teams = Class.extend({
+    
+    init : function() {
+        this.teamRed    = null;
+        this.teamBlue   = null;
+        this.teamMother = null;
+        this.typeRed    = 1;
+        this.typeBlue   = 2;
+        this.typeMother = 0;
+        this.colorRed   = new ColorRGB(149, 149, 149);
+        this.colorBlue  = new ColorRGB(255, 98, 255);
+        this.colorGreen = new ColorRGB(0, 255, 0);
+    },
+
+    add : function (team) {
+        var color = new ColorRGB(team.color.r, team.color.g, team.color.b);
+
+        if(color.isSame(this.colorRed))
+            this.teamRed = team;
+        else if(color.isSame(this.colorBlue))
+            this.teamBlue = team;
+        else if(color.isSame(this.colorGreen))
+            this.teamMother = team;
+        else
+            console.log("Error : team color not supported");   
+    },
+
+    getTeam : function (name) {
+        var team = null;
+
+        if(name == this.teamRed.name) {
+            team = this.teamRed;
+            team.teamType = this.typeRed;
+        }
+        else if (name == this.teamBlue.name) {
+            team = this.teamBlue;
+            team.teamType = this.typeBlue;
+        }
+        else if (name == this.teamMother.name) {
+            team = this.teamMother;
+            team.teamType = this.typeRed;
+        }
+        else 
+            console.log("Error : team name not supported");
+
+        return team;      
+    },
+
+    isRedTeam : function (team) {
+        if(this.typeRed == team.teamType)
+            return true;
+        return false;    
+    }
+
+
+}); 
+
 /**
  * @ClassNeed   : Class
  * @ClassNeed   : Pixi
@@ -63,20 +120,20 @@ var MessageText = Class.extend({
 var Sprite = Class.extend({
 
     init : function(texture) {
-        this.sprite             = new PIXI.Sprite(texture);
-        this.sprite.position.x  = 0;
-        this.sprite.position.y  = 0;
-        this.sprite.anchor.x    = 0;
-        this.sprite.anchor.y    = 0;
-        this.sprite.alpha       = 1;
-        this.sprite.scale.x     = 1;
-        this.sprite.scale.y     = 1;
-        this.rotation           = 0;
-        this.visible            = true;
-        this.sprite.interactive = false;
-        this.sprite.buttonMode  = false; 
-        this.defaultCursor      = Cursor.defaultC;
-        this.zIndex             = 0;
+        this.sprite               = new PIXI.Sprite(texture);
+        this.sprite.position.x    = 0;
+        this.sprite.position.y    = 0;
+        this.sprite.anchor.x      = 0;
+        this.sprite.anchor.y      = 0;
+        this.sprite.alpha         = 1;
+        this.sprite.scale.x       = 1;
+        this.sprite.scale.y       = 1;
+        this.sprite.rotation      = 0;
+        this.sprite.visible       = true;
+        this.sprite.interactive   = false;
+        this.sprite.buttonMode    = false; 
+        this.sprite.defaultCursor = Cursor.defaultC;
+        this.zIndex               = 0;
     },
 
     setPosX : function (posX) {
@@ -118,11 +175,15 @@ var Sprite = Class.extend({
     },
 
     setVisible : function (visible) {
-        this.visible = visible;
+        this.sprite.visible = visible;
     },
 
     setRotation : function (rotation) {
-        this.rotation = rotation;
+        this.sprite.rotation = rotation;
+    },
+
+    incrementRotation : function (rotation) {
+        this.sprite.rotation += rotation;
     },
 
     setInteractive : function (interact) {
@@ -1002,65 +1063,6 @@ var typeMessagesServer = {
     end     : "end"
 }; 
 
-
-
-var Teams = Class.extend({
-    
-    init : function() {
-        this.teamRed    = null;
-        this.teamBlue   = null;
-        this.teamMother = null;
-        this.typeRed    = 1;
-        this.typeBlue   = 2;
-        this.typeMother = 0;
-        this.colorRed   = new ColorRGB(149, 149, 149);
-        this.colorBlue  = new ColorRGB(255, 98, 255);
-        this.colorGreen = new ColorRGB(0, 255, 0);
-    },
-
-    add : function (team) {
-        var color = new ColorRGB(team.color.r, team.color.g, team.color.b);
-
-        if(color.isSame(this.colorRed))
-            this.teamRed = team;
-        else if(color.isSame(this.colorBlue))
-            this.teamBlue = team;
-        else if(color.isSame(this.colorGreen))
-            this.teamMother = team;
-        else
-            console.log("Error : team color not supported");   
-    },
-
-    getTeam : function (name) {
-        var team = null;
-
-        if(name == this.teamRed.name) {
-            team = this.teamRed;
-            team.teamType = this.typeRed;
-        }
-        else if (name == this.teamBlue.name) {
-            team = this.teamBlue;
-            team.teamType = this.typeBlue;
-        }
-        else if (name == this.teamMother.name) {
-            team = this.teamMother;
-            team.teamType = this.typeRed;
-        }
-        else 
-            console.log("Error : team name not supported");
-
-        return team;      
-    },
-
-    isRedTeam : function (team) {
-        if(this.typeRed == team.teamType)
-            return true;
-        return false;    
-    }
-
-
-}); 
-
 var PartyStream = Stream.extend({
 
     /**
@@ -1098,23 +1100,58 @@ var PartyStream = Stream.extend({
         play.setButtonMode(true);
         play.setCursor(Cursor.pointer);
 
-        // TODO mousedown
+        var self = this;
+
+        play.sprite.mousedown = function(data) {
+
+            console.log(self.partyStarting);
+
+            if(!self.partyStarting) {
+                self.appModel.launchParty(self.idParty,-1);
+                self.partyStarting = true;
+                play.setAlpha(-1);
+                play.setInteractive(false);
+                play.setVisible(false);
+            }
+        };
 
         this.buttons.insert("play", play);
         this.hud.addChild(play.sprite);
+
+        var load0 = new Sprite(gameTexture.getTexture("loading0"));
+        load0.setAnchs(0.5);
+        load0.setScales(0.3);
+        load0.setAlpha(1);
+        load0.setVisible(false);
+        
+        this.buttons.insert("loading0", load0);
+        this.hud.addChild(load0.sprite);
+
+        var load = new Sprite(gameTexture.getTexture("loading"));
+        load.setAnchs(0.5);
+        load.setScales(0.3);
+        load.setAlpha(1);
+        load.setVisible(false);
+        
+        this.buttons.insert("loading", load);
+        this.hud.addChild(load.sprite);
+
+
     },
 
     analyseMessageServer : function (message) {
 
+        console.log(message.header);
+
         switch(message.header) {
             case typeMessagesServer.init:
-                messageServerInit(message.content);
+                this.messageServerInit(message.content);
                 break;
             case typeMessagesServer.agent:
-                messageServerAgent(message.content);       
+                //this.messageServerAgent(message.content);       
                 break;
             case typeMessagesServer.end:
-                messageServerEnd(message.content);
+                this.messageServerEnd(message.content);
                 break;                                                
             default:
                 console.log("bug analyse message server"); 
@@ -1123,6 +1160,8 @@ var PartyStream = Stream.extend({
 
     messageServerInit : function (message) {
 
+        console.log("INIT STREAM");
+
         this.Teams.add(message.teams[0]);
         this.Teams.add(message.teams[1]);
         this.Teams.add(message.teams[2]);
@@ -1130,7 +1169,7 @@ var PartyStream = Stream.extend({
         this.createMapJson();
 
         for (i = 0; i < message.agents.length; i++)
-            this.createAgentJson(message.agents[i]);
+            //this.createAgentJson(message.agents[i]);
     
         this.partyStarting = false;
         this.partyRunning = true;
@@ -1181,7 +1220,7 @@ var PartyStream = Stream.extend({
             this.camera.removeChild(this.agents.get(i).debug.sprite);
             this.camera.removeChild(this.agents.get(i).sprite);        }
 
-        // TODO HUD
+        this.partyRunning = false;
         
         
     },
@@ -1189,13 +1228,13 @@ var PartyStream = Stream.extend({
 
     createMapJson : function () {
 
-        this.map = new Sprite(map);      
+        this.map = new Sprite(gameTexture.getTexture("map"));      
         this.map.setPosX(-14);
         this.map.setPosY(-14);
-        this.camera.addChild(this.map);
+        this.map.zIndex = 0;
+        this.camera.addChild(this.map.sprite);
 
 
-    
     },
 
     createAgentJson : function (agentJson) {
@@ -1343,8 +1382,40 @@ function animatePartyStream() {
 	partyStreaming.resizeStream();
     partyStreaming.renderer.render(partyStreaming.stage);
 
-    partyStreaming.buttons.get("play").setPosX(partyStreaming.coordCenterX / 2);
-    partyStreaming.buttons.get("play").setPosY(partyStreaming.coordCenterY / 2);
+    var playB  = partyStreaming.buttons.get("play");
+    var load0B = partyStreaming.buttons.get("loading0");
+    var loadB  = partyStreaming.buttons.get("loading");
+
+    playB.setPosX(partyStreaming.coordCenterX / 2);
+    playB.setPosY(partyStreaming.coordCenterY / 2);
+
+    loadB.setPosX(partyStreaming.coordCenterX / 2);
+    loadB.setPosY(partyStreaming.coordCenterY / 2);
+
+    load0B.setPosX(partyStreaming.coordCenterX / 2);
+    load0B.setPosY(partyStreaming.coordCenterY / 2);
+    
+    if(partyStreaming.partyStarting) {
+        load0B.setAlpha(1);
+        load0B.setVisible(true);
+        loadB.incrementRotation(0.05);
+        loadB.setAlpha(1);
+        loadB.setVisible(true);
+    }
+    else {
+
+        if(partyStreaming.partyRunning) {
+            loadB.setAlpha(-1);
+            load0B.setAlpha(-1);
+            load0B.setVisible(false);
+            loadB.setVisible(false);
+        }    
+
+        if(!partyStreaming.partyRunning) {
+            playB.setAlpha(1); 
+            playB.setInteractive(true);
+        }
+    }
 }
 
 function stopGame() {
@@ -1387,13 +1458,14 @@ var TextureFolder = {
 }
 
 var gameTextureFile = {
-	hud : {play : "playButton"},
+	hud : {play : "playButton", load : "loading", load0 : "load0"},
 	mother 	 : {food : "food02", map : "map004", rocket : "rocket2"}
 }
 
 var TextureExtension = {
 
-	png : "png"
+	png : "png",
+	gif : "gif"
 }
 
 var WarbotTexture = MapCollections.extend({
@@ -1421,6 +1493,12 @@ gameTexture.insert("map", mapTexture);
 
 var playTexture = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.play, TextureExtension.png);
 gameTexture.insert("play", playTexture);
+
+var loading = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load, TextureExtension.png);
+gameTexture.insert("loading", loading);
+
+var loading0 = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load0, TextureExtension.png);
+gameTexture.insert("loading0", loading0);
 
 var CounterAgent = Class.extend({
 

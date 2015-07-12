@@ -16,14 +16,14 @@ function WebGameModel(stompClient) {
       {
         //UPDATE AGENT
                     // console.log(message.body);
-                    analyseMessageServer(JSON.parse(message.body));
+                    partyStreaming.analyseMessageServer(JSON.parse(message.body));
                      
       });
        stompClient.subscribe("/user/queue/game", function(message)
             {
               //UPDATE AGENT
               //console.log(message.body);
-              analyseMessageServer(JSON.parse(message.body));
+              partyStreaming.analyseMessageServer(JSON.parse(message.body));
 
             });
 

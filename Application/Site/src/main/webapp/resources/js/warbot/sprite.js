@@ -8,20 +8,20 @@
 var Sprite = Class.extend({
 
     init : function(texture) {
-        this.sprite             = new PIXI.Sprite(texture);
-        this.sprite.position.x  = 0;
-        this.sprite.position.y  = 0;
-        this.sprite.anchor.x    = 0;
-        this.sprite.anchor.y    = 0;
-        this.sprite.alpha       = 1;
-        this.sprite.scale.x     = 1;
-        this.sprite.scale.y     = 1;
-        this.rotation           = 0;
-        this.visible            = true;
-        this.sprite.interactive = false;
-        this.sprite.buttonMode  = false; 
-        this.defaultCursor      = Cursor.defaultC;
-        this.zIndex             = 0;
+        this.sprite               = new PIXI.Sprite(texture);
+        this.sprite.position.x    = 0;
+        this.sprite.position.y    = 0;
+        this.sprite.anchor.x      = 0;
+        this.sprite.anchor.y      = 0;
+        this.sprite.alpha         = 1;
+        this.sprite.scale.x       = 1;
+        this.sprite.scale.y       = 1;
+        this.sprite.rotation      = 0;
+        this.sprite.visible       = true;
+        this.sprite.interactive   = false;
+        this.sprite.buttonMode    = false; 
+        this.sprite.defaultCursor = Cursor.defaultC;
+        this.zIndex               = 0;
     },
 
     setPosX : function (posX) {
@@ -63,11 +63,15 @@ var Sprite = Class.extend({
     },
 
     setVisible : function (visible) {
-        this.visible = visible;
+        this.sprite.visible = visible;
     },
 
     setRotation : function (rotation) {
-        this.rotation = rotation;
+        this.sprite.rotation = rotation;
+    },
+
+    incrementRotation : function (rotation) {
+        this.sprite.rotation += rotation;
     },
 
     setInteractive : function (interact) {

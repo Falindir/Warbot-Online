@@ -32,13 +32,14 @@ var TextureFolder = {
 }
 
 var gameTextureFile = {
-	hud : {play : "playButton"},
+	hud : {play : "playButton", load : "loading", load0 : "load0"},
 	mother 	 : {food : "food02", map : "map004", rocket : "rocket2"}
 }
 
 var TextureExtension = {
 
-	png : "png"
+	png : "png",
+	gif : "gif"
 }
 
 var WarbotTexture = MapCollections.extend({
@@ -66,3 +67,9 @@ gameTexture.insert("map", mapTexture);
 
 var playTexture = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.play, TextureExtension.png);
 gameTexture.insert("play", playTexture);
+
+var loading = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load, TextureExtension.png);
+gameTexture.insert("loading", loading);
+
+var loading0 = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load0, TextureExtension.png);
+gameTexture.insert("loading0", loading0);
