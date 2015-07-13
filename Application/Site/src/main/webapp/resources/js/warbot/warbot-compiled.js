@@ -144,6 +144,11 @@ var Sprite = Class.extend({
         this.sprite.position.y = posY;
     },
 
+    multiplyPosFactor : function (factor) {
+        this.position.x *= factor;
+        this.position.y *= factor;
+    },   
+
     setAnchX : function (anchX) {
         this.sprite.anchor.x = anchX;
     },
@@ -172,6 +177,11 @@ var Sprite = Class.extend({
     setScales : function (val) {
         this.setScaleX(val);
         this.setScaleY(val);    
+    },
+
+    multiplyScalesFactor : function (factor) {
+        this.sprite.x *= factor;
+        this.sprite.y *= factor;
     },
 
     setVisible : function (visible) {
@@ -1089,6 +1099,7 @@ var PartyStream = Stream.extend({
         this.haveFollower  = false;
         this.follower      = null;
         this.buttons       = new Buttons();
+        this.activeZoom    = true;
     },
 
     initStreaming : function () {
@@ -1172,7 +1183,7 @@ var PartyStream = Stream.extend({
             //this.createAgentJson(message.agents[i]);
     
         this.partyStarting = false;
-        this.partyRunning = true;
+        this.partyRunning  = true;
     },
 
     messageServerAgent : function (message) {
@@ -1371,11 +1382,48 @@ var PartyStream = Stream.extend({
 
         this.hud.addChild(button.sprite);      
 
-    }
+    },
+
+    addWheelListenerHexagonEditorStream : function() {
+
+        console.log("BITE");
+
+        if(this.activeZoom) {
+            if (this.container.addEventListener) {
+                // IE9, Chrome, Safari, Opera
+                this.container.addEventListener('onmousewheel', cameraZoomPartyStreaming);
+                // Firefox
+                this.container.addEventListener("DOMMouseScroll", cameraZoomPartyStreaming, false);
+            }
+            // IE 6/7/8
+            else this.container.addEventListener("onmousewheel", cameraZoomPartyStreaming);
+        }
+    },
 
 }); 
 
 var partyStreaming = null;
+
+function cameraZoomPartyStreaming (e) {
+
+    console.log("BITE 2");
+
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    var x = e.clientX;
+    var y = e.clientY;
+    var isZoomIn = delta > 0;
+    var direction = isZoomIn ? 1 : -1;
+    var factor = (1 + direction * 0.1);
+
+    if(partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom) {
+        partyStreaming.zoom *= factor;
+
+        partyStreaming.map.multiplyPosFactor(factor);
+        partyStreaming.map.multiplyScalesFactor(factor);
+    }
+};
+
 
 function animatePartyStream() {
 	requestAnimationFrame( animatePartyStream );
