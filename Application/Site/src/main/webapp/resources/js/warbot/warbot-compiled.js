@@ -6,7 +6,7 @@ var Cursor = {
 var MessageText = Class.extend({
 
     init : function(text, color) {
-        this.text             = new PIXI.Text(agent.messageDebug, {font:"12px Arial", fill:agent.colorDebug});
+        this.text             = new PIXI.Text(text, {font:"12px Arial", fill:color});
         this.text.messageText = text;
         this.text.colorText   = color;
         this.text.font        = "12px Arial";
@@ -26,9 +26,14 @@ var MessageText = Class.extend({
     
     },
 
-    setFont : function () {
-    
-    
+    setFont : function (size) {
+        this.text.scale.x = size;
+        this.text.scale.y = size;    
+    },
+
+    multiplyFont : function (size) {
+        this.text.scale.x *= size;
+        this.text.scale.y *= size;
     },
 
     setPosX : function (posX) {
@@ -37,6 +42,11 @@ var MessageText = Class.extend({
 
     setPosY : function (posY) {
         this.text.position.y = posY; 
+    },
+
+    multiplyPos : function (fact) {
+        this.text.position.x = fact;
+        this.text.position.y = fact;    
     },
 
     setAnchX : function (anchX) {
@@ -56,15 +66,17 @@ var MessageText = Class.extend({
 var Teams = Class.extend({
     
     init : function() {
-        this.teamRed    = null;
-        this.teamBlue   = null;
-        this.teamMother = null;
-        this.typeRed    = 1;
-        this.typeBlue   = 2;
-        this.typeMother = 0;
-        this.colorRed   = new ColorRGB(149, 149, 149);
-        this.colorBlue  = new ColorRGB(255, 98, 255);
-        this.colorGreen = new ColorRGB(0, 255, 0);
+        this.teamRed      = null;
+        this.teamBlue     = null;
+        this.teamMother   = null;
+        this.typeRed      = 1;
+        this.typeBlue     = 2;
+        this.typeMother   = 0;
+        this.colorRed     = new ColorRGB(149, 149, 149);
+        this.colorBlue    = new ColorRGB(255, 98, 255);
+        this.colorGreen   = new ColorRGB(0, 255, 0);
+        this.nameTeamRed  = null;
+        this.nameTeamBlue = null;
     },
 
     add : function (team) {
@@ -145,8 +157,8 @@ var Sprite = Class.extend({
     },
 
     multiplyPosFactor : function (factor) {
-        this.position.x *= factor;
-        this.position.y *= factor;
+        this.sprite.position.x *= factor;
+        this.sprite.position.y *= factor;
     },   
 
     setAnchX : function (anchX) {
@@ -180,8 +192,8 @@ var Sprite = Class.extend({
     },
 
     multiplyScalesFactor : function (factor) {
-        this.sprite.x *= factor;
-        this.sprite.y *= factor;
+        this.sprite.scale.x *= factor;
+        this.sprite.scale.y *= factor;
     },
 
     setVisible : function (visible) {
@@ -1246,6 +1258,17 @@ var PartyStream = Stream.extend({
         this.camera.addChild(this.map.sprite);
 
 
+        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed, "red");
+        this.Teams.nameTeamRed.setPosX(30);
+        this.Teams.nameTeamRed.setPosY(-50);
+        this.Teams.nameTeamRed.setFont(2);
+        this.camera.addChild(this.Teams.nameTeamRed.text);
+
+        this.Teams.nameTeamBlue = new MessageText("BLUE : " + this.Teams.teamRed, "blue");
+        this.Teams.nameTeamBlue.setPosX(800);
+        this.Teams.nameTeamBlue.setPosY(-50);
+        this.Teams.nameTeamBlue.setFont(2);
+        this.camera.addChild(this.Teams.nameTeamBlue.text);
     },
 
     createAgentJson : function (agentJson) {
@@ -1384,10 +1407,7 @@ var PartyStream = Stream.extend({
 
     },
 
-    addWheelListenerHexagonEditorStream : function() {
-
-        console.log("BITE");
-
+    addWheelListenerPartyStream: function() {
         if(this.activeZoom) {
             if (this.container.addEventListener) {
                 // IE9, Chrome, Safari, Opera
@@ -1396,17 +1416,17 @@ var PartyStream = Stream.extend({
                 this.container.addEventListener("DOMMouseScroll", cameraZoomPartyStreaming, false);
             }
             // IE 6/7/8
-            else this.container.addEventListener("onmousewheel", cameraZoomPartyStreaming);
+            else {
+                this.container.addEventListener("onmousewheel", cameraZoomPartyStreaming);
+            }    
         }
-    },
+    }
 
 }); 
 
 var partyStreaming = null;
 
 function cameraZoomPartyStreaming (e) {
-
-    console.log("BITE 2");
 
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
@@ -1416,11 +1436,17 @@ function cameraZoomPartyStreaming (e) {
     var direction = isZoomIn ? 1 : -1;
     var factor = (1 + direction * 0.1);
 
-    if(partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom) {
+
+    if(/*partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom &&*/ partyStreaming.partyRunning == true ) {
         partyStreaming.zoom *= factor;
 
         partyStreaming.map.multiplyPosFactor(factor);
         partyStreaming.map.multiplyScalesFactor(factor);
+
+        partyStreaming.Teams.nameTeamRed.multiplyPos(factor);
+        partyStreaming.Teams.nameTeamRed.multiplyFont(factor);
+        partyStreaming.Teams.nameTeamBlue.multiplyPos(factor);
+        partyStreaming.Teams.nameTeamBlue.multiplyFont(factor);
     }
 };
 

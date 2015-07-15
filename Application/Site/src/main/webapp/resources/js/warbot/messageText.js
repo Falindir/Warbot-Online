@@ -1,7 +1,7 @@
 var MessageText = Class.extend({
 
     init : function(text, color) {
-        this.text             = new PIXI.Text(agent.messageDebug, {font:"12px Arial", fill:agent.colorDebug});
+        this.text             = new PIXI.Text(text, {font:"12px Arial", fill:color});
         this.text.messageText = text;
         this.text.colorText   = color;
         this.text.font        = "12px Arial";
@@ -21,9 +21,14 @@ var MessageText = Class.extend({
     
     },
 
-    setFont : function () {
-    
-    
+    setFont : function (size) {
+        this.text.scale.x = size;
+        this.text.scale.y = size;    
+    },
+
+    multiplyFont : function (size) {
+        this.text.scale.x *= size;
+        this.text.scale.y *= size;
     },
 
     setPosX : function (posX) {
@@ -32,6 +37,11 @@ var MessageText = Class.extend({
 
     setPosY : function (posY) {
         this.text.position.y = posY; 
+    },
+
+    multiplyPos : function (fact) {
+        this.text.position.x *= fact;
+        this.text.position.y *= fact;    
     },
 
     setAnchX : function (anchX) {

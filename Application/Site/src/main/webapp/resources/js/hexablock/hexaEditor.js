@@ -685,7 +685,7 @@ animateHexaEditor();
 
 var tutu = new Collections();
 var tktk = new Collections();
-
+²
 console.log(tutu.toto);
 console.log(tutu._tata);
 console.log(tutu instanceof Collections);
