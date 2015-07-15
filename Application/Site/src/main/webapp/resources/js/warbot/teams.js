@@ -1,15 +1,17 @@
 var Teams = Class.extend({
     
     init : function() {
-        this.teamRed    = null;
-        this.teamBlue   = null;
-        this.teamMother = null;
-        this.typeRed    = 1;
-        this.typeBlue   = 2;
-        this.typeMother = 0;
-        this.colorRed   = new ColorRGB(149, 149, 149);
-        this.colorBlue  = new ColorRGB(255, 98, 255);
-        this.colorGreen = new ColorRGB(0, 255, 0);
+        this.teamRed      = null;
+        this.teamBlue     = null;
+        this.teamMother   = null;
+        this.typeRed      = 1;
+        this.typeBlue     = 2;
+        this.typeMother   = 0;
+        this.colorRed     = new ColorRGB(149, 149, 149);
+        this.colorBlue    = new ColorRGB(255, 98, 255);
+        this.colorGreen   = new ColorRGB(0, 255, 0);
+        this.nameTeamRed  = null;
+        this.nameTeamBlue = null;
     },
 
     add : function (team) {

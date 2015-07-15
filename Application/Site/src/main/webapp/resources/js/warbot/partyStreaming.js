@@ -198,6 +198,17 @@ var PartyStream = Stream.extend({
         this.camera.addChild(this.map.sprite);
 
 
+        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed, "red");
+        this.Teams.nameTeamRed.setPosX(30);
+        this.Teams.nameTeamRed.setPosY(-50);
+        this.Teams.nameTeamRed.setFont(2);
+        this.camera.addChild(this.Teams.nameTeamRed.text);
+
+        this.Teams.nameTeamBlue = new MessageText("BLUE : " + this.Teams.teamRed, "blue");
+        this.Teams.nameTeamBlue.setPosX(800);
+        this.Teams.nameTeamBlue.setPosY(-50);
+        this.Teams.nameTeamBlue.setFont(2);
+        this.camera.addChild(this.Teams.nameTeamBlue.text);
     },
 
     createAgentJson : function (agentJson) {
@@ -336,32 +347,26 @@ var PartyStream = Stream.extend({
 
     },
 
-    addWheelListenerHexagonEditorStream : function() {
-
-        console.log("BITE");
-
+    addWheelListenerPartyStream: function() {
         if(this.activeZoom) {
             if (this.container.addEventListener) {
-
-                console.log("BITE 3");
-
                 // IE9, Chrome, Safari, Opera
                 this.container.addEventListener('onmousewheel', cameraZoomPartyStreaming);
                 // Firefox
                 this.container.addEventListener("DOMMouseScroll", cameraZoomPartyStreaming, false);
             }
             // IE 6/7/8
-            else this.container.addEventListener("onmousewheel", cameraZoomPartyStreaming);
+            else {
+                this.container.addEventListener("onmousewheel", cameraZoomPartyStreaming);
+            }    
         }
-    },
+    }
 
 }); 
 
 var partyStreaming = null;
 
 function cameraZoomPartyStreaming (e) {
-
-    console.log("BITE 2");
 
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
@@ -371,11 +376,17 @@ function cameraZoomPartyStreaming (e) {
     var direction = isZoomIn ? 1 : -1;
     var factor = (1 + direction * 0.1);
 
-    if(partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom) {
+
+    if(/*partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom &&*/ partyStreaming.partyRunning == true ) {
         partyStreaming.zoom *= factor;
 
         partyStreaming.map.multiplyPosFactor(factor);
         partyStreaming.map.multiplyScalesFactor(factor);
+
+        partyStreaming.Teams.nameTeamRed.multiplyPos(factor);
+        partyStreaming.Teams.nameTeamRed.multiplyFont(factor);
+        partyStreaming.Teams.nameTeamBlue.multiplyPos(factor);
+        partyStreaming.Teams.nameTeamBlue.multiplyFont(factor);
     }
 };
 

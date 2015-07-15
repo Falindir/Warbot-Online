@@ -33,8 +33,8 @@ var Sprite = Class.extend({
     },
 
     multiplyPosFactor : function (factor) {
-        this.position.x *= factor;
-        this.position.y *= factor;
+        this.sprite.position.x *= factor;
+        this.sprite.position.y *= factor;
     },   
 
     setAnchX : function (anchX) {
@@ -68,8 +68,8 @@ var Sprite = Class.extend({
     },
 
     multiplyScalesFactor : function (factor) {
-        this.sprite.x *= factor;
-        this.sprite.y *= factor;
+        this.sprite.scale.x *= factor;
+        this.sprite.scale.y *= factor;
     },
 
     setVisible : function (visible) {
