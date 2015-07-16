@@ -6,10 +6,10 @@ var Cursor = {
 var MessageText = Class.extend({
 
     init : function(text, color) {
-        this.text             = new PIXI.Text(text, {font:"12px Arial", fill:color});
+        this.text             = new PIXI.Text(text, {font:"25px Arial", fill:color});
         this.text.messageText = text;
         this.text.colorText   = color;
-        this.text.font        = "12px Arial";
+        this.text.font        = "25px Arial";
         this.text.position.x  = 0;
         this.text.position.y  = 0;
         this.text.anchor.x    = 0;
@@ -45,8 +45,8 @@ var MessageText = Class.extend({
     },
 
     multiplyPos : function (fact) {
-        this.text.position.x = fact;
-        this.text.position.y = fact;    
+        this.text.position.x *= fact;
+        this.text.position.y *= fact;    
     },
 
     setAnchX : function (anchX) {
@@ -748,12 +748,16 @@ var SpriteBlock = {
         }
     },
 
-    getAgent : function (name, red) {
-        switch(name) {
+    getAgent : function (type, red) {
+
+        console.log("Type : " + type);
+
+        switch(type) {
             case agentType.base :
                 if(red)
-                    return baseRed;
-                    
+                    return gameTexture.getTexture("baseRed");
+                else
+                    return gameTexture.getTexture("baseBlue");    
                 break;
             case agentType.engineer :
                 
@@ -770,13 +774,13 @@ var SpriteBlock = {
             case agentType.turret:
 
                 break;
-            case value:
+            case agentType.wall:
         
                 break;
-            case value:
+            case agentType.food:
         
                 break;
-            case value:
+            case agentType.rocket:
         
                 break;                
             default:
@@ -1082,7 +1086,8 @@ var typeMessagesServer = {
     init    : "init",
     agent   : "agent",
     synchro : "synchro",
-    end     : "end"
+    end     : "end",
+    ping    : "PingMessage"
 }; 
 
 var PartyStream = Stream.extend({
@@ -1126,9 +1131,6 @@ var PartyStream = Stream.extend({
         var self = this;
 
         play.sprite.mousedown = function(data) {
-
-            console.log(self.partyStarting);
-
             if(!self.partyStarting) {
                 self.appModel.launchParty(self.idParty,-1);
                 self.partyStarting = true;
@@ -1164,9 +1166,10 @@ var PartyStream = Stream.extend({
 
     analyseMessageServer : function (message) {
 
-        console.log(message.header);
-
         switch(message.header) {
+            case typeMessagesServer.ping:
+                //nothing
+                break;
             case typeMessagesServer.init:
                 this.messageServerInit(message.content);
                 break;
@@ -1191,8 +1194,18 @@ var PartyStream = Stream.extend({
 
         this.createMapJson();
 
-        for (i = 0; i < message.agents.length; i++)
-            //this.createAgentJson(message.agents[i]);
+        console.log(message.agents.length);
+
+        //for (i = 0; i < message.agents.length; i++)
+        var i = 0;    
+        while(i < message.agents.length) {    
+            if(message.agents[i].type == "WarBase") {
+                this.createAgentJson(message.agents[i]);
+            }
+            i++;
+        } 
+
+        this.camera.children.sort(depthCompare);
     
         this.partyStarting = false;
         this.partyRunning  = true;
@@ -1200,7 +1213,7 @@ var PartyStream = Stream.extend({
 
     messageServerAgent : function (message) {
         if(typeof(message.state) != "undefined" && (message.state == 1)) {
-            this.createAgentJson(message);
+            //this.createAgentJson(message);
         }
         else {
 
@@ -1254,30 +1267,29 @@ var PartyStream = Stream.extend({
         this.map = new Sprite(gameTexture.getTexture("map"));      
         this.map.setPosX(-14);
         this.map.setPosY(-14);
-        this.map.zIndex = 0;
+        this.map.zIndex = 1;
         this.camera.addChild(this.map.sprite);
 
 
-        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed, "red");
+        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed.name, "red");
         this.Teams.nameTeamRed.setPosX(30);
         this.Teams.nameTeamRed.setPosY(-50);
-        this.Teams.nameTeamRed.setFont(2);
         this.camera.addChild(this.Teams.nameTeamRed.text);
 
-        this.Teams.nameTeamBlue = new MessageText("BLUE : " + this.Teams.teamRed, "blue");
-        this.Teams.nameTeamBlue.setPosX(800);
+        this.Teams.nameTeamBlue = new MessageText("Blue : " + this.Teams.teamRed.name, "blue");
+        this.Teams.nameTeamBlue.setPosX(750);
         this.Teams.nameTeamBlue.setPosY(-50);
-        this.Teams.nameTeamBlue.setFont(2);
         this.camera.addChild(this.Teams.nameTeamBlue.text);
     },
 
-    createAgentJson : function (agentJson) {
-        var team = this.Teams.getTeam(agentJson.team);
+    createAgentJson : function (json) {
+        var team = this.Teams.getTeam(json.team);
         var isRed = this.Teams.isRedTeam(team);
-        var texture = null; // TODO SpriteBlock.getDefaultAgent(name, red);
-        var agent = new Agent(texture.get());
+        var texture = SpriteBlock.getAgent(json.type, isRed);
+        console.log(texture);
+        var agent = new Agent(texture);
         
-        this.updateData(agentJson.type, true, isRed);
+        //this.updateData(json.type, true, isRed);
 
         agent.setAnchs(0.5);
         agent.setName(json.name);
@@ -1287,7 +1299,8 @@ var PartyStream = Stream.extend({
         agent.setPosY(json.y * this.zoom);
         agent.setAngle(json.angle);
         agent.setScales(0.05 * this.zoom);
-
+        agent.zIndex = 10;
+/*
         var message = "";
 
         if (typeof(json.messageDebug) != "undefined")
@@ -1303,6 +1316,7 @@ var PartyStream = Stream.extend({
         agent.debug.setPosY(agent.getY());
         agent.debug.setAnchX(-0.1);
         agent.debug.setAnchY(0.5);
+        agent.debug.multiplyFont(0.5);
 
 
         // TODO button
@@ -1340,12 +1354,12 @@ var PartyStream = Stream.extend({
         // TODO anchor percept
         // TODO position
         // TODO Percept < Sprite
-        
+        */
         this.agents.add(agent);
         this.camera.addChild(agent.sprite);
-        this.camera.addChild(agent.debug.sprite);
-        this.camera.addChild(agent.life.sprite);
-        this.camera.addChild(agent.percept.sprite);
+        //this.camera.addChild(agent.debug.sprite);
+        //this.camera.addChild(agent.life.sprite);
+        //this.camera.addChild(agent.percept.sprite);
 
         var self = this;
 
@@ -1517,11 +1531,22 @@ var hexablockTextureFolders = {
 
 var gameTextureFolders = {
 	root 	 : "assetWarbot",
-	blue 	 : "BlueTeam",
+	blue 	 : "Team2",
 	hud 	 : "HUD",
 	info 	 : "InfoAgent",
 	mother 	 : "MotherTeam",
-	red 	 : "RedTeam"
+	red 	 : "Team1"
+}
+
+var agentTexture = {
+	base 			: "base",
+	engineer 		: "engineer",
+	explorer 		: "explorer",
+	kamikaze 		: "kamikaze",
+	rocketLauncher 	: "rocketLauncher",
+	turret 			: "turret",
+	wall 			: "wall"
+
 }
 
 var TextureFolder = {
@@ -1533,7 +1558,8 @@ var TextureFolder = {
 
 var gameTextureFile = {
 	hud : {play : "playButton", load : "loading", load0 : "load0"},
-	mother 	 : {food : "food02", map : "map004", rocket : "rocket2"}
+	mother 	 : {food : "food02", map : "map004", rocket : "rocket2"},
+	agent : agentTexture
 }
 
 var TextureExtension = {
@@ -1564,7 +1590,6 @@ var gameTexture = new WarbotTexture();
 var mapTexture = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.mother], gameTextureFile.mother.map, TextureExtension.png);
 gameTexture.insert("map", mapTexture);
 
-
 var playTexture = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.play, TextureExtension.png);
 gameTexture.insert("play", playTexture);
 
@@ -1573,6 +1598,12 @@ gameTexture.insert("loading", loading);
 
 var loading0 = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.hud], gameTextureFile.hud.load0, TextureExtension.png);
 gameTexture.insert("loading0", loading0);
+
+var baseRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.base,TextureExtension.png);
+gameTexture.insert("baseRed", baseRed);
+
+var baseBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.base,TextureExtension.png);
+gameTexture.insert("baseBlue", baseBlue);
 
 var CounterAgent = Class.extend({
 

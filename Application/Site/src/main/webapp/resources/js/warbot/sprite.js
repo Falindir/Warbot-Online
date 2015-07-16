@@ -624,12 +624,16 @@ var SpriteBlock = {
         }
     },
 
-    getAgent : function (name, red) {
-        switch(name) {
+    getAgent : function (type, red) {
+
+        console.log("Type : " + type);
+
+        switch(type) {
             case agentType.base :
                 if(red)
-                    return baseRed;
-                    
+                    return gameTexture.getTexture("baseRed");
+                else
+                    return gameTexture.getTexture("baseBlue");    
                 break;
             case agentType.engineer :
                 
@@ -646,13 +650,13 @@ var SpriteBlock = {
             case agentType.turret:
 
                 break;
-            case value:
+            case agentType.wall:
         
                 break;
-            case value:
+            case agentType.food:
         
                 break;
-            case value:
+            case agentType.rocket:
         
                 break;                
             default:
