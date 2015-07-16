@@ -22,7 +22,8 @@ var typeMessagesServer = {
     init    : "init",
     agent   : "agent",
     synchro : "synchro",
-    end     : "end"
+    end     : "end",
+    ping    : "PingMessage"
 }; 
 
 var PartyStream = Stream.extend({
@@ -66,9 +67,6 @@ var PartyStream = Stream.extend({
         var self = this;
 
         play.sprite.mousedown = function(data) {
-
-            console.log(self.partyStarting);
-
             if(!self.partyStarting) {
                 self.appModel.launchParty(self.idParty,-1);
                 self.partyStarting = true;
@@ -104,9 +102,10 @@ var PartyStream = Stream.extend({
 
     analyseMessageServer : function (message) {
 
-        console.log(message.header);
-
         switch(message.header) {
+            case typeMessagesServer.ping:
+                //nothing
+                break;
             case typeMessagesServer.init:
                 this.messageServerInit(message.content);
                 break;
@@ -131,8 +130,18 @@ var PartyStream = Stream.extend({
 
         this.createMapJson();
 
-        for (i = 0; i < message.agents.length; i++)
-            //this.createAgentJson(message.agents[i]);
+        console.log(message.agents.length);
+
+        //for (i = 0; i < message.agents.length; i++)
+        var i = 0;    
+        while(i < message.agents.length) {    
+            if(message.agents[i].type == "WarBase") {
+                this.createAgentJson(message.agents[i]);
+            }
+            i++;
+        } 
+
+        this.camera.children.sort(depthCompare);
     
         this.partyStarting = false;
         this.partyRunning  = true;
@@ -140,7 +149,7 @@ var PartyStream = Stream.extend({
 
     messageServerAgent : function (message) {
         if(typeof(message.state) != "undefined" && (message.state == 1)) {
-            this.createAgentJson(message);
+            //this.createAgentJson(message);
         }
         else {
 
@@ -194,30 +203,29 @@ var PartyStream = Stream.extend({
         this.map = new Sprite(gameTexture.getTexture("map"));      
         this.map.setPosX(-14);
         this.map.setPosY(-14);
-        this.map.zIndex = 0;
+        this.map.zIndex = 1;
         this.camera.addChild(this.map.sprite);
 
 
-        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed, "red");
+        this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed.name, "red");
         this.Teams.nameTeamRed.setPosX(30);
         this.Teams.nameTeamRed.setPosY(-50);
-        this.Teams.nameTeamRed.setFont(2);
         this.camera.addChild(this.Teams.nameTeamRed.text);
 
-        this.Teams.nameTeamBlue = new MessageText("BLUE : " + this.Teams.teamRed, "blue");
-        this.Teams.nameTeamBlue.setPosX(800);
+        this.Teams.nameTeamBlue = new MessageText("Blue : " + this.Teams.teamRed.name, "blue");
+        this.Teams.nameTeamBlue.setPosX(750);
         this.Teams.nameTeamBlue.setPosY(-50);
-        this.Teams.nameTeamBlue.setFont(2);
         this.camera.addChild(this.Teams.nameTeamBlue.text);
     },
 
-    createAgentJson : function (agentJson) {
-        var team = this.Teams.getTeam(agentJson.team);
+    createAgentJson : function (json) {
+        var team = this.Teams.getTeam(json.team);
         var isRed = this.Teams.isRedTeam(team);
-        var texture = null; // TODO SpriteBlock.getDefaultAgent(name, red);
-        var agent = new Agent(texture.get());
+        var texture = SpriteBlock.getAgent(json.type, isRed);
+        console.log(texture);
+        var agent = new Agent(texture);
         
-        this.updateData(agentJson.type, true, isRed);
+        //this.updateData(json.type, true, isRed);
 
         agent.setAnchs(0.5);
         agent.setName(json.name);
@@ -227,7 +235,8 @@ var PartyStream = Stream.extend({
         agent.setPosY(json.y * this.zoom);
         agent.setAngle(json.angle);
         agent.setScales(0.05 * this.zoom);
-
+        agent.zIndex = 10;
+/*
         var message = "";
 
         if (typeof(json.messageDebug) != "undefined")
@@ -243,6 +252,7 @@ var PartyStream = Stream.extend({
         agent.debug.setPosY(agent.getY());
         agent.debug.setAnchX(-0.1);
         agent.debug.setAnchY(0.5);
+        agent.debug.multiplyFont(0.5);
 
 
         // TODO button
@@ -280,12 +290,12 @@ var PartyStream = Stream.extend({
         // TODO anchor percept
         // TODO position
         // TODO Percept < Sprite
-        
+        */
         this.agents.add(agent);
         this.camera.addChild(agent.sprite);
-        this.camera.addChild(agent.debug.sprite);
-        this.camera.addChild(agent.life.sprite);
-        this.camera.addChild(agent.percept.sprite);
+        //this.camera.addChild(agent.debug.sprite);
+        //this.camera.addChild(agent.life.sprite);
+        //this.camera.addChild(agent.percept.sprite);
 
         var self = this;
 

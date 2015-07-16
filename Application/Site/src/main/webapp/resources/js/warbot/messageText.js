@@ -1,10 +1,10 @@
 var MessageText = Class.extend({
 
     init : function(text, color) {
-        this.text             = new PIXI.Text(text, {font:"12px Arial", fill:color});
+        this.text             = new PIXI.Text(text, {font:"25px Arial", fill:color});
         this.text.messageText = text;
         this.text.colorText   = color;
-        this.text.font        = "12px Arial";
+        this.text.font        = "25px Arial";
         this.text.position.x  = 0;
         this.text.position.y  = 0;
         this.text.anchor.x    = 0;
