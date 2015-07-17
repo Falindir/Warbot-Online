@@ -636,28 +636,46 @@ var SpriteBlock = {
                     return gameTexture.getTexture("baseBlue");    
                 break;
             case agentType.engineer :
-                
+                if(red)
+                    return gameTexture.getTexture("engineerRed");
+                else
+                    return gameTexture.getTexture("engineerBlue");                 
                 break;
             case agentType.explorer :
-                
+                if(red)
+                    return gameTexture.getTexture("explorerRed");
+                else
+                    return gameTexture.getTexture("explorerBlue");                 
                 break;
             case agentType.kamikaze:
-                
+                 if(red)
+                    return gameTexture.getTexture("kamikazeRed");
+                else
+                    return gameTexture.getTexture("kamikazeBlue");                
                 break;
             case agentType.rocketLauncher:
-
+                 if(red)
+                    return gameTexture.getTexture("rocketLauncherRed");
+                else
+                    return gameTexture.getTexture("rocketLauncherBlue");
                 break;
             case agentType.turret:
-
+                 if(red)
+                    return gameTexture.getTexture("turretRed");
+                else
+                    return gameTexture.getTexture("turretBlue");
                 break;
             case agentType.wall:
-        
+                 if(red)
+                    return gameTexture.getTexture("wallRed");
+                else
+                    return gameTexture.getTexture("wallBlue");        
                 break;
             case agentType.food:
-        
+                return gameTexture.getTexture("food"); 
                 break;
             case agentType.rocket:
-        
+                   return gameTexture.getTexture("rocket"); 
                 break;                
             default:
                 return;    

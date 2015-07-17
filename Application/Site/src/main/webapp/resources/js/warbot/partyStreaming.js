@@ -135,9 +135,7 @@ var PartyStream = Stream.extend({
         //for (i = 0; i < message.agents.length; i++)
         var i = 0;    
         while(i < message.agents.length) {    
-            if(message.agents[i].type == "WarBase") {
-                this.createAgentJson(message.agents[i]);
-            }
+            this.createAgentJson(message.agents[i]);
             i++;
         } 
 
@@ -204,7 +202,7 @@ var PartyStream = Stream.extend({
         this.map.setPosX(-14);
         this.map.setPosY(-14);
         this.map.zIndex = 1;
-        this.camera.addChild(this.map.sprite);
+        //this.camera.addChild(this.map.sprite);
 
 
         this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed.name, "red");
@@ -222,11 +220,8 @@ var PartyStream = Stream.extend({
         var team = this.Teams.getTeam(json.team);
         var isRed = this.Teams.isRedTeam(team);
         var texture = SpriteBlock.getAgent(json.type, isRed);
-        console.log(texture);
         var agent = new Agent(texture);
-        
         //this.updateData(json.type, true, isRed);
-
         agent.setAnchs(0.5);
         agent.setName(json.name);
         agent.setTeam(team);
@@ -293,6 +288,7 @@ var PartyStream = Stream.extend({
         */
         this.agents.add(agent);
         this.camera.addChild(agent.sprite);
+        //this.camera.addChild(toto);
         //this.camera.addChild(agent.debug.sprite);
         //this.camera.addChild(agent.life.sprite);
         //this.camera.addChild(agent.percept.sprite);
@@ -390,13 +386,21 @@ function cameraZoomPartyStreaming (e) {
     if(/*partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom &&*/ partyStreaming.partyRunning == true ) {
         partyStreaming.zoom *= factor;
 
-        partyStreaming.map.multiplyPosFactor(factor);
-        partyStreaming.map.multiplyScalesFactor(factor);
+        //partyStreaming.map.multiplyPosFactor(factor);
+        //partyStreaming.map.multiplyScalesFactor(factor);
 
         partyStreaming.Teams.nameTeamRed.multiplyPos(factor);
         partyStreaming.Teams.nameTeamRed.multiplyFont(factor);
         partyStreaming.Teams.nameTeamBlue.multiplyPos(factor);
         partyStreaming.Teams.nameTeamBlue.multiplyFont(factor);
+
+        for(i = 0; i < partyStreaming.agents.size; i++) {
+            var agent = partyStreaming.agents.get(i);
+            agent.multiplyScalesFactor(factor);
+            agent.multiplyPosFactor(factor);
+            
+
+        }
     }
 };
 
@@ -419,6 +423,8 @@ function animatePartyStream() {
     load0B.setPosX(partyStreaming.coordCenterX / 2);
     load0B.setPosY(partyStreaming.coordCenterY / 2);
     
+
+
     if(partyStreaming.partyStarting) {
         load0B.setAlpha(1);
         load0B.setVisible(true);
@@ -433,6 +439,9 @@ function animatePartyStream() {
             load0B.setAlpha(-1);
             load0B.setVisible(false);
             loadB.setVisible(false);
+
+            console.log(partyStreaming.agents.get(0).sprite.visible);
+            console.log(partyStreaming.agents.get(0).sprite.alpha);
         }    
 
         if(!partyStreaming.partyRunning) {
