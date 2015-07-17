@@ -760,28 +760,46 @@ var SpriteBlock = {
                     return gameTexture.getTexture("baseBlue");    
                 break;
             case agentType.engineer :
-                
+                if(red)
+                    return gameTexture.getTexture("engineerRed");
+                else
+                    return gameTexture.getTexture("engineerBlue");                 
                 break;
             case agentType.explorer :
-                
+                if(red)
+                    return gameTexture.getTexture("explorerRed");
+                else
+                    return gameTexture.getTexture("explorerBlue");                 
                 break;
             case agentType.kamikaze:
-                
+                 if(red)
+                    return gameTexture.getTexture("kamikazeRed");
+                else
+                    return gameTexture.getTexture("kamikazeBlue");                
                 break;
             case agentType.rocketLauncher:
-
+                 if(red)
+                    return gameTexture.getTexture("rocketLauncherRed");
+                else
+                    return gameTexture.getTexture("rocketLauncherBlue");
                 break;
             case agentType.turret:
-
+                 if(red)
+                    return gameTexture.getTexture("turretRed");
+                else
+                    return gameTexture.getTexture("turretBlue");
                 break;
             case agentType.wall:
-        
+                 if(red)
+                    return gameTexture.getTexture("wallRed");
+                else
+                    return gameTexture.getTexture("wallBlue");        
                 break;
             case agentType.food:
-        
+                return gameTexture.getTexture("food"); 
                 break;
             case agentType.rocket:
-        
+                   return gameTexture.getTexture("rocket"); 
                 break;                
             default:
                 return;    
@@ -1199,9 +1217,7 @@ var PartyStream = Stream.extend({
         //for (i = 0; i < message.agents.length; i++)
         var i = 0;    
         while(i < message.agents.length) {    
-            if(message.agents[i].type == "WarBase") {
-                this.createAgentJson(message.agents[i]);
-            }
+            this.createAgentJson(message.agents[i]);
             i++;
         } 
 
@@ -1268,7 +1284,7 @@ var PartyStream = Stream.extend({
         this.map.setPosX(-14);
         this.map.setPosY(-14);
         this.map.zIndex = 1;
-        this.camera.addChild(this.map.sprite);
+        //this.camera.addChild(this.map.sprite);
 
 
         this.Teams.nameTeamRed = new MessageText("Red : " + this.Teams.teamRed.name, "red");
@@ -1286,11 +1302,8 @@ var PartyStream = Stream.extend({
         var team = this.Teams.getTeam(json.team);
         var isRed = this.Teams.isRedTeam(team);
         var texture = SpriteBlock.getAgent(json.type, isRed);
-        console.log(texture);
         var agent = new Agent(texture);
-        
         //this.updateData(json.type, true, isRed);
-
         agent.setAnchs(0.5);
         agent.setName(json.name);
         agent.setTeam(team);
@@ -1357,6 +1370,7 @@ var PartyStream = Stream.extend({
         */
         this.agents.add(agent);
         this.camera.addChild(agent.sprite);
+        //this.camera.addChild(toto);
         //this.camera.addChild(agent.debug.sprite);
         //this.camera.addChild(agent.life.sprite);
         //this.camera.addChild(agent.percept.sprite);
@@ -1454,13 +1468,21 @@ function cameraZoomPartyStreaming (e) {
     if(/*partyStreaming.zoom * factor <= partyStreaming.maxZoom && partyStreaming.zoom * factor >= partyStreaming.minZoom &&*/ partyStreaming.partyRunning == true ) {
         partyStreaming.zoom *= factor;
 
-        partyStreaming.map.multiplyPosFactor(factor);
-        partyStreaming.map.multiplyScalesFactor(factor);
+        //partyStreaming.map.multiplyPosFactor(factor);
+        //partyStreaming.map.multiplyScalesFactor(factor);
 
         partyStreaming.Teams.nameTeamRed.multiplyPos(factor);
         partyStreaming.Teams.nameTeamRed.multiplyFont(factor);
         partyStreaming.Teams.nameTeamBlue.multiplyPos(factor);
         partyStreaming.Teams.nameTeamBlue.multiplyFont(factor);
+
+        for(i = 0; i < partyStreaming.agents.size; i++) {
+            var agent = partyStreaming.agents.get(i);
+            agent.multiplyScalesFactor(factor);
+            agent.multiplyPosFactor(factor);
+            
+
+        }
     }
 };
 
@@ -1483,6 +1505,8 @@ function animatePartyStream() {
     load0B.setPosX(partyStreaming.coordCenterX / 2);
     load0B.setPosY(partyStreaming.coordCenterY / 2);
     
+
+
     if(partyStreaming.partyStarting) {
         load0B.setAlpha(1);
         load0B.setVisible(true);
@@ -1497,6 +1521,9 @@ function animatePartyStream() {
             load0B.setAlpha(-1);
             load0B.setVisible(false);
             loadB.setVisible(false);
+
+            console.log(partyStreaming.agents.get(0).sprite.visible);
+            console.log(partyStreaming.agents.get(0).sprite.alpha);
         }    
 
         if(!partyStreaming.partyRunning) {
@@ -1601,9 +1628,40 @@ gameTexture.insert("loading0", loading0);
 
 var baseRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.base,TextureExtension.png);
 gameTexture.insert("baseRed", baseRed);
-
 var baseBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.base,TextureExtension.png);
 gameTexture.insert("baseBlue", baseBlue);
+var engineerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.engineer,TextureExtension.png); 
+gameTexture.insert("engineerRed", engineerRed);
+var engineerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.engineer,TextureExtension.png); 
+gameTexture.insert("engineerBlue", engineerBlue);
+var explorerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.explorer,TextureExtension.png); 
+gameTexture.insert("explorerRed", explorerRed);
+var explorerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.explorer,TextureExtension.png); 
+gameTexture.insert("explorerBlue", explorerBlue);
+var kamikazeRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.kamikaze,TextureExtension.png); 
+gameTexture.insert("kamikazeRed", kamikazeRed);
+var kamikazeBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.kamikaze,TextureExtension.png);
+gameTexture.insert("kamikazeBlue", kamikazeBlue);
+var rocketLauncherRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.rocketLauncher,TextureExtension.png); 
+gameTexture.insert("rocketLauncherRed", rocketLauncherRed);
+var rocketLauncherBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.rocketLauncher,TextureExtension.png); 
+gameTexture.insert("rocketLauncherBlue", rocketLauncherBlue);
+var turretRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.turret,TextureExtension.png); 
+gameTexture.insert("turretRed", turretRed);
+var turretBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.turret,TextureExtension.png);
+gameTexture.insert("turretBlue", turretBlue);
+var wallRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.wall,TextureExtension.png);
+gameTexture.insert("wallRed", wallRed);
+var wallBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.wall,TextureExtension.png);
+gameTexture.insert("wallBlue", wallBlue);
+var food = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.mother], gameTextureFile.mother.food,TextureExtension.png);
+gameTexture.insert("food", food);
+var rocket = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.mother], gameTextureFile.mother.rocket,TextureExtension.png);
+gameTexture.insert("rocket", rocket);
+
+
+
+
 
 var CounterAgent = Class.extend({
 
