@@ -1,4 +1,16 @@
 
+
+var HexagonEditorMode = {
+    MINIMIZED : "minimizedMode",
+    NORMAL    : "normalMode",
+    EXTENDED  : "extendedMode"    
+}
+
+var MinimizedMode = {
+    DEPTH : 5,
+    WIDTH : 10
+}
+
 var HexagonEditorStream = Stream.extend({
 
     init : function(cnt, color) {
@@ -12,10 +24,11 @@ var HexagonEditorStream = Stream.extend({
         this.activeZoom                       = false;
         this.nameActiveMasterAgent            = null;
         this.lastIndexActiveMasterTab         = null;
-        this.agentsMasterTab                  = [];
+        this.agentsMasterTab                  = []; 
         this.idBlock                          = 0;
         this.blockXmlTab                      = [];
         this.CONSTANT                         = this.getConstant();
+        this.mode                             = HexagonEditorMode.NORMAL;
     },
     
     getNextIdBlock : function () {
@@ -286,8 +299,8 @@ var HexagonEditorStream = Stream.extend({
                         this.managementOfNewActionBlocks(block, index, tempI);
 
                         var numberAction = this.agentsMasterTab[index].numberList;
-                        this.blockXmlTab[index].childTab[numberAction - 2].addChild(whenBlock);
-                        this.blockXmlTab[index].childTab[numberAction - 2].addChild(doBlock);
+                        this.blockXmlTab[index].childTab.get(numberAction - 2).addChild(whenBlock);
+                        this.blockXmlTab[index].childTab.get(numberAction - 2).addChild(doBlock);
 
                         //console.log(this.blockXmlTab[index].getXmlCode());
             }
@@ -318,23 +331,23 @@ var HexagonEditorStream = Stream.extend({
                     var viewBlock = new Block(this.getNextIdBlock(), 'view', tempBlock.x, tempBlock.y, 'View');
                     var typeViewBlock = getViewInfo(name);
 
-                    while(i < this.blockXmlTab[index].childTab.length && cont) {
-                        var list = this.blockXmlTab[index].childTab[i];
-                        var w = list.childTab[0];
-                        var d = list.childTab[1];
+                    while(i < this.blockXmlTab[index].childTab.size && cont) {
+                        var list = this.blockXmlTab[index].childTab.get(i);
+                        var w = list.childTab.get(0);
+                        var d = list.childTab.get(1);
 
                         if(w.posY == tempBlock.y) {
                             cont = false;
                             viewBlock.createNode(typeViewBlock.agent);
                             viewBlock.createNode(typeViewBlock.team);
-                            this.blockXmlTab[index].childTab[i].childTab[0].addChild(viewBlock);
+                            this.blockXmlTab[index].childTab.get(i).childTab.get(0).addChild(viewBlock);
 
                         }
                         else if(d.posY == tempBlock.y) {
                             cont = false;
                             viewBlock.createNode(typeViewBlock.agent);
                             viewBlock.createNode(typeViewBlock.team);
-                            this.blockXmlTab[index].childTab[i].childTab[1].addChild(viewBlock);
+                            this.blockXmlTab[index].childTab.get(i).childTab.get(1).addChild(viewBlock);
                         }
                         i += 1;
                     }
@@ -636,39 +649,6 @@ function addButton(scene, form, formDown, cX, cY, type) {
 	scene.hud.addChild(button);
 }
 
-var Collections = Class.extend({
-
-    init : function() {
-       this.collections = [];
-       this.toto = 5;
-       this._tata = 8;
-    },
-
-    size : function () {
-        return this.collections.length;
-    },
-
-    clear : function () {
-        this.collections = [];
-    },
-
-    get : function (index) {
-        return this.collections[index];    
-    },
-
-    add : function (value) {
-        this.collections.push(value);
-    },
-
-    set : function (index, value) {
-        this.collections[index] = value;
-    },
-
-    remove : function (index) {
-        this.collections.splice(index, 1);
-    }
-
-}); 
 
 //================================================================================//
 //                                      MAIN                                      //
@@ -680,15 +660,6 @@ hexaEditor.initMasterTab();
 hexaEditor.addWheelListenerHexagonEditorStream();
 hexaEditor.cameraMove();
 addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
-addButton(hexaEditor, trashOff, trashOn, 65, 25, 1);
+addButton(hexaEditor, trashOff, trashOn, 65, 25, 2);
 animateHexaEditor();
-
-var tutu = new Collections();
-var tktk = new Collections();
-²
-console.log(tutu.toto);
-console.log(tutu._tata);
-console.log(tutu instanceof Collections);
-console.log(tutu === tutu);
-console.log(tutu === tktk);
 
