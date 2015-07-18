@@ -439,9 +439,6 @@ function animatePartyStream() {
             load0B.setAlpha(-1);
             load0B.setVisible(false);
             loadB.setVisible(false);
-
-            console.log(partyStreaming.agents.get(0).sprite.visible);
-            console.log(partyStreaming.agents.get(0).sprite.alpha);
         }    
 
         if(!partyStreaming.partyRunning) {
