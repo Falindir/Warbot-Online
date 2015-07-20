@@ -26,7 +26,7 @@ var HexagonEditorStream = Stream.extend({
         this.lastIndexActiveMasterTab         = null;
         this.agentsMasterTab                  = []; 
         this.idBlock                          = 0;
-        this.blockXmlTab                      = [];
+        this.blockXmlTab                      = new Collections();
         this.CONSTANT                         = this.getConstant();
         this.mode                             = HexagonEditorMode.NORMAL;
     },
@@ -65,11 +65,11 @@ var HexagonEditorStream = Stream.extend({
 
     getNewActionBlock : function () {
         var newActionBlock = {
-            x : 90,
-            y : 165,
-            addY : 120,
-            index : -1,
-            indexInTab : 2
+            x           : 90,
+            y           : 165,
+            addY        : 120,
+            index       : -1,
+            indexInTab  : 2
         };
 
         return newActionBlock;
@@ -86,21 +86,21 @@ var HexagonEditorStream = Stream.extend({
         this.createBlock(this.camera, SpriteBlock.getMaster(tab.nameMaster), this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, 1, index);
 
         var blockXml = new Block(this.getNextIdBlock(), 'master', this.CONSTANT.coordinate.xMasterBlock, this.CONSTANT.coordinate.yMasterBlock, name);
-        this.blockXmlTab.push(blockXml);
+        this.blockXmlTab.add(blockXml);
 
         this.createBlock(this.camera, listAction, this.CONSTANT.coordinate.xFirstList, this.CONSTANT.coordinate.yFirstList, this.CONSTANT.typeBlock.list, index);
         this.createBlock(this.camera, emptyBlock, this.CONSTANT.coordinate.xFirstBlock, this.CONSTANT.coordinate.yFirstBlock, this.CONSTANT.typeBlock.empty, index);
         //var actionUser = new Block(this.getNextIdBlock(), 'actionUser', this.CONSTANT.coordinate.xFirstBlock, this.CONSTANT.coordinate.yFirstBlock, "ActionUser");
-        //this.blockXmlTab[index].addChild(actionUser);
+        //this.blockXmlTab.get(index).addChild(actionUser);
     },
 
     initMasterTab : function () {
-        this.initMasterBlock("WarBase", 0);
-        this.initMasterBlock("WarEngineer", 1);
-        this.initMasterBlock("WarExplorer", 2);
-        this.initMasterBlock("WarKamikaze", 3);
-        this.initMasterBlock("WarRocketLauncher", 4);
-        this.initMasterBlock("WarTurret", 5);
+        this.initMasterBlock(agentType.base, 0);
+        this.initMasterBlock(agentType.engineer, 1);
+        this.initMasterBlock(agentType.explorer, 2);
+        this.initMasterBlock(agentType.kamikaze, 3);
+        this.initMasterBlock(agentType.rocketLauncher, 4);
+        this.initMasterBlock(agentType.turret, 5);
 
         this.camera.children.sort(depthCompare);
     },
@@ -262,7 +262,7 @@ var HexagonEditorStream = Stream.extend({
             this.agentsMasterTab[index].currentActionBlock.indexInTab = this.agentsMasterTab[index].length - 2; // on lui donne son nouveau index
             this.agentsMasterTab[index].numberList += 1;
             var nextAction = new Block(this.getNextIdBlock(), 'actionUser', actionBlock.x, actionBlock.y + actionBlock.addY, "ActionUser");
-            this.blockXmlTab[index].addChild(nextAction);
+            this.blockXmlTab.get(index).addChild(nextAction);
             if(this.agentsMasterTab[index].numberList % 2 == 1) {
                 this.createBlock(this.camera, listAction, actionBlock.x, this.agentsMasterTab[index].lastPosYList + 240, 0, index);
                 this.agentsMasterTab[index].lastPosYList += 240;
@@ -299,10 +299,10 @@ var HexagonEditorStream = Stream.extend({
                         this.managementOfNewActionBlocks(block, index, tempI);
 
                         var numberAction = this.agentsMasterTab[index].numberList;
-                        this.blockXmlTab[index].childTab.get(numberAction - 2).addChild(whenBlock);
-                        this.blockXmlTab[index].childTab.get(numberAction - 2).addChild(doBlock);
+                        this.blockXmlTab.get(index).childTab.get(numberAction - 2).addChild(whenBlock);
+                        this.blockXmlTab.get(index).childTab.get(numberAction - 2).addChild(doBlock);
 
-                        //console.log(this.blockXmlTab[index].getXmlCode());
+                        //console.log(this.blockXmlTab.get(index).getXmlCode());
             }
             else {
 
@@ -331,8 +331,8 @@ var HexagonEditorStream = Stream.extend({
                     var viewBlock = new Block(this.getNextIdBlock(), 'view', tempBlock.x, tempBlock.y, 'View');
                     var typeViewBlock = getViewInfo(name);
 
-                    while(i < this.blockXmlTab[index].childTab.size && cont) {
-                        var list = this.blockXmlTab[index].childTab.get(i);
+                    while(i < this.blockXmlTab.get(index).childTab.size && cont) {
+                        var list = this.blockXmlTab.get(index).childTab.get(i);
                         var w = list.childTab.get(0);
                         var d = list.childTab.get(1);
 
@@ -340,14 +340,14 @@ var HexagonEditorStream = Stream.extend({
                             cont = false;
                             viewBlock.createNode(typeViewBlock.agent);
                             viewBlock.createNode(typeViewBlock.team);
-                            this.blockXmlTab[index].childTab.get(i).childTab.get(0).addChild(viewBlock);
+                            this.blockXmlTab.get(index).childTab.get(i).childTab.get(0).addChild(viewBlock);
 
                         }
                         else if(d.posY == tempBlock.y) {
                             cont = false;
                             viewBlock.createNode(typeViewBlock.agent);
                             viewBlock.createNode(typeViewBlock.team);
-                            this.blockXmlTab[index].childTab.get(i).childTab.get(1).addChild(viewBlock);
+                            this.blockXmlTab.get(index).childTab.get(i).childTab.get(1).addChild(viewBlock);
                         }
                         i += 1;
                     }
@@ -357,7 +357,7 @@ var HexagonEditorStream = Stream.extend({
                     console.log("BITE");
                 }
 
-                console.log(this.blockXmlTab[index].getXmlCode());
+                console.log(this.blockXmlTab.get(index).getXmlCode());
 
             }
             else if (type >= 410 && type <= 480) { // BLOCK ACTION

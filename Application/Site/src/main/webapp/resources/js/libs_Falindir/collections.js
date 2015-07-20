@@ -132,13 +132,31 @@ var MapCollections = Class.extend({
 
 }); 
 
+var Node = Class.extend({
+
+    init : function() {
+        this.value = null;
+        this.depth = -1;
+    },
+
+    setValue : function (value) {
+        this.value = value;
+    },
+
+    setDepth : function (depth) {
+        this.depth = depth;
+    }
+}); 
+
 var Tree = Class.extend({
 
     init : function() {
-        this.position = 0;
+        this.depth    = -1;
         this.father   = null;
-        this.value    = null;
+        this.node     = new Node();
         this.children = new Collections();
+
+        this.node.setDepth(0);
     },
 
     addChild : function (child) {
@@ -150,9 +168,32 @@ var Tree = Class.extend({
 
     addFather : function (father) {
         if(father instanceof Tree){
-            
+            if(this.father != father) { 
+                this.father = father;
+                
+                // security if not init depth of father
+                if(this.father.depth == -1)
+                    this.father.depth = 0;
 
+                this.depth = this.father.depth + 1;
+            }    
         }   
+    },
+
+    haveFather : function () {
+        return this.father != null;
+    }
+
+    isNull : function () {
+        return this.depth == -1; 
+    }, 
+
+    isEmpty : function () {
+        return this.children.size == 0;
+    },
+
+    getSize : function () {
+        return this.children.size + 1;
     }
 
 }); 
