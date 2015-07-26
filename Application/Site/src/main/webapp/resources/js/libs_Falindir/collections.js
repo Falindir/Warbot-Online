@@ -128,6 +128,10 @@ var MapCollections = Class.extend({
             this.values.remove(index);
             this.size -= 1;
         }
+    },
+
+    contains : function (key) {
+        return this.keys.contains(key);    
     } 
 
 }); 
@@ -182,7 +186,7 @@ var Tree = Class.extend({
 
     haveFather : function () {
         return this.father != null;
-    }
+    },
 
     isNull : function () {
         return this.depth == -1; 

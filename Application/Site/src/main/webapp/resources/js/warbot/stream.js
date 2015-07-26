@@ -10,7 +10,7 @@ var Stream = Class.extend({
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
             this.camera        = new PIXI.Container();
-            this.hud           = new PIXI.Container();
+            this.hud           = new HUD(this.stage);
             this.coordCenterX  = 0;
             this.coordCenterY  = 0;
             this.zoom          = 1;
@@ -27,7 +27,7 @@ var Stream = Class.extend({
         	this.renderer.view.style.display = "block";
             this.container.appendChild(this.renderer.view);
             this.stage.addChild(this.camera);
-            this.stage.addChild(this.hud);
+            //this.stage.addChild(this.hud);
             this.camera.position.x = 0;
             this.camera.position.y = 0;
     },

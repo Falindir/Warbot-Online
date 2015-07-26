@@ -77,7 +77,8 @@ var PartyStream = Stream.extend({
         };
 
         this.buttons.insert("play", play);
-        this.hud.addChild(play.sprite);
+        //this.hud.addChild(play.sprite);
+        this.hud.addButton("play", play);
 
         var load0 = new Sprite(gameTexture.getTexture("loading0"));
         load0.setAnchs(0.5);
@@ -86,7 +87,8 @@ var PartyStream = Stream.extend({
         load0.setVisible(false);
         
         this.buttons.insert("loading0", load0);
-        this.hud.addChild(load0.sprite);
+        //this.hud.addChild(load0.sprite);
+        this.hud.addButton("loading0", load0);
 
         var load = new Sprite(gameTexture.getTexture("loading"));
         load.setAnchs(0.5);
@@ -95,8 +97,8 @@ var PartyStream = Stream.extend({
         load.setVisible(false);
         
         this.buttons.insert("loading", load);
-        this.hud.addChild(load.sprite);
-
+        //this.hud.addChild(load.sprite);
+        this.hud.addButton("loading", load);
 
     },
 
@@ -321,7 +323,7 @@ var PartyStream = Stream.extend({
     
     },
 
-    addButton : function (formDefault, formDown, formTrans, cX, cY, type) {
+    addButton : function (name, formDefault, formDown, formTrans, cX, cY, type) {
         
         var button = new ButtonUI(formDefault, formDown, formTrans);
         button.setPosX(cX);
@@ -349,8 +351,8 @@ var PartyStream = Stream.extend({
         // TODO mousedown
 
 
-        this.hud.addChild(button.sprite);      
-
+        //this.hud.addChild(button.sprite);      
+        this.hud.addButton(name, load0);
     },
 
     addWheelListenerPartyStream: function() {
