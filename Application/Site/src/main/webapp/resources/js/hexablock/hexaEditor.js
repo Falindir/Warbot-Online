@@ -593,7 +593,7 @@ function cameraZoomHexagonEditorStream (e) {
     }
 };
 
-function addButton(scene, form, formDown, cX, cY, type) {
+function addButton(name, scene, form, formDown, cX, cY, type) {
 
 	var button = new PIXI.Sprite(form);
 
@@ -646,8 +646,10 @@ function addButton(scene, form, formDown, cX, cY, type) {
         }
     };
 
-	scene.hud.addChild(button);
+	//scene.hud.addChild(button);
+    scene.hud.addSprite(name, button);
 }
+
 
 
 //================================================================================//
@@ -659,7 +661,9 @@ hexaEditor.initStream();
 hexaEditor.initMasterTab();
 hexaEditor.addWheelListenerHexagonEditorStream();
 hexaEditor.cameraMove();
-addButton(hexaEditor, revertOff, revertOn, 25, 25, 1);
-addButton(hexaEditor, trashOff, trashOn, 65, 25, 2);
+addButton("revert", hexaEditor, revertOff, revertOn, 25, 25, 1);
+addButton("trash", hexaEditor, trashOff, trashOn, 65, 25, 2);
+
+addButton("when", hexaEditor, editorTexture.get("when"), editorTexture.get("when"), 100, 100, 3);
 animateHexaEditor();
 

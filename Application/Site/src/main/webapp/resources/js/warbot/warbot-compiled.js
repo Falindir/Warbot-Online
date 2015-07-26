@@ -946,7 +946,7 @@ var Stream = Class.extend({
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
             this.camera        = new PIXI.Container();
-            this.hud           = new PIXI.Container();
+            this.hud           = new HUD(this.stage);
             this.coordCenterX  = 0;
             this.coordCenterY  = 0;
             this.zoom          = 1;
@@ -963,7 +963,7 @@ var Stream = Class.extend({
         	this.renderer.view.style.display = "block";
             this.container.appendChild(this.renderer.view);
             this.stage.addChild(this.camera);
-            this.stage.addChild(this.hud);
+            //this.stage.addChild(this.hud);
             this.camera.position.x = 0;
             this.camera.position.y = 0;
     },
@@ -1080,6 +1080,30 @@ var ButtonsType = {
 	load 	: "loading"
 }
 
+var HUD = Class.extend({
+
+    init : function(stage) {
+		this.container = new PIXI.Container();
+		this.buttons   = new MapCollections(); 
+		stage.addChild(this.container); 
+    },
+
+    addButton : function (name, button) {
+    	this.buttons.insert(name, button);
+    	this.container.addChild(button.sprite);
+    },
+
+    addSprite : function (name, button) {
+    	this.buttons.insert(name, button);
+    	this.container.addChild(button);
+    },
+
+    getButton : function (name) {
+    	return this.buttons.get(name);    
+    }
+
+}); 
+
 
 var agentDataHTML = {
  
@@ -1159,7 +1183,8 @@ var PartyStream = Stream.extend({
         };
 
         this.buttons.insert("play", play);
-        this.hud.addChild(play.sprite);
+        //this.hud.addChild(play.sprite);
+        this.hud.addButton("play", play);
 
         var load0 = new Sprite(gameTexture.getTexture("loading0"));
         load0.setAnchs(0.5);
@@ -1168,7 +1193,8 @@ var PartyStream = Stream.extend({
         load0.setVisible(false);
         
         this.buttons.insert("loading0", load0);
-        this.hud.addChild(load0.sprite);
+        //this.hud.addChild(load0.sprite);
+        this.hud.addButton("loading0", load0);
 
         var load = new Sprite(gameTexture.getTexture("loading"));
         load.setAnchs(0.5);
@@ -1177,8 +1203,8 @@ var PartyStream = Stream.extend({
         load.setVisible(false);
         
         this.buttons.insert("loading", load);
-        this.hud.addChild(load.sprite);
-
+        //this.hud.addChild(load.sprite);
+        this.hud.addButton("loading", load);
 
     },
 
@@ -1403,7 +1429,7 @@ var PartyStream = Stream.extend({
     
     },
 
-    addButton : function (formDefault, formDown, formTrans, cX, cY, type) {
+    addButton : function (name, formDefault, formDown, formTrans, cX, cY, type) {
         
         var button = new ButtonUI(formDefault, formDown, formTrans);
         button.setPosX(cX);
@@ -1431,8 +1457,8 @@ var PartyStream = Stream.extend({
         // TODO mousedown
 
 
-        this.hud.addChild(button.sprite);      
-
+        //this.hud.addChild(button.sprite);      
+        this.hud.addButton(name, button);
     },
 
     addWheelListenerPartyStream: function() {
