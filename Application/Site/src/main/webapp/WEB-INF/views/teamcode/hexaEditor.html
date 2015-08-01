@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Warbot Online</title>
+    <object th:include="fragments/header :: head" th:remove="tag"/>
+
+    <script src="../../../resources/js/libs/jquery-ui.min.js"
+            th:src="@{/resources/js/libs/jquery-ui.min.js}"></script>
+
+    <script src="../../../resources/js/libs/jquery.layout_and_plugins.min.js" th:src="@{/resources/js/libs/jquery.layout_and_plugins.min.js}"></script>
+    <script src="../../../resources/js/layout/hexaEditorLayout.js" th:src="@{/resources/js/layout/hexaEditorLayout.js}"></script>
+
+    <script src="../../../resources/js/libs/pixi.min.js" th:src="@{/resources/js/libs/pixi.min.js}"></script>
+
+</head>
+<body>
+<div th:replace="fragments/header :: header">Header</div>
+
+<div class="box">
+
+    <div class="outer-center">
+
+    	CENTER
+
+    </div>
+
+    <div class="outer-west">
+
+    	WEST
+
+    </div>	
+
+
+</div>
+
+
+</body>
+</html>

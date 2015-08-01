@@ -63,6 +63,27 @@ var MessageText = Class.extend({
     },    
 }); 
 
+var Zoom = Class.extend({
+
+    init : function() {
+		this.value  = 1;
+		this.min    = 0;
+		this.max    = 10000;
+		this.active = true;   
+    },
+
+    multiply : function (factor) {
+    	if(this.zoomable(factor))
+    		this.value *= factor;
+    },
+
+    zoomable : function (factor) {
+    	var tempVal = this.value * factor;
+    	return tempVal >= this.min && tempVal <= this.max;
+    }
+
+}); 
+
 var Teams = Class.extend({
     
     init : function() {
@@ -934,6 +955,46 @@ var agentType = {
 	rocket 		   : "WarRocket"
 };
 
+var Camera = Class.extend({
+
+    init : function(stage) {
+    	this.container = new PIXI.Container();
+    	stage.addChild(this.container); 
+        this.container.position.x = 0;
+        this.container.position.y = 0;
+    },
+
+    addSprite : function (sprite) {
+    	this.container.addChild(sprite);
+    },
+
+    setPosX : function (posX) {
+    	this.container.position.x = posX;
+    },
+
+    setPosY : function (posY) {
+    	this.container.position.y = posY;
+    },
+
+    setPos : function (posX, posY) {
+    	this.setPosX(posX);
+    	this.setPosY(posY);    
+    },
+
+    samePosX : function (posX) {
+    	return this.container.position.x == posX;
+    },
+
+    samePosY : function (posY) {
+    	return this.container.position.y == posY;
+    },
+
+    samePos : function (posX, posY) {
+    	return this.samePosX(posX) && this.samePosY(posY);    
+    }
+
+}); 
+
 /**
  * @author Falindir
  */
@@ -1086,6 +1147,8 @@ var HUD = Class.extend({
 		this.container = new PIXI.Container();
 		this.buttons   = new MapCollections(); 
 		stage.addChild(this.container); 
+        this.container.position.x = 0;
+        this.container.position.y = 0;
     },
 
     addButton : function (name, button) {
@@ -1458,7 +1521,7 @@ var PartyStream = Stream.extend({
 
 
         //this.hud.addChild(button.sprite);      
-        this.hud.addButton(name, button);
+        this.hud.addButton(name, load0);
     },
 
     addWheelListenerPartyStream: function() {

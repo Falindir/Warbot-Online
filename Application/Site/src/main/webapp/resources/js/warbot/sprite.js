@@ -1,3 +1,19 @@
+
+
+/**
+ * [init description]
+ * @param  {[type]} ) {                      }} [description]
+ * @return {[type]}   [description]
+ */
+var SpriteSheet = Class.extend({
+
+    init : function() {
+       
+    }
+
+}); 
+
+
 /**
  * @ClassNeed   : Class
  * @ClassNeed   : Pixi

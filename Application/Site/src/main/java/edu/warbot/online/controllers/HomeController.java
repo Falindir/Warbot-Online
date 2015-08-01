@@ -104,7 +104,7 @@ public class HomeController {
     }
 
 
-    @RequestMapping(value = "/hexaPhaser", method = RequestMethod.GET)
+    @RequestMapping(value = "/hexaEditor", method = RequestMethod.GET)
     public String hexaPhaser(Principal principal,
                              Model model,
                              @RequestParam Long idParty,
@@ -121,6 +121,6 @@ public class HomeController {
         model.addAttribute("party", party);
         model.addAttribute("agents", webAgentRepository.findAllStarter());
 
-        return "teamcode/hexaPhaser";
+        return "teamcode/hexaEditor";
     }
 }

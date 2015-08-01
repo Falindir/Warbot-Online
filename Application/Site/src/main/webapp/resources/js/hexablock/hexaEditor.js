@@ -4,12 +4,12 @@ var HexagonEditorMode = {
     MINIMIZED : "minimizedMode",
     NORMAL    : "normalMode",
     EXTENDED  : "extendedMode"    
-}
+};
 
 var MinimizedMode = {
     DEPTH : 5,
     WIDTH : 10
-}
+};
 
 var HexagonEditorStream = Stream.extend({
 
@@ -603,8 +603,10 @@ function addButton(name, scene, form, formDown, cX, cY, type) {
 	button.anchor.x = 0.5;
 	button.anchor.y = 0.5;
 
-	button.scale.x = 0.15;
-	button.scale.y = 0.15;
+	button.scale.x = 0.25;
+	button.scale.y = 0.25;
+
+
 
 	button.interactive = true;
 	button.buttonMode = true;
@@ -664,6 +666,44 @@ hexaEditor.cameraMove();
 addButton("revert", hexaEditor, revertOff, revertOn, 25, 25, 1);
 addButton("trash", hexaEditor, trashOff, trashOn, 65, 25, 2);
 
-addButton("when", hexaEditor, editorTexture.get("when"), editorTexture.get("when"), 100, 100, 3);
+//addButton("when", hexaEditor, editorTexture.get("when"), editorTexture.get("when"), 100, 100, 3);
+
+// test feuille de style
+
+// Taille des block sur la carte
+var blockWidth = 250;
+var blockHeight = 250;
+
+// Taille des block sur le tileset
+var blockTextureWidth = 250;
+var blockTextureHeight = 250;
+
+// Chargement de la texture du tileset
+var blocksetTexture = PIXI.Texture.fromImage('/resources/hexaBlocks/block.png');
+
+// Taille total du tileset
+var blocksetTextureWidth = 500;
+var blocksetTextureHeight = 500;
+
+var blockList = [];
+
+for (var i = 0; i < blocksetTextureHeight / blockTextureHeight; i++) {
+    for (var j = 0; j < blocksetTextureWidth / blockTextureWidth; j++) {
+
+        // Calculate the Tile coordinate to cut
+        var blockPosition = new PIXI.Rectangle(j * blockTextureWidth, i * blockTextureHeight, blockTextureWidth, blockTextureHeight);
+
+        // Build the Tile texture
+        var bTile = new PIXI.Texture(blocksetTexture.baseTexture, blockPosition);
+
+        // Push the texture into table
+        blockList.push(bTile);
+    }
+}
+
+console.log(blockList);
+
+addButton("when", hexaEditor, blockList[1], blockList[2], 250, 250, 3);
+
 animateHexaEditor();
 
