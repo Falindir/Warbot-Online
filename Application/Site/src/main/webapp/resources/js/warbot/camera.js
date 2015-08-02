@@ -11,6 +11,10 @@ var Camera = Class.extend({
     	this.container.addChild(sprite);
     },
 
+    initPosition : function () {
+        this.setPos(0, 0);
+    },
+
     setPosX : function (posX) {
     	this.container.position.x = posX;
     },
@@ -34,6 +38,15 @@ var Camera = Class.extend({
 
     samePos : function (posX, posY) {
     	return this.samePosX(posX) && this.samePosY(posY);    
+    },
+
+    moveX : function (dx) {
+        this.container.position.x += dx;    
+    },
+
+    moveY : function (dy) {
+        this.container.position.y += dy;    
     }
+
 
 }); 

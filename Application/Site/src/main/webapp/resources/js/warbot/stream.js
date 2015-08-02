@@ -9,7 +9,7 @@ var Stream = Class.extend({
             this.container     = $(cnt)[0];
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
-            this.camera        = new PIXI.Container();
+            this.camera        = new Camera(this.stage);
             this.hud           = new HUD(this.stage);
             this.coordCenterX  = 0;
             this.coordCenterY  = 0;
@@ -26,10 +26,11 @@ var Stream = Class.extend({
         	this.stage.interactive = true;
         	this.renderer.view.style.display = "block";
             this.container.appendChild(this.renderer.view);
-            this.stage.addChild(this.camera);
+            //this.stage.addChild(this.camera);
             //this.stage.addChild(this.hud);
-            this.camera.position.x = 0;
-            this.camera.position.y = 0;
+            //this.camera.position.x = 0;
+            //this.camera.position.y = 0;
+            this.camera.initPosition();
     },
 
     resizeStream : function () {
@@ -74,8 +75,10 @@ var Stream = Class.extend({
                 var dx = pos.x - this.prevX;
                 var dy = pos.y - this.prevY;
 
-                self.camera.position.x += dx;
-                self.camera.position.y += dy;
+                //self.camera.position.x += dx;
+                //self.camera.position.y += dy;
+                self.camera.moveX(dx);
+                self.camera.moveY(dy);
 
                 this.prevX = pos.x;
                 this.prevY = pos.y;

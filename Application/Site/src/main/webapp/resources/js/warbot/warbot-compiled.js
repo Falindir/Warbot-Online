@@ -143,6 +143,22 @@ var Teams = Class.extend({
 
 }); 
 
+
+
+/**
+ * [init description]
+ * @param  {[type]} ) {                      }} [description]
+ * @return {[type]}   [description]
+ */
+var SpriteSheet = Class.extend({
+
+    init : function() {
+       
+    }
+
+}); 
+
+
 /**
  * @ClassNeed   : Class
  * @ClassNeed   : Pixi
@@ -955,6 +971,19 @@ var agentType = {
 	rocket 		   : "WarRocket"
 };
 
+var SingletonInteger = Class.extend({
+
+    init : function() {
+    	this.value = 0;   
+    },
+
+    getNextValue : function () {
+    	this.value += 1;
+    	return this.value;    
+    }
+
+}); 
+
 var Camera = Class.extend({
 
     init : function(stage) {
@@ -966,6 +995,10 @@ var Camera = Class.extend({
 
     addSprite : function (sprite) {
     	this.container.addChild(sprite);
+    },
+
+    initPosition : function () {
+        this.setPos(0, 0);
     },
 
     setPosX : function (posX) {
@@ -991,7 +1024,16 @@ var Camera = Class.extend({
 
     samePos : function (posX, posY) {
     	return this.samePosX(posX) && this.samePosY(posY);    
+    },
+
+    moveX : function (dx) {
+        this.container.position.x += dx;    
+    },
+
+    moveY : function (dy) {
+        this.container.position.y += dy;    
     }
+
 
 }); 
 
@@ -1006,7 +1048,7 @@ var Stream = Class.extend({
             this.container     = $(cnt)[0];
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
-            this.camera        = new PIXI.Container();
+            this.camera        = new Camera(this.stage);
             this.hud           = new HUD(this.stage);
             this.coordCenterX  = 0;
             this.coordCenterY  = 0;
@@ -1023,10 +1065,11 @@ var Stream = Class.extend({
         	this.stage.interactive = true;
         	this.renderer.view.style.display = "block";
             this.container.appendChild(this.renderer.view);
-            this.stage.addChild(this.camera);
+            //this.stage.addChild(this.camera);
             //this.stage.addChild(this.hud);
-            this.camera.position.x = 0;
-            this.camera.position.y = 0;
+            //this.camera.position.x = 0;
+            //this.camera.position.y = 0;
+            this.camera.initPosition();
     },
 
     resizeStream : function () {
@@ -1071,8 +1114,10 @@ var Stream = Class.extend({
                 var dx = pos.x - this.prevX;
                 var dy = pos.y - this.prevY;
 
-                self.camera.position.x += dx;
-                self.camera.position.y += dy;
+                //self.camera.position.x += dx;
+                //self.camera.position.y += dy;
+                self.camera.moveX(dx);
+                self.camera.moveY(dy);
 
                 this.prevX = pos.x;
                 this.prevY = pos.y;

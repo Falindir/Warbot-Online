@@ -25,20 +25,6 @@ var HexagonEditor = Stream.extend({
 
     initHudEditor : function () {
     
-    	var truncatedBlock = new MapCollections();
-
-
-    	this.hud.insert("truncated", truncated);
-    },
-
-    createRegularBlock : function () {
-    
-    
-    },
-
-
-    createTruncatedBlock : function (scene, ) {
-    
     
     }
 
@@ -51,4 +37,6 @@ function animateHexaEditorComplete() {
         hexaEditor.resizeStream();
         hexaEditor.renderer.render(hexaEditor.stage);
 }
+
+
 
