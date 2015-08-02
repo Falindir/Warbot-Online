@@ -12,27 +12,51 @@
 
     <script src="../../../resources/js/libs/pixi.min.js" th:src="@{/resources/js/libs/pixi.min.js}"></script>
 
+    <script src="../../../resources/js/libs_Falindir/libs_Falindir-compiled.js"
+            th:src="@{/resources/js/libs_Falindir/libs_Falindir-compiled.js}"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header">Header</div>
 
 <div class="box">
 
-    <div class="outer-center">
+    <div id="editor" class="outer-center">
 
-    	CENTER
+        <!-- EDITOR -->
 
     </div>
 
     <div class="outer-west">
 
-    	WEST
+        <!-- GAME -->
 
     </div>	
 
 
 </div>
 
+
+
+<script src="../../../resources/js/warbot/warbot-compiled.js"
+        th:src="@{/resources/js/warbot/warbot-compiled.js}"></script>  
+
+<script src="../../../resources/js/hexaEditor/hexaEditor-compiled.js"
+        th:src="@{/resources/js/hexaEditor/hexaEditor-compiled.js}"></script>      
+
+
+<script th:inline="javascript">
+(function() {
+
+    hexaEditor = new HexagonEditor('#editor', 0x777777);
+    hexaEditor.initStream();
+    hexaEditor.cameraMove();
+    hexaEditor.initHudEditor();
+    animateHexaEditorComplete();
+
+
+})();
+
+</script>
 
 </body>
 </html>
