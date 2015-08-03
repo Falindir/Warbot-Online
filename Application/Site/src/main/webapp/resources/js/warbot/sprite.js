@@ -7,12 +7,27 @@
  */
 var SpriteSheet = Class.extend({
 
-    init : function() {
-       
+    init : function(sheet, height, width, blockH, blockW) {
+        this.sheet       = PIXI.Texture.fromImage(sheet);    
+        this.height      = height;
+        this.width       = width;
+        this.blockHeight = blockH;
+        this.blockWidth  = blockW;
+        this.blocks      = new Collections();
+    },
+
+    cut : function () {
+        for (var i = 0; i < this.height / this.blockHeight; i++) {
+            for (var j = 0; j < this.width / this.blockWidth; j++) {
+                var blockPosition = new PIXI.Rectangle(j * this.blockWidth, i * this.blockHeight, this.blockWidth, this.blockHeight);
+                var blockTexture = new PIXI.Texture(this.sheet.baseTexture, blockPosition);
+                this.blocks.add(blockTexture);
+            }
+        }
+    
     }
 
 }); 
-
 
 /**
  * @ClassNeed   : Class
