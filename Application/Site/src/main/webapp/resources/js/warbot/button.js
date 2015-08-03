@@ -6,6 +6,20 @@ var Buttons = MapCollections.extend({
 
 });  
 
+var ButtonHexa = Sprite.extend({
+
+    init : function(name, texture) {
+    	this._super(texture);
+		this.name   = name;
+		this.type   = -1;
+		this.isDown = false;
+		this.setInteractive(true);
+		this.setButtonMode(true);
+		this.setCursor(Cursor.pointer);
+    }
+
+}); 
+
 
 var ButtonUI = Sprite.extend({
 
