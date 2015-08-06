@@ -46,22 +46,23 @@ var HexagonEditor = Stream.extend({
             return oldY;
         }
 
-        this.createTruncatedBlock('nothing', blocksTruncatedSpriteSheet.blocks.get(0), startX, oldY, 1);
-        this.createTruncatedBlock('blue', blocksTruncatedSpriteSheet.blocks.get(1), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('aqua', blocksTruncatedSpriteSheet.blocks.get(2), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('yellow', blocksTruncatedSpriteSheet.blocks.get(3), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('orange', blocksTruncatedSpriteSheet.blocks.get(4), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('red', blocksTruncatedSpriteSheet.blocks.get(5), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('green', blocksTruncatedSpriteSheet.blocks.get(6), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('purple', blocksTruncatedSpriteSheet.blocks.get(7), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('magenta', blocksTruncatedSpriteSheet.blocks.get(8), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('pink', blocksTruncatedSpriteSheet.blocks.get(9), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('lemon', blocksTruncatedSpriteSheet.blocks.get(10), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('brun', blocksTruncatedSpriteSheet.blocks.get(11), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('light-green', blocksTruncatedSpriteSheet.blocks.get(12), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('light-red', blocksTruncatedSpriteSheet.blocks.get(13), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('slime', blocksTruncatedSpriteSheet.blocks.get(14), startX, getNextPosY(oldY), 1);
-        this.createTruncatedBlock('white', blocksTruncatedSpriteSheet.blocks.get(15), startX, getNextPosY(oldY), 1);
+        this.createTruncatedBlock('nothing', blocksTruncatedSpriteSheet.blocks.get(0), startX, oldY, 1, null);
+        this.createTruncatedBlock('blue', blocksTruncatedSpriteSheet.blocks.get(1), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('aqua', blocksTruncatedSpriteSheet.blocks.get(2), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('yellow', blocksTruncatedSpriteSheet.blocks.get(3), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('orange', blocksTruncatedSpriteSheet.blocks.get(4), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('red', blocksTruncatedSpriteSheet.blocks.get(5), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('green', blocksTruncatedSpriteSheet.blocks.get(6), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('purple', blocksTruncatedSpriteSheet.blocks.get(7), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('magenta', blocksTruncatedSpriteSheet.blocks.get(8), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('pink', blocksTruncatedSpriteSheet.blocks.get(9), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('lemon', blocksTruncatedSpriteSheet.blocks.get(10), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('brun', blocksTruncatedSpriteSheet.blocks.get(11), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('light-green', blocksTruncatedSpriteSheet.blocks.get(12), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('light-red', blocksTruncatedSpriteSheet.blocks.get(13), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('slime', blocksTruncatedSpriteSheet.blocks.get(14), startX, getNextPosY(oldY), 1, null);
+        this.createTruncatedBlock('white', blocksTruncatedSpriteSheet.blocks.get(15), startX, getNextPosY(oldY), 1, null);
+
 
         var oldXButton = 30;
 
@@ -72,11 +73,11 @@ var HexagonEditor = Stream.extend({
             return oldXButton;
         }
 
-        this.createButtonUI('view', buttonHUDSpriteSheet.blocks.get(6), buttonHUDSpriteSheet.blocks.get(7), buttonHUDSpriteSheet.blocks.get(8), startX, startY, 0);
-        this.createButtonUI('undo', buttonHUDSpriteSheet.blocks.get(0), buttonHUDSpriteSheet.blocks.get(1), buttonHUDSpriteSheet.blocks.get(2), getNextPosXButton(oldXButton), startY, 0);
-        this.createButtonUI('clear', buttonHUDSpriteSheet.blocks.get(3), buttonHUDSpriteSheet.blocks.get(4), buttonHUDSpriteSheet.blocks.get(5), getNextPosXButton(oldXButton), startY, 0);
-        this.createButtonUI('save', buttonHUDSpriteSheet.blocks.get(9), buttonHUDSpriteSheet.blocks.get(10), buttonHUDSpriteSheet.blocks.get(11), getNextPosXButton(oldXButton), startY, 0);
-        this.createButtonUI('load', buttonHUDSpriteSheet.blocks.get(12), buttonHUDSpriteSheet.blocks.get(13), buttonHUDSpriteSheet.blocks.get(14), getNextPosXButton(oldXButton), startY, 0);
+        this.createButtonUI('view', buttonHUDSpriteSheet.blocks.get(6), buttonHUDSpriteSheet.blocks.get(7), buttonHUDSpriteSheet.blocks.get(8), startX, startY, 0, 1);
+        this.createButtonUI('undo', buttonHUDSpriteSheet.blocks.get(0), buttonHUDSpriteSheet.blocks.get(1), buttonHUDSpriteSheet.blocks.get(2), getNextPosXButton(oldXButton), startY, 0, 2);
+        this.createButtonUI('clear', buttonHUDSpriteSheet.blocks.get(3), buttonHUDSpriteSheet.blocks.get(4), buttonHUDSpriteSheet.blocks.get(5), getNextPosXButton(oldXButton), startY, 0, 3);
+        this.createButtonUI('save', buttonHUDSpriteSheet.blocks.get(9), buttonHUDSpriteSheet.blocks.get(10), buttonHUDSpriteSheet.blocks.get(11), getNextPosXButton(oldXButton), startY, 0, 4);
+        this.createButtonUI('load', buttonHUDSpriteSheet.blocks.get(12), buttonHUDSpriteSheet.blocks.get(13), buttonHUDSpriteSheet.blocks.get(14), getNextPosXButton(oldXButton), startY, 0, 5);
 
 
 
@@ -88,20 +89,26 @@ var HexagonEditor = Stream.extend({
     },
 
 
-    createTruncatedBlock : function (name, texture, cX, cY, type) {
+    createTruncatedBlock : function (name, texture, cX, cY, type, father) {
         var block = new ButtonHexa(name, texture);
         block.type = type;
         block.setPosX(cX);
         block.setPosY(cY);
         block.setAnchs(0.5);
         block.setScales(0.2);
+        block.father = father;
+
+
+        block.sprite.mousedown = function(data) {
+            console.log(block.name);
+        };
 
         this.hud.addButton(block.name, block);
 
         return block;
     },
 
-    createButtonUI : function (name, textureOff, textureOn, texturTrans, cX, cY, type) {
+    createButtonUI : function (name, textureOff, textureOn, texturTrans, cX, cY, type, subType) {
         var button = new Sprite(textureOn);
         button.name = name;
         button.Off = textureOff;
@@ -111,12 +118,16 @@ var HexagonEditor = Stream.extend({
         button.setPosY(cY);
         button.setAnchs(0.5);
         button.setScales(0.2);
+        button.type = type;
+        button.sprite.subType = subType;
 
         button.setInteractive(true);
         button.setButtonMode(true);
         button.setCursor(Cursor.pointer);
 
         button.sprite.isdown = false;
+
+        var self = this;
 
         button.sprite.mouseover = function(data) {
             this.isOver = true;
@@ -130,6 +141,50 @@ var HexagonEditor = Stream.extend({
               if (this.isdown)
                   return;
               this.texture = textureOn;
+        };
+
+        button.sprite.mousedown = function(data) {
+
+            var but = null;
+
+            if(this.subType == 1) {
+
+              if(this.isdown) {
+                  this.isdown = false;
+
+                  this.texture = textureOn;
+
+                  for (i = 0; i < self.hud.buttons.size; i++) {
+                      but = self.hud.buttons.getContent(i);
+
+                      if(but.value.type == 1) {
+                          but.value.setAlpha(1);
+                          but.value.setVisible(true);
+                      }
+                  }
+
+              }
+              else {
+                  this.isdown = true;
+
+                  this.texture = textureOff;
+
+                  console.log(self.hud.buttons.size);
+
+                  for (i = 0; i < self.hud.buttons.size; i++) {
+                      but = self.hud.buttons.getContent(i);
+
+                      if(but.value.type == 1) {
+                          but.value.setAlpha(-1);
+                          but.value.setVisible(false);
+                      }
+                  }
+              }
+
+
+
+            }
+
         };
 
         this.hud.addButton(button.name, button);
