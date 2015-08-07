@@ -39,7 +39,7 @@ var HexagonEditor = Stream.extend({
         var startX = 30;
         var startY = 30;
 
-        var oldY = 100;
+        var oldY = 150;
 
         function getNextPosY (old) {
             oldY = old + (blockSize * ratio) - (blockSize * ratio) % 1;
@@ -79,7 +79,60 @@ var HexagonEditor = Stream.extend({
         this.createButtonUI('save', buttonHUDSpriteSheet.blocks.get(9), buttonHUDSpriteSheet.blocks.get(10), buttonHUDSpriteSheet.blocks.get(11), getNextPosXButton(oldXButton), startY, 0, 4);
         this.createButtonUI('load', buttonHUDSpriteSheet.blocks.get(12), buttonHUDSpriteSheet.blocks.get(13), buttonHUDSpriteSheet.blocks.get(14), getNextPosXButton(oldXButton), startY, 0, 5);
 
+        var listAgent = new Sprite(buttonHUDListAgent.blocks.get(0));
+        listAgent.setScales(0.3);
+        listAgent.setAnchs(0.5);
+        listAgent.setPosX(100);
+        listAgent.setPosY(85);
+        listAgent.setInteractive(true);
+        listAgent.setButtonMode(true);
+        listAgent.setCursor(Cursor.pointer);
 
+        listAgent.sprite.isdown = true;
+
+        var self = this;
+
+        listAgent.sprite.mousedown = function(data) {
+            var agent = null;
+
+            if(this.isdown) {
+                this.isdown = false;
+
+                for (i = 0; i < self.hud.buttons.size; i++) {
+                    agent = self.hud.buttons.getContent(i);
+
+                    if(agent.value.type == 2) {
+                        agent.value.setAlpha(1);
+                        agent.value.setVisible(true);
+                    }
+                }
+            }
+            else {
+                this.isdown = true;
+
+                for (i = 0; i < self.hud.buttons.size; i++) {
+                    agent = self.hud.buttons.getContent(i);
+
+                    if(agent.value.type == 2) {
+                        agent.value.setAlpha(-1);
+                        agent.value.setVisible(false);
+                    }
+                }
+
+
+            }
+        };
+
+        this.hud.addButton('listAgent', listAgent);
+
+        this.createListAgents('base', agentsHUDSpriteSheet.blocks.get(0), agentsHUDSpriteSheet.blocks.get(1), 220, 85, 2, 1, nameAgentHUDSpriteSheet.blocks.get(0));
+        this.createListAgents('engineer', agentsHUDSpriteSheet.blocks.get(2), agentsHUDSpriteSheet.blocks.get(3), 270, 85, 2, 2, nameAgentHUDSpriteSheet.blocks.get(1));
+        this.createListAgents('explorer', agentsHUDSpriteSheet.blocks.get(4), agentsHUDSpriteSheet.blocks.get(5), 320, 85, 2, 3, nameAgentHUDSpriteSheet.blocks.get(2));
+        this.createListAgents('kamikaze', agentsHUDSpriteSheet.blocks.get(6), agentsHUDSpriteSheet.blocks.get(7), 370, 85, 2, 4, nameAgentHUDSpriteSheet.blocks.get(3));
+        this.createListAgents('rocketLauncher', agentsHUDSpriteSheet.blocks.get(8), agentsHUDSpriteSheet.blocks.get(9), 420, 85, 2, 5, nameAgentHUDSpriteSheet.blocks.get(4));
+        this.createListAgents('turret', agentsHUDSpriteSheet.blocks.get(10), agentsHUDSpriteSheet.blocks.get(11), 470, 85, 2, 6, nameAgentHUDSpriteSheet.blocks.get(5));
+
+        this.createMasterBlock('base', masterAgent.blocks.get(0), 400, 400, 3, 1);
 
     },
 
@@ -108,12 +161,12 @@ var HexagonEditor = Stream.extend({
         return block;
     },
 
-    createButtonUI : function (name, textureOff, textureOn, texturTrans, cX, cY, type, subType) {
+    createButtonUI : function (name, textureOff, textureOn, textureTrans, cX, cY, type, subType) {
         var button = new Sprite(textureOn);
         button.name = name;
         button.Off = textureOff;
         button.On = textureOn;
-        button.Trans = texturTrans;
+        button.Trans = textureTrans;
         button.setPosX(cX);
         button.setPosY(cY);
         button.setAnchs(0.5);
@@ -133,7 +186,7 @@ var HexagonEditor = Stream.extend({
             this.isOver = true;
             if (this.isdown)
                 return;
-            this.texture = texturTrans;
+            this.texture = textureTrans;
         };
 
         button.sprite.mouseout = function(data) {
@@ -169,8 +222,6 @@ var HexagonEditor = Stream.extend({
 
                   this.texture = textureOff;
 
-                  console.log(self.hud.buttons.size);
-
                   for (i = 0; i < self.hud.buttons.size; i++) {
                       but = self.hud.buttons.getContent(i);
 
@@ -180,14 +231,80 @@ var HexagonEditor = Stream.extend({
                       }
                   }
               }
-
-
-
             }
-
         };
 
         this.hud.addButton(button.name, button);
+    },
+
+    createListAgents : function (name, textureOff, textureTrans, cX, cY, type, subType, textureName) {
+        var agent = new Sprite(textureOff);
+        agent.name = name;
+        agent.Off = textureOff;
+        agent.Trans = textureTrans;
+        agent.setPosX(cX);
+        agent.setPosY(cY);
+        agent.setAnchs(0.5);
+        agent.setScales(0.25);
+        agent.type = type;
+        agent.sprite.subType = subType;
+        agent.setAlpha(-1);
+        agent.setVisible(false);
+
+        agent.setInteractive(true);
+        agent.setButtonMode(true);
+        agent.setCursor(Cursor.pointer);
+
+        var nameAgent = new Sprite(textureName);
+        nameAgent.setPosX(cX);
+        nameAgent.setPosY(-35 + cY); // TODO faire une distance générique
+
+        nameAgent.setAnchs(0.5);
+        nameAgent.setScales(0.25);
+        nameAgent.setAlpha(-1);
+        nameAgent.setVisible(false);
+
+        agent.sprite.mouseover = function(data) {
+            this.isOver = true;
+            if (this.isdown)
+                return;
+            this.texture = textureTrans;
+            nameAgent.setAlpha(1);
+            nameAgent.setVisible(true);
+        };
+
+        agent.sprite.mouseout = function(data) {
+              this.isOver = false;
+              if (this.isdown)
+                  return;
+              this.texture = textureOff;
+              nameAgent.setAlpha(-1);
+              nameAgent.setVisible(false);
+        };
+
+        agent.sprite.mousedown = function(data) {
+
+            // TODO creation master hexagon
+        };
+
+        this.hud.addButton(agent.name, agent);
+        this.hud.addButton('nameAgent-'+agent.name, nameAgent);
+
+
+    },
+
+    createMasterBlock : function (name, texture, cX, cY, type, subType) {
+        var master = new Sprite(texture);
+
+        master.name = name + '-master';
+        master.setPosX(cX);
+        master.setPosY(cY);
+        master.setAnchs(0.5);
+        master.setScales(0.4);
+        master.type = type;
+        master.sprite.subType = subType;
+
+        this.hud.addButton(master.name, master);
     }
 
 });
