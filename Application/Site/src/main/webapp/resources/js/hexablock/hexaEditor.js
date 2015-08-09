@@ -3,7 +3,7 @@
 var HexagonEditorMode = {
     MINIMIZED : "minimizedMode",
     NORMAL    : "normalMode",
-    EXTENDED  : "extendedMode"    
+    EXTENDED  : "extendedMode"
 };
 
 var MinimizedMode = {
@@ -24,13 +24,13 @@ var HexagonEditorStream = Stream.extend({
         this.activeZoom                       = false;
         this.nameActiveMasterAgent            = null;
         this.lastIndexActiveMasterTab         = null;
-        this.agentsMasterTab                  = []; 
+        this.agentsMasterTab                  = [];
         this.idBlock                          = 0;
         this.blockXmlTab                      = new Collections();
         this.CONSTANT                         = this.getConstant();
         this.mode                             = HexagonEditorMode.NORMAL;
     },
-    
+
     getNextIdBlock : function () {
         this.idBlock += 1;
         return this.idBlock;
@@ -706,4 +706,3 @@ console.log(blockList);
 addButton("when", hexaEditor, blockList[1], blockList[2], 250, 250, 3);
 
 animateHexaEditor();
-

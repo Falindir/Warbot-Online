@@ -153,7 +153,7 @@ var Teams = Class.extend({
 var SpriteSheet = Class.extend({
 
     init : function(sheet, height, width, blockH, blockW) {
-        this.sheet       = PIXI.Texture.fromImage(sheet);    
+        this.sheet       = PIXI.Texture.fromImage(sheet);
         this.height      = height;
         this.width       = width;
         this.blockHeight = blockH;
@@ -169,10 +169,10 @@ var SpriteSheet = Class.extend({
                 this.blocks.add(blockTexture);
             }
         }
-    
+
     }
 
-}); 
+});
 
 /**
  * @ClassNeed   : Class
@@ -195,9 +195,9 @@ var Sprite = Class.extend({
         this.sprite.rotation      = 0;
         this.sprite.visible       = true;
         this.sprite.interactive   = false;
-        this.sprite.buttonMode    = false; 
+        this.sprite.buttonMode    = false;
         this.sprite.defaultCursor = Cursor.defaultC;
-        this.zIndex               = 0;
+        this.sprite.zIndex               = 0;
     },
 
     setPosX : function (posX) {
@@ -211,7 +211,7 @@ var Sprite = Class.extend({
     multiplyPosFactor : function (factor) {
         this.sprite.position.x *= factor;
         this.sprite.position.y *= factor;
-    },   
+    },
 
     setAnchX : function (anchX) {
         this.sprite.anchor.x = anchX;
@@ -223,11 +223,11 @@ var Sprite = Class.extend({
 
     setAnchs : function (val) {
         this.setAnchX(val);
-        this.setAnchY(val);    
+        this.setAnchY(val);
     },
 
     setAlpha : function (alpha) {
-        this.sprite.alpha = alpha;    
+        this.sprite.alpha = alpha;
     },
 
     setScaleX : function (scaleX) {
@@ -240,7 +240,7 @@ var Sprite = Class.extend({
 
     setScales : function (val) {
         this.setScaleX(val);
-        this.setScaleY(val);    
+        this.setScaleY(val);
     },
 
     multiplyScalesFactor : function (factor) {
@@ -265,11 +265,11 @@ var Sprite = Class.extend({
     },
 
     setButtonMode : function (butMode) {
-        this.sprite.buttonMode = butMode;    
+        this.sprite.buttonMode = butMode;
     },
 
     setCursor : function (cursor) {
-        this.sprite.defaultCursor = cursor;    
+        this.sprite.defaultCursor = cursor;
     },
 
     getX : function () {
@@ -284,7 +284,7 @@ var Sprite = Class.extend({
         this.sprite.setTexture(texture);
     }
 
-}); 
+});
 
 
 var HexagonInfo = Class.extend({
@@ -297,7 +297,7 @@ var HexagonInfo = Class.extend({
         this.agent = agent;
     }
 
-}); 
+});
 
 function getSpriteOfAgent (nameHexagon) {
 
@@ -318,16 +318,16 @@ function getSpriteOfAgent (nameHexagon) {
                 hexagon = new HexagonInfo(nameHexagon, operatorOr, 132, null, null);
                 break;
             case "operatorNot" :
-                hexagon = new HexagonInfo(nameHexagon, operatorNot, 133, null, null);                 
+                hexagon = new HexagonInfo(nameHexagon, operatorNot, 133, null, null);
                 break;
             case "nothing" :
-                hexagon = new HexagonInfo(nameHexagon, nothing, 134, null, null);                                  
+                hexagon = new HexagonInfo(nameHexagon, nothing, 134, null, null);
                 break;
             case "agentBaseTeam1":
-                hexagon = new HexagonInfo(nameHexagon, agentBaseTeam1, 211, "ally", "warbase"); 
+                hexagon = new HexagonInfo(nameHexagon, agentBaseTeam1, 211, "ally", "warbase");
                 break;
             case "agentEngineerTeam1":
-                hexagon = new HexagonInfo(nameHexagon, agentEngineerTeam1, 212, "ally", "warengineer");                  
+                hexagon = new HexagonInfo(nameHexagon, agentEngineerTeam1, 212, "ally", "warengineer");
                 break;
              case "agentExplorerTeam1":
                  hexagon.sprite = agentExplorerTeam1;
@@ -809,25 +809,25 @@ var SpriteBlock = {
                 if(red)
                     return gameTexture.getTexture("baseRed");
                 else
-                    return gameTexture.getTexture("baseBlue");    
+                    return gameTexture.getTexture("baseBlue");
                 break;
             case agentType.engineer :
                 if(red)
                     return gameTexture.getTexture("engineerRed");
                 else
-                    return gameTexture.getTexture("engineerBlue");                 
+                    return gameTexture.getTexture("engineerBlue");
                 break;
             case agentType.explorer :
                 if(red)
                     return gameTexture.getTexture("explorerRed");
                 else
-                    return gameTexture.getTexture("explorerBlue");                 
+                    return gameTexture.getTexture("explorerBlue");
                 break;
             case agentType.kamikaze:
                  if(red)
                     return gameTexture.getTexture("kamikazeRed");
                 else
-                    return gameTexture.getTexture("kamikazeBlue");                
+                    return gameTexture.getTexture("kamikazeBlue");
                 break;
             case agentType.rocketLauncher:
                  if(red)
@@ -845,17 +845,17 @@ var SpriteBlock = {
                  if(red)
                     return gameTexture.getTexture("wallRed");
                 else
-                    return gameTexture.getTexture("wallBlue");        
+                    return gameTexture.getTexture("wallBlue");
                 break;
             case agentType.food:
-                return gameTexture.getTexture("food"); 
+                return gameTexture.getTexture("food");
                 break;
             case agentType.rocket:
-                   return gameTexture.getTexture("rocket"); 
-                break;                
+                   return gameTexture.getTexture("rocket");
+                break;
             default:
-                return;    
-        }        
+                return;
+        }
     },
 
     getLife : function (life) {
@@ -950,29 +950,30 @@ var SpriteBlock = {
         }
         else {
             return perceptOther;
-        }    
-    
+        }
+
     },
 
     getButton : function (type) {
         switch(type) {
             case ButtonsType.life:
-        
+
                 break;
             case ButtonsType.life:
-        
+
                 break;
             case ButtonsType.life:
-        
-                break;                                
+
+                break;
             default:
-                return;    
-        }        
-        
-    
+                return;
+        }
+
+
     }
 
 }
+
 
 var agentType = {
 	base 		   : "WarBase",
@@ -1063,8 +1064,19 @@ var Stream = Class.extend({
             this.container     = $(cnt)[0];
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
+            this.backGround    = new PIXI.Container();
+
+
+            this.stage.addChild(this.backGround);
+            var texture = PIXI.Texture.fromImage("/resources/hexaBlocks/backgroung.png");
+            var tilingSprite = new PIXI.extras.TilingSprite(texture, 2000, 2000);
+            tilingSprite.scale.x = 0.3;
+            tilingSprite.scale.y = 0.3;
+            this.sp = tilingSprite;
+            this.backGround.addChild(tilingSprite);
             this.camera        = new Camera(this.stage);
             this.hud           = new HUD(this.stage);
+
             this.coordCenterX  = 0;
             this.coordCenterY  = 0;
             this.zoom          = 1;
@@ -1074,6 +1086,7 @@ var Stream = Class.extend({
             this.prevY         = 0;
             this.isDragging    = false;
             this.activeZoom    = true;
+            this.activeMove    = true;
     },
 
     initStream : function() {
@@ -1091,6 +1104,8 @@ var Stream = Class.extend({
         this.renderer.resize(this.container.offsetWidth-1, this.container.offsetHeight-1);
         this.coordCenterX = this.container.offsetWidth-1 / 2;
         this.coordCenterY = this.container.offsetHeight-1 / 2;
+        this.sp.height = this.container.offsetHeight / 0.3;
+        this.sp.width = this.container.offsetWidth / 0.3;
     },
 
     renderStream : function () {
@@ -1114,33 +1129,34 @@ var Stream = Class.extend({
 
     	this.stage.mouseover = function (moveDate) {
 
-    	}
+    	};
 
     	this.stage.mousemove = function (moveData) {
 
-    		if (!this.isDragging) {
-    		    self.moveWhenNotDragging(moveData);
-    			return;
-    		}
+        if(this.activeMove) {
+        		if (!this.isDragging) {
+        		    self.moveWhenNotDragging(moveData);
+        			return;
+        		}
 
-    		var pos = moveData.data.global;
+        		var pos = moveData.data.global;
 
-    		if(pos.x > 0 && pos.y > 0 && pos.x < self.container.offsetWidth-1 && pos.y < self.container.offsetHeight-1) {
-                var dx = pos.x - this.prevX;
-                var dy = pos.y - this.prevY;
+        		if(pos.x > 0 && pos.y > 0 && pos.x < self.container.offsetWidth-1 && pos.y < self.container.offsetHeight-1) {
+                    var dx = pos.x - this.prevX;
+                    var dy = pos.y - this.prevY;
 
-                //self.camera.position.x += dx;
-                //self.camera.position.y += dy;
-                self.camera.moveX(dx);
-                self.camera.moveY(dy);
+                    //self.camera.position.x += dx;
+                    //self.camera.position.y += dy;
+                    self.camera.moveX(dx);
+                    self.camera.moveY(dy);
 
-                this.prevX = pos.x;
-                this.prevY = pos.y;
-    		}
-    		else {
-    		    this.isDragging = false;
-    		}
-
+                    this.prevX = pos.x;
+                    this.prevY = pos.y;
+        		}
+        		else {
+        		    this.isDragging = false;
+        		}
+        }
     	};
     },
 
@@ -1152,6 +1168,7 @@ var Stream = Class.extend({
 
 
 function depthCompare(a,b) {
+
   if (a.zIndex < b.zIndex)
      return -1;
   if (a.zIndex > b.zIndex)
