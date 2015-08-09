@@ -122,7 +122,14 @@ var Collections = Class.extend({
     },
 
     get : function (index) {
-        return this.collections[index];    
+        return this.collections[index];
+    },
+
+    last : function () {
+        if(this.size === 0)
+          return this.collections[0];
+        else
+          return this.collections[size - 1];
     },
 
     add : function (value) {
@@ -144,15 +151,15 @@ var Collections = Class.extend({
         for (i = 0; i < this.collections.length; i++)
             if(this.collections[i] === value)
                 return true;
-    
+
         return false;
     },
 
     getIndex : function (value) {
         for (i = 0; i < this.collections.length; i++)
             if(this.collections[i] === value)
-                return i;            
-        
+                return i;
+
         return -1;
     },
 
@@ -161,10 +168,10 @@ var Collections = Class.extend({
 
         for (i = 0; i < this.collections.length; i++)
             if(this.collections[i] === value)
-                return index.add(i);            
-        
-        return index;    
-    
+                return index.add(i);
+
+        return index;
+
     },
 
     getInterval : function (start, end) {
@@ -173,20 +180,20 @@ var Collections = Class.extend({
         for (i = start; i <= end; i++) {
             interval.add(this.get(i));
         }
-        
+
         return interval;
     }
 
-}); 
+});
 
 var MapContent = Class.extend({
 
     init : function(key, value) {
         this.key = key;
-        this.value = value;       
+        this.value = value;
     }
 
-}); 
+});
 
 var MapCollections = Class.extend({
 
@@ -199,14 +206,14 @@ var MapCollections = Class.extend({
     clear : function () {
         this.keys = new Collections();
         this.values = new Collections();
-    }, 
+    },
 
     get : function (key) {
         if(this.keys.contains(key)) {
             var index = this.keys.getIndex(key);
             return this.values.get(index);
         }
-            
+
 
         return null;
     },
@@ -219,9 +226,9 @@ var MapCollections = Class.extend({
             var content = new MapContent(key, value);
             return content;
         }
-            
+
         return null;
-    
+
     },
 
     insert : function (key, value) {
@@ -242,10 +249,10 @@ var MapCollections = Class.extend({
     },
 
     contains : function (key) {
-        return this.keys.contains(key);    
-    } 
+        return this.keys.contains(key);
+    }
 
-}); 
+});
 
 var Node = Class.extend({
 
@@ -261,7 +268,7 @@ var Node = Class.extend({
     setDepth : function (depth) {
         this.depth = depth;
     }
-}); 
+});
 
 var Tree = Class.extend({
 
@@ -278,40 +285,40 @@ var Tree = Class.extend({
         if(child instanceof Tree){
             if(!this.children.contains(child))
                 this.children.add(child);
-        }        
+        }
     },
 
     addFather : function (father) {
         if(father instanceof Tree){
-            if(this.father != father) { 
+            if(this.father != father) {
                 this.father = father;
-                
+
                 // security if not init depth of father
                 if(this.father.depth == -1)
                     this.father.depth = 0;
 
                 this.depth = this.father.depth + 1;
-            }    
-        }   
+            }
+        }
     },
 
     haveFather : function () {
-        return this.father != null;
+        return this.father !== null;
     },
 
     isNull : function () {
-        return this.depth == -1; 
-    }, 
+        return this.depth == -1;
+    },
 
     isEmpty : function () {
-        return this.children.size == 0;
+        return this.children.size === 0;
     },
 
     getSize : function () {
         return this.children.size + 1;
     }
 
-}); 
+});
 
 var BinaryTree = Class.extend({
 
@@ -320,8 +327,9 @@ var BinaryTree = Class.extend({
         this.father   = null;
         this.value    = null;
         this.right    = null;
-        this.left     = null;   
+        this.left     = null;
     }
 
-}); 
+});
+
 

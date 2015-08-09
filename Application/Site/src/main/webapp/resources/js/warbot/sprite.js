@@ -8,7 +8,7 @@
 var SpriteSheet = Class.extend({
 
     init : function(sheet, height, width, blockH, blockW) {
-        this.sheet       = PIXI.Texture.fromImage(sheet);    
+        this.sheet       = PIXI.Texture.fromImage(sheet);
         this.height      = height;
         this.width       = width;
         this.blockHeight = blockH;
@@ -24,10 +24,10 @@ var SpriteSheet = Class.extend({
                 this.blocks.add(blockTexture);
             }
         }
-    
+
     }
 
-}); 
+});
 
 /**
  * @ClassNeed   : Class
@@ -50,9 +50,9 @@ var Sprite = Class.extend({
         this.sprite.rotation      = 0;
         this.sprite.visible       = true;
         this.sprite.interactive   = false;
-        this.sprite.buttonMode    = false; 
+        this.sprite.buttonMode    = false;
         this.sprite.defaultCursor = Cursor.defaultC;
-        this.zIndex               = 0;
+        this.sprite.zIndex               = 0;
     },
 
     setPosX : function (posX) {
@@ -66,7 +66,7 @@ var Sprite = Class.extend({
     multiplyPosFactor : function (factor) {
         this.sprite.position.x *= factor;
         this.sprite.position.y *= factor;
-    },   
+    },
 
     setAnchX : function (anchX) {
         this.sprite.anchor.x = anchX;
@@ -78,11 +78,11 @@ var Sprite = Class.extend({
 
     setAnchs : function (val) {
         this.setAnchX(val);
-        this.setAnchY(val);    
+        this.setAnchY(val);
     },
 
     setAlpha : function (alpha) {
-        this.sprite.alpha = alpha;    
+        this.sprite.alpha = alpha;
     },
 
     setScaleX : function (scaleX) {
@@ -95,7 +95,7 @@ var Sprite = Class.extend({
 
     setScales : function (val) {
         this.setScaleX(val);
-        this.setScaleY(val);    
+        this.setScaleY(val);
     },
 
     multiplyScalesFactor : function (factor) {
@@ -120,11 +120,11 @@ var Sprite = Class.extend({
     },
 
     setButtonMode : function (butMode) {
-        this.sprite.buttonMode = butMode;    
+        this.sprite.buttonMode = butMode;
     },
 
     setCursor : function (cursor) {
-        this.sprite.defaultCursor = cursor;    
+        this.sprite.defaultCursor = cursor;
     },
 
     getX : function () {
@@ -139,7 +139,7 @@ var Sprite = Class.extend({
         this.sprite.setTexture(texture);
     }
 
-}); 
+});
 
 
 var HexagonInfo = Class.extend({
@@ -152,7 +152,7 @@ var HexagonInfo = Class.extend({
         this.agent = agent;
     }
 
-}); 
+});
 
 function getSpriteOfAgent (nameHexagon) {
 
@@ -173,16 +173,16 @@ function getSpriteOfAgent (nameHexagon) {
                 hexagon = new HexagonInfo(nameHexagon, operatorOr, 132, null, null);
                 break;
             case "operatorNot" :
-                hexagon = new HexagonInfo(nameHexagon, operatorNot, 133, null, null);                 
+                hexagon = new HexagonInfo(nameHexagon, operatorNot, 133, null, null);
                 break;
             case "nothing" :
-                hexagon = new HexagonInfo(nameHexagon, nothing, 134, null, null);                                  
+                hexagon = new HexagonInfo(nameHexagon, nothing, 134, null, null);
                 break;
             case "agentBaseTeam1":
-                hexagon = new HexagonInfo(nameHexagon, agentBaseTeam1, 211, "ally", "warbase"); 
+                hexagon = new HexagonInfo(nameHexagon, agentBaseTeam1, 211, "ally", "warbase");
                 break;
             case "agentEngineerTeam1":
-                hexagon = new HexagonInfo(nameHexagon, agentEngineerTeam1, 212, "ally", "warengineer");                  
+                hexagon = new HexagonInfo(nameHexagon, agentEngineerTeam1, 212, "ally", "warengineer");
                 break;
              case "agentExplorerTeam1":
                  hexagon.sprite = agentExplorerTeam1;
@@ -664,25 +664,25 @@ var SpriteBlock = {
                 if(red)
                     return gameTexture.getTexture("baseRed");
                 else
-                    return gameTexture.getTexture("baseBlue");    
+                    return gameTexture.getTexture("baseBlue");
                 break;
             case agentType.engineer :
                 if(red)
                     return gameTexture.getTexture("engineerRed");
                 else
-                    return gameTexture.getTexture("engineerBlue");                 
+                    return gameTexture.getTexture("engineerBlue");
                 break;
             case agentType.explorer :
                 if(red)
                     return gameTexture.getTexture("explorerRed");
                 else
-                    return gameTexture.getTexture("explorerBlue");                 
+                    return gameTexture.getTexture("explorerBlue");
                 break;
             case agentType.kamikaze:
                  if(red)
                     return gameTexture.getTexture("kamikazeRed");
                 else
-                    return gameTexture.getTexture("kamikazeBlue");                
+                    return gameTexture.getTexture("kamikazeBlue");
                 break;
             case agentType.rocketLauncher:
                  if(red)
@@ -700,17 +700,17 @@ var SpriteBlock = {
                  if(red)
                     return gameTexture.getTexture("wallRed");
                 else
-                    return gameTexture.getTexture("wallBlue");        
+                    return gameTexture.getTexture("wallBlue");
                 break;
             case agentType.food:
-                return gameTexture.getTexture("food"); 
+                return gameTexture.getTexture("food");
                 break;
             case agentType.rocket:
-                   return gameTexture.getTexture("rocket"); 
-                break;                
+                   return gameTexture.getTexture("rocket");
+                break;
             default:
-                return;    
-        }        
+                return;
+        }
     },
 
     getLife : function (life) {
@@ -805,26 +805,26 @@ var SpriteBlock = {
         }
         else {
             return perceptOther;
-        }    
-    
+        }
+
     },
 
     getButton : function (type) {
         switch(type) {
             case ButtonsType.life:
-        
+
                 break;
             case ButtonsType.life:
-        
+
                 break;
             case ButtonsType.life:
-        
-                break;                                
+
+                break;
             default:
-                return;    
-        }        
-        
-    
+                return;
+        }
+
+
     }
 
 }
