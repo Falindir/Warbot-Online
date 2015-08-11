@@ -9,16 +9,7 @@ var Stream = Class.extend({
             this.container     = $(cnt)[0];
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
-            this.backGround    = new PIXI.Container();
-
-
-            this.stage.addChild(this.backGround);
-            var texture = PIXI.Texture.fromImage("/resources/hexaBlocks/backgroung.png");
-            var tilingSprite = new PIXI.extras.TilingSprite(texture, 2000, 2000);
-            tilingSprite.scale.x = 0.3;
-            tilingSprite.scale.y = 0.3;
-            this.sp = tilingSprite;
-            this.backGround.addChild(tilingSprite);
+            this.backGround    = new Background(this.stage, backgroundTexture, 2000, 2000, 0.3);
             this.camera        = new Camera(this.stage);
             this.hud           = new HUD(this.stage);
 
@@ -49,8 +40,8 @@ var Stream = Class.extend({
         this.renderer.resize(this.container.offsetWidth-1, this.container.offsetHeight-1);
         this.coordCenterX = this.container.offsetWidth-1 / 2;
         this.coordCenterY = this.container.offsetHeight-1 / 2;
-        this.sp.height = this.container.offsetHeight / 0.3;
-        this.sp.width = this.container.offsetWidth / 0.3;
+        this.backGround.tilingSprite.height = this.container.offsetHeight / 0.3;
+        this.backGround.tilingSprite.width = this.container.offsetWidth / 0.3;
     },
 
     renderStream : function () {

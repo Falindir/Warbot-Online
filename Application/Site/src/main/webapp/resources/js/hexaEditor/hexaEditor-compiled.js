@@ -27,6 +27,7 @@ var HexagonEditor = Stream.extend({
         this.activeNexHexagonButton  = null;
         this.activeZoom              = false;
         this.activeMove              = false;
+        this.nameActiveBlock         = null;
 
         //this.blockXml = new Collections();
 
@@ -71,7 +72,19 @@ var HexagonEditor = Stream.extend({
         this.createTruncatedBlock('white', blocksTruncatedSpriteSheet.blocks.get(15), startX, getNextPosY(oldY), 1, null);
 
         oldY = 150;
-        this.createTruncatedBlock('when', blocksTruncatedSpriteSheet.blocks.get(16), startX + 100 * ratio + 11, 150 + ((blockSize * ratio) - (blockSize * ratio) % 1) / 2, 1.1, 'blue');
+        var blockPos = this.getTruncatedBlockPosition(this.hud.getButton('blue'), 2, 0.2);
+        this.createTruncatedBlock('when', blocksTruncatedSpriteSheet.blocks.get(16), blockPos.x, blockPos.y, 1.1, 'blue');
+
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('aqua'), 2, 0.2);
+        this.createTruncatedBlock('and', blocksTruncatedSpriteSheet.blocks.get(19), blockPos.x, blockPos.y, 1.21, 'aqua');
+
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('yellow'), 2, 0.2);
+        this.createTruncatedBlock('or', blocksTruncatedSpriteSheet.blocks.get(20), blockPos.x, blockPos.y, 1.22, 'aqua');
+
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('orange'), 2, 0.2);
+        this.createTruncatedBlock('not', blocksTruncatedSpriteSheet.blocks.get(21), blockPos.x, blockPos.y, 1.23, 'aqua');
+
+
 
         var oldXButton = 30;
 
@@ -180,7 +193,6 @@ var HexagonEditor = Stream.extend({
         block.setAnchs(0.5);
         block.setScales(0.2);
         block.father = father;
-        block.active = false;
 
         if(block.type !== 1) {
           block.setVisible(false);
@@ -192,10 +204,10 @@ var HexagonEditor = Stream.extend({
         block.sprite.mousedown = function(data) {
             console.log(block.name);
 
-            if(block.active)
-                block.active = false;
+            if(self.nameActiveBlock == block.name)
+                self.nameActiveBlock = null;
             else
-                block.active = true;
+                self.nameActiveBlock = block.name;
 
 
             var bl = null;
@@ -204,13 +216,19 @@ var HexagonEditor = Stream.extend({
                 for (var i = 0; i < self.hud.buttons.size; i++) {
                     bl = self.hud.buttons.getContent(i);
                     if(bl.value.father == block.name) {
-                        if(block.active) {
+                        if(block.name == self.nameActiveBlock) {
                             bl.value.setAlpha(1);
                             bl.value.setVisible(true);
                         }
                         else {
                             bl.value.setAlpha(-1);
                             bl.value.setVisible(false);
+                        }
+                    }
+                    else {
+                        if(bl.value.type > 1 && bl.value.type < 2) {
+                          bl.value.setAlpha(-1);
+                          bl.value.setVisible(false);
                         }
                     }
                 }
@@ -225,6 +243,42 @@ var HexagonEditor = Stream.extend({
         this.hud.addButton(block.name, block);
 
         return block;
+    },
+
+    getTruncatedBlockPosition : function (blockBase, typePos, ratio) {
+
+        var pos = {
+            x : 0,
+            y : 0
+        };
+
+        // TODO need more test
+
+        switch (typePos) {
+          case 1:
+                pos.x = blockBase.getX();
+                pos.y = blockBase.getY();
+            break;
+          case 2:
+                pos.x = blockBase.getX() + 160 * ratio;
+                pos.y = blockBase.getY() - (blockBase.sprite.height * ratio) - 7;
+            break;
+          case 3:
+                pos.x = blockBase.getX();
+                pos.y = blockBase.getY();
+            break;
+          case 4:
+                pos.x = blockBase.getX();
+                pos.y = blockBase.getY();
+            break;
+
+          // TODO cont case 5 and 6
+
+          default:
+
+        }
+
+        return pos;
     },
 
     createButtonUI : function (name, textureOff, textureOn, textureTrans, cX, cY, type, subType) {
@@ -528,6 +582,8 @@ masterAgent.cut();
 
 var listActionHUD = new SpriteSheet('/resources/hexaBlocks/blocks/other/listAction.png', 1000, 50, 1000, 50);
 listActionHUD.cut();
+
+
 
 var blocksRegularTexture = new MapCollections();
 
