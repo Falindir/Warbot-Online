@@ -3,6 +3,24 @@ var Cursor = {
     pointer  : 'pointer'
 }
 
+var Background = Class.extend({
+
+    init : function(stage, texture, width, height, scale) {
+    		this.container = new PIXI.Container();
+    		this.tilingSprite = new PIXI.extras.TilingSprite(texture, width, height);
+        this.setScale(scale);
+        stage.addChild(this.container);
+        this.container.addChild(this.tilingSprite);
+    },
+
+    setScale : function (scale) {
+      this.tilingSprite.scale.x = scale;
+      this.tilingSprite.scale.y = scale;
+    }
+
+});
+
+
 var MessageText = Class.extend({
 
     init : function(text, color) {
@@ -1064,16 +1082,7 @@ var Stream = Class.extend({
             this.container     = $(cnt)[0];
             this.renderer      = new PIXI.autoDetectRenderer(this.container.offsetWidth,this.container.offsetHeight,{backgroundColor : color});
             this.stage         = new PIXI.Container();
-            this.backGround    = new PIXI.Container();
-
-
-            this.stage.addChild(this.backGround);
-            var texture = PIXI.Texture.fromImage("/resources/hexaBlocks/backgroung.png");
-            var tilingSprite = new PIXI.extras.TilingSprite(texture, 2000, 2000);
-            tilingSprite.scale.x = 0.3;
-            tilingSprite.scale.y = 0.3;
-            this.sp = tilingSprite;
-            this.backGround.addChild(tilingSprite);
+            this.backGround    = new Background(this.stage, backgroundTexture, 2000, 2000, 0.3);
             this.camera        = new Camera(this.stage);
             this.hud           = new HUD(this.stage);
 
@@ -1104,8 +1113,8 @@ var Stream = Class.extend({
         this.renderer.resize(this.container.offsetWidth-1, this.container.offsetHeight-1);
         this.coordCenterX = this.container.offsetWidth-1 / 2;
         this.coordCenterY = this.container.offsetHeight-1 / 2;
-        this.sp.height = this.container.offsetHeight / 0.3;
-        this.sp.width = this.container.offsetWidth / 0.3;
+        this.backGround.tilingSprite.height = this.container.offsetHeight / 0.3;
+        this.backGround.tilingSprite.width = this.container.offsetWidth / 0.3;
     },
 
     renderStream : function () {
@@ -1721,7 +1730,7 @@ function stopGame() {
 var hexablockTexture = Class.extend({
 
     init : function() {
-       
+
     }
 
 });
@@ -1731,7 +1740,7 @@ var hexablockTexture = Class.extend({
 var hexablockTextureFolders = {
 	root     : "hexaBlocks",
 	blocks 	 : "blocks"
-}; 
+};
 
 var gameTextureFolders = {
 	root 	 : "assetWarbot",
@@ -1757,7 +1766,7 @@ var TextureFolder = {
 
 	root : "resources",
 	game : gameTextureFolders,
-	bloc : hexablockTextureFolders 
+	bloc : hexablockTextureFolders
 }
 
 var gameTextureFile = {
@@ -1775,7 +1784,7 @@ var TextureExtension = {
 var WarbotTexture = MapCollections.extend({
 
     init : function() {
-    	this._super();   
+    	this._super();
     },
 
     getTexture : function (key) {
@@ -1783,11 +1792,11 @@ var WarbotTexture = MapCollections.extend({
     	if(value != null) {
     		var texture = PIXI.Texture.fromImage(value.getPath());
     		return texture;
-    	}	
+    	}
     	return null;
     }
 
-}); 
+});
 
 var gameTexture = new WarbotTexture();
 
@@ -1807,23 +1816,23 @@ var baseRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureF
 gameTexture.insert("baseRed", baseRed);
 var baseBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.base,TextureExtension.png);
 gameTexture.insert("baseBlue", baseBlue);
-var engineerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.engineer,TextureExtension.png); 
+var engineerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.engineer,TextureExtension.png);
 gameTexture.insert("engineerRed", engineerRed);
-var engineerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.engineer,TextureExtension.png); 
+var engineerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.engineer,TextureExtension.png);
 gameTexture.insert("engineerBlue", engineerBlue);
-var explorerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.explorer,TextureExtension.png); 
+var explorerRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.explorer,TextureExtension.png);
 gameTexture.insert("explorerRed", explorerRed);
-var explorerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.explorer,TextureExtension.png); 
+var explorerBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.explorer,TextureExtension.png);
 gameTexture.insert("explorerBlue", explorerBlue);
-var kamikazeRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.kamikaze,TextureExtension.png); 
+var kamikazeRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.kamikaze,TextureExtension.png);
 gameTexture.insert("kamikazeRed", kamikazeRed);
 var kamikazeBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.kamikaze,TextureExtension.png);
 gameTexture.insert("kamikazeBlue", kamikazeBlue);
-var rocketLauncherRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.rocketLauncher,TextureExtension.png); 
+var rocketLauncherRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.rocketLauncher,TextureExtension.png);
 gameTexture.insert("rocketLauncherRed", rocketLauncherRed);
-var rocketLauncherBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.rocketLauncher,TextureExtension.png); 
+var rocketLauncherBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.rocketLauncher,TextureExtension.png);
 gameTexture.insert("rocketLauncherBlue", rocketLauncherBlue);
-var turretRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.turret,TextureExtension.png); 
+var turretRed = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.red], gameTextureFile.agent.turret,TextureExtension.png);
 gameTexture.insert("turretRed", turretRed);
 var turretBlue = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.blue], gameTextureFile.agent.turret,TextureExtension.png);
 gameTexture.insert("turretBlue", turretBlue);
@@ -1836,8 +1845,7 @@ gameTexture.insert("food", food);
 var rocket = new Texture([TextureFolder.root, TextureFolder.game.root, TextureFolder.game.mother], gameTextureFile.mother.rocket,TextureExtension.png);
 gameTexture.insert("rocket", rocket);
 
-
-
+var backgroundTexture = PIXI.Texture.fromImage("/resources/hexaBlocks/backgroung.png");
 
 
 var CounterAgent = Class.extend({

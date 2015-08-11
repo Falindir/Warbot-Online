@@ -24,6 +24,8 @@ masterAgent.cut();
 var listActionHUD = new SpriteSheet('/resources/hexaBlocks/blocks/other/listAction.png', 1000, 50, 1000, 50);
 listActionHUD.cut();
 
+
+
 var blocksRegularTexture = new MapCollections();
 
 
