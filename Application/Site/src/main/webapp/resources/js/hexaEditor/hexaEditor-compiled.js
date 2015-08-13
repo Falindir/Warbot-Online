@@ -117,6 +117,22 @@ var HexagonEditor = Stream.extend({
         blockPos = this.getTruncatedBlockPosition(this.hud.getButton('create-wall'), 2, 0.2);
         this.createTruncatedBlock('wall-red', blocksTruncatedSpriteSheet.blocks.get(38), blockPos.x, blockPos.y, 1.317, 'redBase');
 
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('aqua'), 2, 0.2);
+        this.createTruncatedBlock('eat', blocksTruncatedSpriteSheet.blocks.get(59), blockPos.x, blockPos.y, 1.51, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('yellow'), 2, 0.2);
+        this.createTruncatedBlock('fire', blocksTruncatedSpriteSheet.blocks.get(57), blockPos.x, blockPos.y, 1.52, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('orange'), 2, 0.2);
+        this.createTruncatedBlock('idle', blocksTruncatedSpriteSheet.blocks.get(61), blockPos.x, blockPos.y, 1.53, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('red'), 2, 0.2);
+        this.createTruncatedBlock('give', blocksTruncatedSpriteSheet.blocks.get(62), blockPos.x, blockPos.y, 1.54, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('green'), 2, 0.2);
+        this.createTruncatedBlock('move', blocksTruncatedSpriteSheet.blocks.get(58), blockPos.x, blockPos.y, 1.55, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('purple'), 2, 0.2);
+        this.createTruncatedBlock('reload', blocksTruncatedSpriteSheet.blocks.get(56), blockPos.x, blockPos.y, 1.56, 'red');
+        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('magenta'), 2, 0.2);
+        this.createTruncatedBlock('take', blocksTruncatedSpriteSheet.blocks.get(60), blockPos.x, blockPos.y, 1.57, 'red');
+
+
         var oldXButton = 30;
 
         var buttonSize = 200;
