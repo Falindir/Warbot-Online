@@ -93,6 +93,9 @@ var Stream = Class.extend({
         		    this.isDragging = false;
         		}
         }
+        else {
+          self.moveWhenNotDragging(moveData);
+        }
     	};
     },
 
