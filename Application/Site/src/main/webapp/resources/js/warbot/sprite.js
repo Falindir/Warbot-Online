@@ -14,6 +14,7 @@ var SpriteSheet = Class.extend({
         this.blockHeight = blockH;
         this.blockWidth  = blockW;
         this.blocks      = new Collections();
+        this.blocksN     = new MapCollections();
     },
 
     cut : function () {
@@ -25,6 +26,10 @@ var SpriteSheet = Class.extend({
             }
         }
 
+    },
+
+    addName : function (name, index) {
+        this.blocksN.insert(name, this.blocks.get(index));
     }
 
 });

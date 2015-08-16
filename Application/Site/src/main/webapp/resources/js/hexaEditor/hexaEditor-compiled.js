@@ -28,6 +28,8 @@ var HexagonEditor = Stream.extend({
         this.activeZoom              = false;
         this.activeMove              = false;
         this.nameActiveBlock         = null;
+        this.newRegularBlock         = null;
+        this.mouse = null;
 
         //this.blockXml = new Collections();
 
@@ -211,9 +213,9 @@ var HexagonEditor = Stream.extend({
         this.camera.container.children.sort(depthCompare);
     },
 
-    createRegularBlock : function (texture, cX, cY, type, subType, nameMaster) {
+    createRegularBlock : function (name, texture, cX, cY, type, subType, nameMaster, mode) {
           var block = new Sprite(texture);
-
+          block.name = name;
           block.setScales(0.3);
           block.setPosX(cX);
           block.setPosY(cY);
@@ -221,27 +223,39 @@ var HexagonEditor = Stream.extend({
           block.sprite.zIndex = 100;
           block.setAlpha(-1);
           block.setVisible(false);
+          block.setInteractive(true);
+          block.setButtonMode(true);
+          block.setCursor(Cursor.pointer);
 
-          block.normalMode = true;
+          block.nameMaster = nameMaster;
+
+          block.normalMode = mode;
 
           // TODO add to master
+
+          if(nameMaster !== null)
+              this.camera.sprites.get(nameMaster).get('blocks').add(block);
+
+
 
           block.sprite.mousedown = function(data) {
 
               if(block.normalMode) {
-
+                  console.log("normal");
               }
               else { //temp block, mouse
-
+                  console.log("not normal");
               }
 
           };
 
-          var blocksList = this.camera.sprites.get(nameMaster).get('blocks');
+          if(nameMaster !== null)
+              var blocksList = this.camera.sprites.get(nameMaster).get('blocks');
 
           this.camera.addSprite(block.sprite);
           this.camera.container.children.sort(depthCompare);
 
+          return block;
     },
 
 
@@ -262,7 +276,6 @@ var HexagonEditor = Stream.extend({
         var self = this;
 
         block.sprite.mousedown = function(data) {
-            console.log(block.name);
 
             if(self.nameActiveBlock == block.name)
                 self.nameActiveBlock = null;
@@ -297,7 +310,17 @@ var HexagonEditor = Stream.extend({
             }
             else {
 
-                // TODO create block regular on mouse
+                console.log(self.newRegularBlock);
+
+                if(self.newRegularBlock !== null) {
+                    self.camera.removeSprite(self.newRegularBlock.sprite);
+                    console.log("removeChild");
+                }
+
+                self.newRegularBlock = self.createRegularBlock(block.name, blocksRegularSpriteSheet.blocks.get(0), self.mouse.x, self.mouse.y, 4, block.subType, self.nameActiveMaster, false);
+                self.newRegularBlock.setAlpha(1);
+                self.newRegularBlock.setVisible(true);
+
 
             }
         };
@@ -305,6 +328,19 @@ var HexagonEditor = Stream.extend({
         this.hud.addButton(block.name, block);
 
         return block;
+    },
+
+    moveWhenNotDragging : function (moveData) {
+
+        this.mouse = moveData.data.global;
+
+        if(this.newRegularBlock !== null) {
+            this.newRegularBlock.setPosX(this.mouse.x);
+            this.newRegularBlock.setPosY(this.mouse.y);
+        }
+
+
+
     },
 
     getTruncatedBlockPosition : function (blockBase, typePos, ratio) {
@@ -407,9 +443,11 @@ var HexagonEditor = Stream.extend({
                   for (i = 0; i < self.hud.buttons.size; i++) {
                       but = self.hud.buttons.getContent(i);
 
-                      if(but.value.type == 1) {
+                      if(but.value.type >= 1 && but.value.type < 2) {
                           but.value.setAlpha(-1);
                           but.value.setVisible(false);
+
+                          self.nameActiveBlock = null;
                       }
                   }
               }
@@ -477,6 +515,8 @@ var HexagonEditor = Stream.extend({
             var listAction = null;
             var panel = null;
             var list = null;
+            var block = null;
+            var blocks = null;
 
             while(index < self.camera.sprites.size) {
                 but = self.camera.sprites.getContent(index);
@@ -484,6 +524,7 @@ var HexagonEditor = Stream.extend({
                 if(but.value.get('master').type == 3) {
                     but.value.get('master').setAlpha(-1);
                     but.value.get('master').setVisible(false);
+
                 }
 
                 index += 1;
@@ -497,14 +538,11 @@ var HexagonEditor = Stream.extend({
             else {
                 if(self.nameLastActiveMaster != name) {
 
-                    self.nameLastActiveMaster = name;
-
-
-
                     panel = self.camera.sprites.get(self.nameLastActiveMaster);
                     listAction = panel.get('list');
 
                     list = null;
+                    index = 0;
                     while(index < listAction.size) {
                         list = listAction.get(index);
                         list.setAlpha(-1);
@@ -512,7 +550,18 @@ var HexagonEditor = Stream.extend({
                         index++;
                     }
 
-                    // TODO set visible block
+                    block = null;
+                    index = 0;
+                    blocks = panel.get('blocks');
+                    while(index < blocks.size) {
+                      block = blocks.get(index);
+                      block.setAlpha(-1);
+                      block.setVisible(false);
+                      index++;
+                    }
+
+                    self.nameLastActiveMaster = name;
+
                 }
 
 
@@ -536,7 +585,16 @@ var HexagonEditor = Stream.extend({
                 index++;
             }
 
-            // TODO set visible block
+            blocks = panel.get('blocks');
+            index = 0;
+            block = null;
+
+            while(index < blocks.size) {
+                block = blocks.get(index);
+                block.setAlpha(1);
+                block.setVisible(true);
+                index++;
+            }
 
 
 
@@ -565,18 +623,18 @@ var HexagonEditor = Stream.extend({
         master.sprite.zIndex = 50;
 
 
-        var listBlock = new MapCollections();
+        var listBlock = new Collections();
 
         var listAction = new Collections();
 
         var masterCollections = new MapCollections();
         masterCollections.insert('master', master);
         masterCollections.insert('list', listAction);
-        masterCollections.insert('blocks', listBlock);
+        masterCollections.insert('blocks', listBlock); // TODO recup lisp with server XML
 
         this.camera.sprites.insert(master.name, masterCollections);
         this.createListeAction(master.name, listActionHUD.blocks.get(0), cX, cY, false);
-        this.createRegularBlock( blocksRegularSpriteSheet.blocks.get(0), cX - 46, cY + 110, 4, 0, master.name);
+        this.createRegularBlock('nothing', blocksRegularSpriteSheet.blocks.get(0), cX - 46, cY + 110, 4, 0, master.name, true);
         this.camera.addSprite(master.sprite);
 
     },

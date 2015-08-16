@@ -1022,13 +1022,17 @@ var Camera = Class.extend({
 
     init : function(stage) {
     	this.container = new PIXI.Container();
-    	stage.addChild(this.container); 
+    	stage.addChild(this.container);
         this.container.position.x = 0;
         this.container.position.y = 0;
     },
 
     addSprite : function (sprite) {
     	this.container.addChild(sprite);
+    },
+
+    removeSprite : function(sprite) {
+      this.container.removeChild(sprite);
     },
 
     initPosition : function () {
@@ -1045,7 +1049,7 @@ var Camera = Class.extend({
 
     setPos : function (posX, posY) {
     	this.setPosX(posX);
-    	this.setPosY(posY);    
+    	this.setPosY(posY);
     },
 
     samePosX : function (posX) {
@@ -1057,19 +1061,20 @@ var Camera = Class.extend({
     },
 
     samePos : function (posX, posY) {
-    	return this.samePosX(posX) && this.samePosY(posY);    
+    	return this.samePosX(posX) && this.samePosY(posY);
     },
 
     moveX : function (dx) {
-        this.container.position.x += dx;    
+        this.container.position.x += dx;
     },
 
     moveY : function (dy) {
-        this.container.position.y += dy;    
+        this.container.position.y += dy;
     }
 
 
-}); 
+});
+
 
 /**
  * @author Falindir
@@ -1165,6 +1170,9 @@ var Stream = Class.extend({
         		else {
         		    this.isDragging = false;
         		}
+        }
+        else {
+          self.moveWhenNotDragging(moveData);
         }
     	};
     },
