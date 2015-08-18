@@ -38,6 +38,30 @@ var HexagonEditor = Stream.extend({
         this.camera.lastListAction   = null;
     },
 
+    getRegularBlockInfo : function(name) {
+
+      // TODO move other and simplify because complexity is orrible
+
+      var blockRegular = new Collections();
+      blockRegular.transformTab(blockRegularTab, true);
+
+      var blockRegularMap = new MapCollections();
+
+      var index = 0;
+      while(index < blockRegular.size) {
+          var block = blockRegular.get(index);
+          blockRegularMap.insert(block.name, block);
+          index++;
+      }
+
+      var result = blockRegularMap.get(name);
+
+      if(result === null)
+          return blockRegularMap.get('nothing');
+
+      return result;
+    },
+
     initHudEditor : function () {
 
         var sizeScreen = $('#editor').width();
@@ -56,33 +80,24 @@ var HexagonEditor = Stream.extend({
             return oldY;
         }
 
-        //this.createTruncatedBlock('nothing', blocksTruncatedSpriteSheet.blocks.get(0), startX, oldY, 1, null);
-        this.createTruncatedBlock('blue', blocksTruncatedSpriteSheet.blocks.get(1), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('aqua', blocksTruncatedSpriteSheet.blocks.get(2), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('yellow', blocksTruncatedSpriteSheet.blocks.get(3), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('orange', blocksTruncatedSpriteSheet.blocks.get(4), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('red', blocksTruncatedSpriteSheet.blocks.get(5), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('green', blocksTruncatedSpriteSheet.blocks.get(6), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('purple', blocksTruncatedSpriteSheet.blocks.get(7), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('magenta', blocksTruncatedSpriteSheet.blocks.get(8), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('pink', blocksTruncatedSpriteSheet.blocks.get(9), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('lemon', blocksTruncatedSpriteSheet.blocks.get(10), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('brun', blocksTruncatedSpriteSheet.blocks.get(11), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('light-green', blocksTruncatedSpriteSheet.blocks.get(12), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('light-red', blocksTruncatedSpriteSheet.blocks.get(13), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('slime', blocksTruncatedSpriteSheet.blocks.get(14), startX, getNextPosY(oldY), 1, null);
-        this.createTruncatedBlock('white', blocksTruncatedSpriteSheet.blocks.get(15), startX, getNextPosY(oldY), 1, null);
+        var blockTruncated = new Collections();
+        blockTruncated.transformTab(blockTruncatedTab, true);
 
-        oldY = 150;
-        var blockPos = this.getTruncatedBlockPosition(this.hud.getButton('blue'), 2, 0.2);
-        this.createTruncatedBlock('when', blocksTruncatedSpriteSheet.blocks.get(16), blockPos.x, blockPos.y, 1.1, 'blue');
+        var index = 0;
+        var blockP = null;
+        while(index < blockTruncated.size) {
+            var trunc = blockTruncated.get(index);
+            if(trunc.type === 1) { // father block
+                this.createTruncatedBlock(trunc.name, blocksTruncatedSpriteSheet.blocks.get(trunc.index), startX, getNextPosY(oldY), trunc.type, trunc.father);
+            }
+            else { // child
+              blockP = this.getTruncatedBlockPosition(this.hud.getButton(trunc.neighbour), 2, 0.2);
+              this.createTruncatedBlock(trunc.name, blocksTruncatedSpriteSheet.blocks.get(trunc.index), blockP.x, blockP.y, trunc.type, trunc.father);
+            }
+            index++;
+        }
 
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('aqua'), 2, 0.2);
-        this.createTruncatedBlock('and', blocksTruncatedSpriteSheet.blocks.get(19), blockPos.x, blockPos.y, 1.21, 'aqua');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('yellow'), 2, 0.2);
-        this.createTruncatedBlock('or', blocksTruncatedSpriteSheet.blocks.get(20), blockPos.x, blockPos.y, 1.22, 'aqua');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('orange'), 2, 0.2);
-        this.createTruncatedBlock('not', blocksTruncatedSpriteSheet.blocks.get(21), blockPos.x, blockPos.y, 1.23, 'aqua');
+        var blockPos = null;
 
         blockPos = this.getTruncatedBlockPosition(this.hud.getButton('yellow'), 2, 0.2);
         this.createTruncatedBlock('redBase', blocksTruncatedSpriteSheet.blocks.get(32), blockPos.x, blockPos.y, 1.31, 'yellow');
@@ -90,19 +105,6 @@ var HexagonEditor = Stream.extend({
         this.createTruncatedBlock('blueBase', blocksTruncatedSpriteSheet.blocks.get(40), blockPos.x, blockPos.y, 1.32, 'yellow');
         blockPos = this.getTruncatedBlockPosition(this.hud.getButton('red'), 2, 0.2);
         this.createTruncatedBlock('food', blocksTruncatedSpriteSheet.blocks.get(39), blockPos.x, blockPos.y, 1.33, 'yellow');
-
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('aqua'), 2, 0.2);
-        this.createTruncatedBlock('create-engineer', blocksTruncatedSpriteSheet.blocks.get(52), blockPos.x, blockPos.y, 1.43, 'orange');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('yellow'), 2, 0.2);
-        this.createTruncatedBlock('create-explorer', blocksTruncatedSpriteSheet.blocks.get(50), blockPos.x, blockPos.y, 1.44, 'orange');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('orange'), 2, 0.2);
-        this.createTruncatedBlock('create-kamikaze', blocksTruncatedSpriteSheet.blocks.get(51), blockPos.x, blockPos.y, 1.45, 'orange');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('red'), 2, 0.2);
-        this.createTruncatedBlock('create-rocketLauncher', blocksTruncatedSpriteSheet.blocks.get(54), blockPos.x, blockPos.y, 1.46, 'orange');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('green'), 2, 0.2);
-        this.createTruncatedBlock('create-turret', blocksTruncatedSpriteSheet.blocks.get(53), blockPos.x, blockPos.y, 1.47, 'orange');
-        blockPos = this.getTruncatedBlockPosition(this.hud.getButton('purple'), 2, 0.2);
-        this.createTruncatedBlock('create-wall', blocksTruncatedSpriteSheet.blocks.get(55), blockPos.x, blockPos.y, 1.48, 'orange');
 
         blockPos = this.getTruncatedBlockPosition(this.hud.getButton('when'), 2, 0.2);
         this.createTruncatedBlock('base-red', blocksTruncatedSpriteSheet.blocks.get(32), blockPos.x, blockPos.y, 1.311, 'redBase');
@@ -314,7 +316,9 @@ var HexagonEditor = Stream.extend({
                     self.camera.removeSprite(self.newRegularBlock.sprite);
                 }
 
-                self.newRegularBlock = self.createRegularBlock(block.name, blocksRegularSpriteSheet.blocks.get(0), self.mouse.x, self.mouse.y, 4, block.subType, self.nameActiveMaster, false);
+                var blockRG = self.getRegularBlockInfo(block.name);
+
+                self.newRegularBlock = self.createRegularBlock(blockRG.name, blocksRegularSpriteSheet.blocks.get(blockRG.index), self.mouse.x, self.mouse.y, 4, blockRG.type, self.nameActiveMaster, false);
                 self.newRegularBlock.setAlpha(1);
                 self.newRegularBlock.setVisible(true);
             }

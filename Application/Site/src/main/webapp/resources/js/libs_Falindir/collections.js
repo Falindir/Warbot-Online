@@ -71,8 +71,16 @@ var Collections = Class.extend({
         }
 
         return interval;
-    }
+    },
 
+    transformTab : function (tab, reset) {
+
+      if(reset)
+          this.clear();
+
+      for(var i = 0; i < tab.length; i++)
+          this.add(tab[i]);
+    }
 });
 
 var MapContent = Class.extend({
