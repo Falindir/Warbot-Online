@@ -247,7 +247,7 @@ var HexagonEditor = Stream.extend({
 
             var bl = null;
 
-            if(block.type == 1 || block.type == 1.31 || block.type == 1.32) {
+            if(block.type == 1 || block.type == 1.131 || block.type == 1.132) {
                 for (var i = 0; i < self.hud.buttons.size; i++) {
                     bl = self.hud.buttons.getContent(i);
                     if(bl.value.father == block.name) {
@@ -268,7 +268,7 @@ var HexagonEditor = Stream.extend({
                     else {
                         if(bl.value.type > 1 && bl.value.type < 2) {
                             if(block.type == 1) { // TODO need finish
-      
+
                                 bl.value.setAlpha(-1);
                                 bl.value.setVisible(false);
                             }
@@ -572,6 +572,61 @@ var HexagonEditor = Stream.extend({
 
     },
 
+    getPositionOfNeighbourBlock : function (block, type) {
+        var neighbour = {
+            x : 0,
+            y : 0
+        }
+
+        switch(type) {
+            case 0:
+                neighbour.x = block.position.x;
+                neighbour.y = block.position.y;
+                break;
+
+            case 1 :
+                neighbour.x = block.position.x + 52;
+                neighbour.y = block.position.y + 0;
+                break;
+            case 2 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y + 45;
+                break;
+            case 3 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y + 45;
+                break;
+            case 4 :
+                 neighbour.x = block.position.x - 52;
+                 neighbour.y = block.position.y + 0;
+                 break;
+            case 5 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y - 45;
+                break;
+            case 6 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y - 45;
+                break;
+            case 7 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y + 60;
+                break;
+            case 8 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y - 60;
+                break;
+            case 9 :
+                neighbour.x = block.position.x + 26 + 52;
+                neighbour.y = block.position.y + 45;
+                break;
+            default:
+                // nothing
+        }
+
+        return neighbour;
+    },
+
     createMasterBlock : function (name, texture, cX, cY, type, subType) {
         var master = new Sprite(texture);
 
@@ -671,46 +726,47 @@ listActionHUD.cut();
 var blockRegularTab = [
     {name : "nothing", index : 0, type : 0},
 
-    {name : "when", index : 16, type : 1.1},
+    {name : "when", index : 16, type : 1.11},
 
-    {name : "and", index : 19, type : 1.21},
-    {name : "or", index : 20, type : 1.22},
-    {name : "not", index : 21, type : 1.23},
+    {name : "and", index : 19, type : 1.121},
+    {name : "or", index : 20, type : 1.122},
+    {name : "not", index : 21, type : 1.123},
 
-    {name : "redBase", index : 32, type : 1.31},
-    {name : "blueBase", index : 40, type : 1.32},
-    {name : "food", index : 39, type : 1.33},
+    {name : "redBase", index : 32, type : 1.131},
+    {name : "blueBase", index : 40, type : 1.132},
+    {name : "food", index : 39, type : 1.133},
 
-    {name : "base-red", index : 32, type : 1.311},
-    {name : "engineer-red", index : 35, type : 1.312},
-    {name : "explorer-red", index : 33, type : 1.313},
-    {name : "kamikaze-red", index : 34, type : 1.314},
-    {name : "rocketLauncher-red", index : 37, type : 1.315},
-    {name : "turret-red", index : 36, type : 1.316},
-    {name : "wall-red", index : 38, type : 1.317},
+    {name : "base-red", index : 32, type : 1.1311},
+    {name : "engineer-red", index : 35, type : 1.1312},
+    {name : "explorer-red", index : 33, type : 1.1313},
+    {name : "kamikaze-red", index : 34, type : 1.1314},
+    {name : "rocketLauncher-red", index : 37, type : 1.1315},
+    {name : "turret-red", index : 36, type : 1.1316},
+    {name : "wall-red", index : 38, type : 1.1317},
 
-    {name : "base-blue", index : 40, type : 1.321},
-    {name : "engineer-blue", index : 43, type : 1.322},
-    {name : "explorer-blue", index : 41, type : 1.323},
-    {name : "kamikaze-blue", index : 42, type : 1.324},
-    {name : "rocketLauncher-blue", index : 45, type : 1.325},
-    {name : "turret-blue", index : 44, type : 1.326},
-    {name : "wall-blue", index : 46, type : 1.327},
+    {name : "base-blue", index : 40, type : 1.1321},
+    {name : "engineer-blue", index : 43, type : 1.1322},
+    {name : "explorer-blue", index : 41, type : 1.1323},
+    {name : "kamikaze-blue", index : 42, type : 1.1324},
+    {name : "rocketLauncher-blue", index : 45, type : 1.1325},
+    {name : "turret-blue", index : 44, type : 1.1326},
+    {name : "wall-blue", index : 46, type : 1.1327},
 
-    {name : "create-engineer", index : 52, type : 1.43},
-    {name : "create-explorer", index : 50, type : 1.44},
-    {name : "create-kamikaze", index : 51, type : 1.45},
-    {name : "create-rocketLauncher", index : 54, type : 1.46},
-    {name : "create-turret", index : 53, type : 1.47},
-    {name : "create-wall", index : 55, type : 1.48},
+    {name : "create-engineer", index : 52, type : 1.143},
+    {name : "create-explorer", index : 50, type : 1.144},
+    {name : "create-kamikaze", index : 51, type : 1.145},
+    {name : "create-rocketLauncher", index : 54, type : 1.146},
+    {name : "create-turret", index : 53, type : 1.147},
+    {name : "create-wall", index : 55, type : 1.148},
 
-    {name : "eat", index : 59, type : 1.51},
-    {name : "fire", index : 57, type : 1.52},
-    {name : "idle", index : 61, type : 1.53},
-    {name : "give", index : 62, type : 1.54},
-    {name : "move", index : 58, type : 1.55},
-    {name : "reload", index : 56, type : 1.56},
-    {name : "take", index : 60, type : 1.57}
+    {name : "eat", index : 59, type : 1.151},
+    {name : "fire", index : 57, type : 1.152},
+    {name : "idle", index : 61, type : 1.153},
+    {name : "give", index : 62, type : 1.154},
+    {name : "move", index : 58, type : 1.155},
+    {name : "reload", index : 56, type : 1.156},
+    {name : "take", index : 60, type : 1.157}
+
 ];
 
 var blockTruncatedTab = [
@@ -730,46 +786,46 @@ var blockTruncatedTab = [
   {name : "slime", index : 14, type : 1, father : null, neighbour : null},
   {name : "white", index : 15, type : 1, father : null, neighbour : null},
 
-  {name : "when", index : 16, type : 1.1, father : "blue", neighbour : "blue"},
+  {name : "when", index : 16, type : 1.11, father : "blue", neighbour : "blue"},
 
-  {name : "and", index : 19, type : 1.21, father : "aqua", neighbour : "aqua"},
-  {name : "or", index : 20, type : 1.22, father : "aqua", neighbour : "yellow"},
-  {name : "not", index : 21, type : 1.23, father : "aqua", neighbour : "orange"},
+  {name : "and", index : 19, type : 1.121, father : "aqua", neighbour : "aqua"},
+  {name : "or", index : 20, type : 1.122, father : "aqua", neighbour : "yellow"},
+  {name : "not", index : 21, type : 1.123, father : "aqua", neighbour : "orange"},
 
-  {name : "redBase", index : 32, type : 1.31, neighbour : "yellow", father : "yellow"},
-  {name : "blueBase", index : 40, type : 1.32, neighbour : "orange", father : "yellow"},
-  {name : "food", index : 39, type : 1.33, neighbour : "red", father : "yellow"},
+  {name : "redBase", index : 32, type : 1.131, neighbour : "yellow", father : "yellow"},
+  {name : "blueBase", index : 40, type : 1.132, neighbour : "orange", father : "yellow"},
+  {name : "food", index : 39, type : 1.133, neighbour : "red", father : "yellow"},
 
-  {name : "create-engineer", index : 52, type : 1.43, father : "orange", neighbour : "aqua"},
-  {name : "create-explorer", index : 50, type : 1.44, father : "orange", neighbour : "yellow"},
-  {name : "create-kamikaze", index : 51, type : 1.45, father : "orange", neighbour : "orange"},
-  {name : "create-rocketLauncher", index : 54, type : 1.46, father : "orange", neighbour : "red"},
-  {name : "create-turret", index : 53, type : 1.47, father : "orange", neighbour : "green"},
-  {name : "create-wall", index : 55, type : 1.48, father : "orange", neighbour : "purple"},
+  {name : "create-engineer", index : 52, type : 1.143, father : "orange", neighbour : "aqua"},
+  {name : "create-explorer", index : 50, type : 1.144, father : "orange", neighbour : "yellow"},
+  {name : "create-kamikaze", index : 51, type : 1.145, father : "orange", neighbour : "orange"},
+  {name : "create-rocketLauncher", index : 54, type : 1.146, father : "orange", neighbour : "red"},
+  {name : "create-turret", index : 53, type : 1.147, father : "orange", neighbour : "green"},
+  {name : "create-wall", index : 55, type : 1.148, father : "orange", neighbour : "purple"},
 
-  {name : "eat", index : 59, type : 1.51, father : "red", neighbour : "aqua"},
-  {name : "fire", index : 57, type : 1.52, father : "red", neighbour : "yellow"},
-  {name : "idle", index : 61, type : 1.53, father : "red", neighbour : "orange"},
-  {name : "give", index : 62, type : 1.54, father : "red", neighbour : "red"},
-  {name : "move", index : 58, type : 1.55, father : "red", neighbour : "green"},
-  {name : "reload", index : 56, type : 1.56, father : "red", neighbour : "purple"},
-  {name : "take", index : 60, type : 1.57, father : "red", neighbour : "magenta"},
+  {name : "eat", index : 59, type : 1.151, father : "red", neighbour : "aqua"},
+  {name : "fire", index : 57, type : 1.152, father : "red", neighbour : "yellow"},
+  {name : "idle", index : 61, type : 1.153, father : "red", neighbour : "orange"},
+  {name : "give", index : 62, type : 1.154, father : "red", neighbour : "red"},
+  {name : "move", index : 58, type : 1.155, father : "red", neighbour : "green"},
+  {name : "reload", index : 56, type : 1.156, father : "red", neighbour : "purple"},
+  {name : "take", index : 60, type : 1.157, father : "red", neighbour : "magenta"},
 
-  {name : "base-red", index : 32, type : 1.311, neighbour : "when", father : "redBase"},
-  {name : "engineer-red", index : 35, type : 1.312, neighbour : "and", father : "redBase"},
-  {name : "explorer-red", index : 33, type : 1.313, neighbour : "or", father : "redBase"},
-  {name : "kamikaze-red", index : 34, type : 1.314, neighbour : "blueBase", father : "redBase"},
-  {name : "rocketLauncher-red", index : 37, type : 1.315, neighbour : "food", father : "redBase"},
-  {name : "turret-red", index : 36, type : 1.316, neighbour : "create-turret", father : "redBase"},
-  {name : "wall-red", index : 38, type : 1.317, neighbour : "create-wall", father : "redBase"},
+  {name : "base-red", index : 32, type : 1.1311, neighbour : "when", father : "redBase"},
+  {name : "engineer-red", index : 35, type : 1.1312, neighbour : "and", father : "redBase"},
+  {name : "explorer-red", index : 33, type : 1.1313, neighbour : "or", father : "redBase"},
+  {name : "kamikaze-red", index : 34, type : 1.1314, neighbour : "blueBase", father : "redBase"},
+  {name : "rocketLauncher-red", index : 37, type : 1.1315, neighbour : "food", father : "redBase"},
+  {name : "turret-red", index : 36, type : 1.1316, neighbour : "create-turret", father : "redBase"},
+  {name : "wall-red", index : 38, type : 1.1317, neighbour : "create-wall", father : "redBase"},
 
-  {name : "base-blue", index : 40, type : 1.321, neighbour : "and", father : "blueBase"},
-  {name : "engineer-blue", index : 43, type : 1.322, neighbour : "or", father : "blueBase"},
-  {name : "explorer-blue", index : 41, type : 1.323, neighbour : "blueBase", father : "blueBase"},
-  {name : "kamikaze-blue", index : 42, type : 1.324, neighbour : "food", father : "blueBase"},
-  {name : "rocketLauncher-blue", index : 45, type : 1.325, neighbour : "create-turret", father : "blueBase"},
-  {name : "turret-blue", index : 44, type : 1.326, neighbour : "create-wall", father : "blueBase"},
-  {name : "wall-blue", index : 46, type : 1.327, neighbour : "take", father : "blueBase"}
+  {name : "base-blue", index : 40, type : 1.1321, neighbour : "and", father : "blueBase"},
+  {name : "engineer-blue", index : 43, type : 1.1322, neighbour : "or", father : "blueBase"},
+  {name : "explorer-blue", index : 41, type : 1.1323, neighbour : "blueBase", father : "blueBase"},
+  {name : "kamikaze-blue", index : 42, type : 1.1324, neighbour : "food", father : "blueBase"},
+  {name : "rocketLauncher-blue", index : 45, type : 1.1325, neighbour : "create-turret", father : "blueBase"},
+  {name : "turret-blue", index : 44, type : 1.1326, neighbour : "create-wall", father : "blueBase"},
+  {name : "wall-blue", index : 46, type : 1.1327, neighbour : "take", father : "blueBase"}
 ];
 
 var blocksRegularTexture = new MapCollections();
@@ -778,5 +834,17 @@ var blocksRegularTexture = new MapCollections();
 
 
 //var blocksTruncatedTexture = new MapCollections();
+
+
+
+
+var baseCode = "<master><actionUser><when><nothing></nothing></when><do><action><idle/>/action></do></actionUser></master>";
+var engineerCode = "<master><actionUser><when><nothing></nothing></when><do><action><move/>/action></do></actionUser></master>";
+var explorerCode = "<master><actionUser><when><nothing></nothing></when><do><action><move/>/action></do></actionUser></master>";
+var kamikazeCode = "<master><actionUser><when><nothing></nothing></when><do><action><move/>/action></do></actionUser></master>";
+var rocketLauncherCode = "<master><actionUser><when><nothing></nothing></when><do><action><move/>/action></do></actionUser></master>";
+var turretCode = "<master><actionUser><when><nothing></nothing></when><do><action><move/>/action></do></actionUser></master>";
+
+var defaultCode = baseCode + engineerCode + explorerCode + kamikazeCode + rocketLauncherCode + turretCode;
 
 

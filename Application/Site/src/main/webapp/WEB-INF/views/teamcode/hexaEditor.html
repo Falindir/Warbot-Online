@@ -30,7 +30,7 @@
 
         <!-- GAME -->
 
-    </div>	
+    </div>
 
 
 </div>
@@ -38,15 +38,21 @@
 
 
 <script src="../../../resources/js/warbot/warbot-compiled.js"
-        th:src="@{/resources/js/warbot/warbot-compiled.js}"></script>  
+        th:src="@{/resources/js/warbot/warbot-compiled.js}"></script>
 
 <script src="../../../resources/js/hexaEditor/hexaEditor-compiled.js"
-        th:src="@{/resources/js/hexaEditor/hexaEditor-compiled.js}"></script>      
+        th:src="@{/resources/js/hexaEditor/hexaEditor-compiled.js}"></script>
 
 
 <script th:inline="javascript">
 (function() {
 
+    //var xml = $.parseXML("<foo>Stuff</foo>");
+    //alert(xml.documentElement.nodeName);
+
+
+
+    alert(xml2.documentElement.nodeName);
     hexaEditor = new HexagonEditor('#editor', 0x777777);
     hexaEditor.initStream();
     hexaEditor.cameraMove();
