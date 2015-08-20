@@ -247,7 +247,7 @@ var HexagonEditor = Stream.extend({
 
             var bl = null;
 
-            if(block.type == 1 || block.type == 1.31 || block.type == 1.32) {
+            if(block.type == 1 || block.type == 1.131 || block.type == 1.132) {
                 for (var i = 0; i < self.hud.buttons.size; i++) {
                     bl = self.hud.buttons.getContent(i);
                     if(bl.value.father == block.name) {
@@ -570,6 +570,61 @@ var HexagonEditor = Stream.extend({
         this.hud.addButton('nameAgent-'+agent.name, nameAgent);
 
 
+    },
+
+    getPositionOfNeighbourBlock : function (block, type) {
+        var neighbour = {
+            x : 0,
+            y : 0
+        }
+
+        switch(type) {
+            case 0:
+                neighbour.x = block.position.x;
+                neighbour.y = block.position.y;
+                break;
+
+            case 1 :
+                neighbour.x = block.position.x + 52;
+                neighbour.y = block.position.y + 0;
+                break;
+            case 2 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y + 45;
+                break;
+            case 3 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y + 45;
+                break;
+            case 4 :
+                 neighbour.x = block.position.x - 52;
+                 neighbour.y = block.position.y + 0;
+                 break;
+            case 5 :
+                neighbour.x = block.position.x - 26;
+                neighbour.y = block.position.y - 45;
+                break;
+            case 6 :
+                neighbour.x = block.position.x + 26;
+                neighbour.y = block.position.y - 45;
+                break;
+            case 7 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y + 60;
+                break;
+            case 8 :
+                neighbour.x = block.position.x + 0;
+                neighbour.y = block.position.y - 60;
+                break;
+            case 9 :
+                neighbour.x = block.position.x + 26 + 52;
+                neighbour.y = block.position.y + 45;
+                break;
+            default:
+                // nothing
+        }
+
+        return neighbour;
     },
 
     createMasterBlock : function (name, texture, cX, cY, type, subType) {
